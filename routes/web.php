@@ -11,26 +11,29 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register.store');
-    Route::get('dashboard', function () {
+    Route::put('register/{email}/update', [RegisteredUserController::class, 'update'])->name('register.update');
+    Route::delete('register/delete/{email}', [RegisteredUserController::class, 'destroy'])->name('register.destroy');
+    Route::get('admin/dashboard', function () {
         return Inertia::render('dashboard');
-    })->name('dashboard');
-    Route::get('data-warga', function () {
+    })->name('admin.dashboard');
+    Route::get('admin/pengguna', [RegisteredUserController::class, 'index'])->name('pengguna.index');
+    Route::get('admin/data-warga', function () {
         return Inertia::render('admin/data-warga');
-    })->name('data-warga');
-    Route::get('tagihan', function () {
+    })->name('data-warga.index');
+    Route::get('admin/tagihan', function () {
         return Inertia::render('admin/tagihan');
-    })->name('tagihan');
-    Route::get('tarif', function () {
+    })->name('tagihan.index');
+    Route::get('admin/tarif', function () {
         return Inertia::render('admin/tarif');
-    })->name('tarif');
-    Route::get('/test-email', function () {
-        Mail::raw('Test email dari Laravel via Mailtrap', function ($message) {
-            $message->to('maulanasetyawan8@gmail.com') // Bebas, Mailtrap akan nangkep semua
-                ->subject('Tes Kirim Email');
-        });
-
-        return '✅ Email test dikirim (kalau config benar).';
-    });
+    })->name('tarif.index');
+    Route::get('admin/fuzzy', function () {
+        return Inertia::render('admin/fuzzy');
+    })->name('fuzzy.index');
+});
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('admin/dashboard');
+    })->name('user.dashboard');
 });
 
 require __DIR__ . '/settings.php';

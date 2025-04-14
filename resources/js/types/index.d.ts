@@ -34,13 +34,21 @@ export interface SharedData {
     ziggy: Config & { location: string };
     [key: string]: unknown;
 }
-
+export interface PageProps<T = Record<string, unknown>> {
+    auth: {
+      user: User;
+    };
+    ziggy: {
+      location: string;
+      routes: Record<string, unknown>;
+    };
+    props?: T;
+  }
 export interface User {
     id: number;
     name: string;
     email: string;
-    avatar?: string;
-    email_verified_at: string | null;
+    role: string;
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...

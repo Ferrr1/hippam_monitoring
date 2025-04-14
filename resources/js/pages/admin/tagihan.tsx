@@ -3,7 +3,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
-import DataTable from '@/components/ui/data-table';
+import DataTable from '@/pages/admin/pengguna/create/data-table';
 import { Button } from '@/components/ui/button';
 
 
