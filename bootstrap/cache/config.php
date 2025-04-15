@@ -158,8 +158,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\framework/cache/data',
-        'lock_path' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\framework/cache/data',
+        'path' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\framework/cache/data',
+        'lock_path' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -332,7 +332,7 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\app/private',
+        'root' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\app/private',
         'serve' => true,
         'throw' => false,
         'report' => false,
@@ -340,7 +340,7 @@
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\app/public',
+        'root' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -362,7 +362,7 @@
     ),
     'links' => 
     array (
-      'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\public\\storage' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\app/public',
+      'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\public\\storage' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\app/public',
     ),
   ),
   'inertia' => 
@@ -377,7 +377,7 @@
       'ensure_pages_exist' => true,
       'page_paths' => 
       array (
-        0 => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\resources\\js/pages',
+        0 => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\resources\\js/pages',
       ),
       'page_extensions' => 
       array (
@@ -416,14 +416,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\logs/laravel.log',
+        'path' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\logs/laravel.log',
+        'path' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -488,7 +488,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\logs/laravel.log',
+        'path' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -564,7 +564,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\resources\\views/vendor/mail',
+        0 => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -659,7 +659,7 @@
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\framework/sessions',
+    'files' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -786,9 +786,834 @@
   array (
     'paths' => 
     array (
-      0 => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\resources\\views',
+      0 => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\resources\\views',
     ),
-    'compiled' => 'D:\\Document\\SKRIPSI BROK\\Website\\hippam_monitoring\\storage\\framework\\views',
+    'compiled' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\framework\\views',
+  ),
+  'localization' => 
+  array (
+    'inline' => false,
+    'align' => true,
+    'aliases' => 
+    array (
+    ),
+    'smart_punctuation' => 
+    array (
+      'enable' => false,
+      'common' => 
+      array (
+        'double_quote_opener' => '“',
+        'double_quote_closer' => '”',
+        'single_quote_opener' => '‘',
+        'single_quote_closer' => '’',
+      ),
+      'locales' => 
+      array (
+        'fr' => 
+        array (
+          'double_quote_opener' => '«&nbsp;',
+          'double_quote_closer' => '&nbsp;»',
+          'single_quote_opener' => '‘',
+          'single_quote_closer' => '’',
+        ),
+        'ru' => 
+        array (
+          'double_quote_opener' => '«',
+          'double_quote_closer' => '»',
+          'single_quote_opener' => '‘',
+          'single_quote_closer' => '’',
+        ),
+        'uk' => 
+        array (
+          'double_quote_opener' => '«',
+          'double_quote_closer' => '»',
+          'single_quote_opener' => '‘',
+          'single_quote_closer' => '’',
+        ),
+        'be' => 
+        array (
+          'double_quote_opener' => '«',
+          'double_quote_closer' => '»',
+          'single_quote_opener' => '‘',
+          'single_quote_closer' => '’',
+        ),
+      ),
+    ),
+    'routes' => 
+    array (
+      'names' => 
+      array (
+        'parameter' => 'locale',
+        'header' => 'Accept-Language',
+        'cookie' => 'Accept-Language',
+        'session' => 'Accept-Language',
+        'column' => 'locale',
+      ),
+      'name_prefix' => 'localized.',
+      'redirect_default' => false,
+      'hide_default' => false,
+      'group' => 
+      array (
+        'middlewares' => 
+        array (
+          'default' => 
+          array (
+            0 => 'LaravelLang\\Routes\\Middlewares\\LocalizationByCookie',
+            1 => 'LaravelLang\\Routes\\Middlewares\\LocalizationByHeader',
+            2 => 'LaravelLang\\Routes\\Middlewares\\LocalizationBySession',
+            3 => 'LaravelLang\\Routes\\Middlewares\\LocalizationByModel',
+          ),
+          'prefix' => 
+          array (
+            0 => 'LaravelLang\\Routes\\Middlewares\\LocalizationByParameterPrefix',
+            1 => 'LaravelLang\\Routes\\Middlewares\\LocalizationByCookie',
+            2 => 'LaravelLang\\Routes\\Middlewares\\LocalizationByHeader',
+            3 => 'LaravelLang\\Routes\\Middlewares\\LocalizationBySession',
+            4 => 'LaravelLang\\Routes\\Middlewares\\LocalizationByModel',
+          ),
+        ),
+      ),
+    ),
+    'models' => 
+    array (
+      'suffix' => 'Translation',
+      'filter' => 
+      array (
+        'enabled' => true,
+      ),
+      'helpers' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\vendor/_laravel_lang',
+    ),
+    'translators' => 
+    array (
+      'channels' => 
+      array (
+        'google' => 
+        array (
+          'translator' => '\\LaravelLang\\Translator\\Integrations\\Google',
+          'enabled' => true,
+          'priority' => 1,
+        ),
+        'deepl' => 
+        array (
+          'translator' => '\\LaravelLang\\Translator\\Integrations\\Deepl',
+          'enabled' => false,
+          'priority' => 2,
+          'credentials' => 
+          array (
+            'key' => '',
+          ),
+        ),
+        'yandex' => 
+        array (
+          'translator' => '\\LaravelLang\\Translator\\Integrations\\Yandex',
+          'enabled' => false,
+          'priority' => 3,
+          'credentials' => 
+          array (
+            'key' => '',
+            'folder' => '',
+          ),
+        ),
+      ),
+      'options' => 
+      array (
+        'preserve_parameters' => true,
+      ),
+    ),
+  ),
+  'localization-private' => 
+  array (
+    'plugins' => 
+    array (
+      'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\vendor\\laravel-lang\\lang' => 
+      array (
+        0 => 'LaravelLang\\Lang\\Plugins\\Breeze\\Master',
+        1 => 'LaravelLang\\Lang\\Plugins\\Breeze\\V2',
+        2 => 'LaravelLang\\Lang\\Plugins\\Cashier\\Stripe\\Master',
+        3 => 'LaravelLang\\Lang\\Plugins\\Cashier\\Stripe\\V15',
+        4 => 'LaravelLang\\Lang\\Plugins\\Fortify\\Master',
+        5 => 'LaravelLang\\Lang\\Plugins\\Fortify\\V1',
+        6 => 'LaravelLang\\Lang\\Plugins\\Jetstream\\Master',
+        7 => 'LaravelLang\\Lang\\Plugins\\Jetstream\\V5',
+        8 => 'LaravelLang\\Lang\\Plugins\\Laravel\\Master',
+        9 => 'LaravelLang\\Lang\\Plugins\\Laravel\\V11',
+        10 => 'LaravelLang\\Lang\\Plugins\\Laravel\\V12',
+        11 => 'LaravelLang\\Lang\\Plugins\\Nova\\DuskSuite\\Main',
+        12 => 'LaravelLang\\Lang\\Plugins\\Nova\\LogViewer\\Main',
+        13 => 'LaravelLang\\Lang\\Plugins\\Nova\\V4',
+        14 => 'LaravelLang\\Lang\\Plugins\\Nova\\V5',
+        15 => 'LaravelLang\\Lang\\Plugins\\Spark\\Paddle',
+        16 => 'LaravelLang\\Lang\\Plugins\\Spark\\Stripe',
+        17 => 'LaravelLang\\Lang\\Plugins\\UI\\Master',
+        18 => 'LaravelLang\\Lang\\Plugins\\UI\\V4',
+      ),
+    ),
+    'packages' => 
+    array (
+      'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\vendor\\laravel-lang\\lang' => 
+      array (
+        'class' => 'LaravelLang\\Lang\\Plugin',
+        'name' => 'laravel-lang/lang',
+      ),
+    ),
+    'models' => 
+    array (
+      'directory' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\app',
+    ),
+    'map' => 
+    array (
+      'af' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'af_ZA',
+      ),
+      'sq' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sq_AL',
+      ),
+      'am' => 
+      array (
+        'type' => 'Ethi',
+        'regional' => 'am_ET',
+      ),
+      'ar' => 
+      array (
+        'type' => 'Arab',
+        'regional' => 'ar_AE',
+        'direction' => 
+        \LaravelLang\LocaleList\Direction::RightToLeft,
+      ),
+      'hy' => 
+      array (
+        'type' => 'Armn',
+        'regional' => 'hy_AM',
+      ),
+      'as' => 
+      array (
+        'type' => 'Beng',
+        'regional' => 'as_IN',
+      ),
+      'az' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'az_AZ',
+      ),
+      'bm' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'bm_ML',
+      ),
+      'bho' => 
+      array (
+        'type' => 'Deva',
+        'regional' => 'bho_IN',
+      ),
+      'eu' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'eu_ES',
+      ),
+      'be' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'be_BY',
+      ),
+      'bn' => 
+      array (
+        'type' => 'Beng',
+        'regional' => 'bn_BD',
+      ),
+      'bs' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'bs_BA',
+      ),
+      'bg' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'bg_BG',
+      ),
+      'en_CA' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'en_CA',
+      ),
+      'ca' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ca_ES',
+      ),
+      'ceb' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ceb_PH',
+      ),
+      'km' => 
+      array (
+        'type' => 'Khmr',
+        'regional' => 'km_KH',
+      ),
+      'zh_CN' => 
+      array (
+        'type' => 'Hans',
+        'regional' => 'zh_CN',
+      ),
+      'zh_HK' => 
+      array (
+        'type' => 'Hans',
+        'regional' => 'zh_HK',
+      ),
+      'zh_TW' => 
+      array (
+        'type' => 'Hans',
+        'regional' => 'zh_TW',
+      ),
+      'hr' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'hr_HR',
+      ),
+      'cs' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'cs_CZ',
+      ),
+      'da' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'da_DK',
+      ),
+      'doi' => 
+      array (
+        'type' => 'Deva',
+        'regional' => 'doi_IN',
+      ),
+      'nl' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'nl_NL',
+      ),
+      'en' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'en_GB',
+      ),
+      'eo' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'eo_001',
+      ),
+      'et' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'et_EE',
+      ),
+      'ee' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ee_GH',
+      ),
+      'fi' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'fi_FI',
+      ),
+      'fr' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'fr_FR',
+      ),
+      'fy' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'fy_NL',
+      ),
+      'gl' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'gl_ES',
+      ),
+      'ka' => 
+      array (
+        'type' => 'Geor',
+        'regional' => 'ka_GE',
+      ),
+      'de' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'de_DE',
+      ),
+      'de_CH' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'de_CH',
+      ),
+      'el' => 
+      array (
+        'type' => 'Grek',
+        'regional' => 'el_GR',
+      ),
+      'gu' => 
+      array (
+        'type' => 'Gujr',
+        'regional' => 'gu_IN',
+      ),
+      'ha' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ha_NG',
+      ),
+      'haw' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'haw',
+      ),
+      'he' => 
+      array (
+        'type' => 'Hebr',
+        'regional' => 'he_IL',
+        'direction' => 
+        \LaravelLang\LocaleList\Direction::RightToLeft,
+      ),
+      'hi' => 
+      array (
+        'type' => 'Deva',
+        'regional' => 'hi_IN',
+      ),
+      'hu' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'hu_HU',
+      ),
+      'is' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'is_IS',
+      ),
+      'ig' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ig_NG',
+      ),
+      'id' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'id_ID',
+      ),
+      'ga' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ga_IE',
+      ),
+      'it' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'it_IT',
+      ),
+      'ja' => 
+      array (
+        'type' => 'Jpan',
+        'regional' => 'ja_JP',
+      ),
+      'kn' => 
+      array (
+        'type' => 'Knda',
+        'regional' => 'kn_IN',
+      ),
+      'kk' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'kk_KZ',
+      ),
+      'rw' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'rw_RW',
+      ),
+      'ko' => 
+      array (
+        'type' => 'Hang',
+        'regional' => 'ko_KR',
+      ),
+      'ku' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ku_TR',
+      ),
+      'ckb' => 
+      array (
+        'type' => 'Arab',
+        'regional' => 'ckb_IQ',
+        'direction' => 
+        \LaravelLang\LocaleList\Direction::RightToLeft,
+      ),
+      'ky' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'ky_KG',
+      ),
+      'lo' => 
+      array (
+        'type' => 'Laoo',
+        'regional' => 'lo_LA',
+      ),
+      'lv' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'lv_LV',
+      ),
+      'ln' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ln_CD',
+      ),
+      'lt' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'lt_LT',
+      ),
+      'lg' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'lg_UG',
+      ),
+      'lb' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'lb_LU',
+      ),
+      'mk' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'mk_MK',
+      ),
+      'mai' => 
+      array (
+        'type' => 'Deva',
+        'regional' => 'mai_IN',
+      ),
+      'mg' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'mg_MG',
+      ),
+      'ml' => 
+      array (
+        'type' => 'Mlym',
+        'regional' => 'ml_IN',
+      ),
+      'ms' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ms_MY',
+      ),
+      'mt' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'mt_MT',
+      ),
+      'mr' => 
+      array (
+        'type' => 'Deva',
+        'regional' => 'mr_IN',
+      ),
+      'mi' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'mi_NZ',
+      ),
+      'mni_Mtei' => 
+      array (
+        'type' => 'Beng',
+        'regional' => 'mni_IN',
+      ),
+      'mn' => 
+      array (
+        'type' => 'Mong',
+        'regional' => 'mn_MN',
+      ),
+      'my' => 
+      array (
+        'type' => 'Mymr',
+        'regional' => 'my_MM',
+      ),
+      'ne' => 
+      array (
+        'type' => 'Deva',
+        'regional' => 'ne',
+      ),
+      'nb' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'nb_NO',
+      ),
+      'nn' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'nn_NO',
+      ),
+      'oc' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'oc_FR',
+      ),
+      'or' => 
+      array (
+        'type' => 'Orya',
+        'regional' => 'or_IN',
+      ),
+      'om' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'om_ET',
+      ),
+      'ps' => 
+      array (
+        'type' => 'Arab',
+        'regional' => 'ps_AF',
+        'direction' => 
+        \LaravelLang\LocaleList\Direction::RightToLeft,
+      ),
+      'fa' => 
+      array (
+        'type' => 'Arab',
+        'regional' => 'fa_IR',
+        'direction' => 
+        \LaravelLang\LocaleList\Direction::RightToLeft,
+      ),
+      'fil' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'fil_PH',
+      ),
+      'pl' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'pl_PL',
+      ),
+      'pt' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'pt_PT',
+      ),
+      'pt_BR' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'pt_BR',
+      ),
+      'pa' => 
+      array (
+        'type' => 'Guru',
+        'regional' => 'pa_IN',
+      ),
+      'qu' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'qu_PE',
+      ),
+      'ro' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ro_RO',
+      ),
+      'ru' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'ru_RU',
+      ),
+      'sa' => 
+      array (
+        'type' => 'Deva',
+        'regional' => 'sa_IN',
+      ),
+      'sc' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sc_IT',
+      ),
+      'gd' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'gd_GB',
+      ),
+      'sr_Cyrl' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'sr_RS',
+      ),
+      'sr_Latn' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sr_RS',
+      ),
+      'sr_Latn_ME' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sr_Latn_ME',
+      ),
+      'sn' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sn_ZW',
+      ),
+      'sd' => 
+      array (
+        'type' => 'Arab',
+        'regional' => 'sd_PK',
+        'direction' => 
+        \LaravelLang\LocaleList\Direction::RightToLeft,
+      ),
+      'si' => 
+      array (
+        'type' => 'Sinh',
+        'regional' => 'si_LK',
+      ),
+      'sk' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sk_SK',
+      ),
+      'sl' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sl_SI',
+      ),
+      'so' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'so_SO',
+      ),
+      'es' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'es_ES',
+      ),
+      'su' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'su_ID',
+      ),
+      'sw' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sw_KE',
+      ),
+      'sv' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'sv_SE',
+      ),
+      'tl' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'tl_PH',
+      ),
+      'tg' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'tg_TJ',
+      ),
+      'ta' => 
+      array (
+        'type' => 'Taml',
+        'regional' => 'ta_IN',
+      ),
+      'tt' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'tt_RU',
+      ),
+      'te' => 
+      array (
+        'type' => 'Telu',
+        'regional' => 'te_IN',
+      ),
+      'ti' => 
+      array (
+        'type' => 'Ethi',
+        'regional' => 'ti_ET',
+      ),
+      'th' => 
+      array (
+        'type' => 'Thai',
+        'regional' => 'th_TH',
+      ),
+      'tr' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'tr_TR',
+      ),
+      'tk' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'tk_TM',
+      ),
+      'ak' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'ak_GH',
+      ),
+      'ug' => 
+      array (
+        'type' => 'Arab',
+        'regional' => 'ug_CN',
+        'direction' => 
+        \LaravelLang\LocaleList\Direction::RightToLeft,
+      ),
+      'uk' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'uk_UA',
+      ),
+      'ur' => 
+      array (
+        'type' => 'Arab',
+        'regional' => 'ur_PK',
+        'direction' => 
+        \LaravelLang\LocaleList\Direction::RightToLeft,
+      ),
+      'uz_Cyrl' => 
+      array (
+        'type' => 'Cyrl',
+        'regional' => 'uz_UZ',
+      ),
+      'uz_Latn' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'uz_UZ',
+      ),
+      'vi' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'vi_VN',
+      ),
+      'cy' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'cy_GB',
+      ),
+      'xh' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'xh_ZA',
+      ),
+      'yi' => 
+      array (
+        'type' => 'Hebr',
+        'regional' => 'yi_001',
+      ),
+      'yo' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'yo_NG',
+      ),
+      'zu' => 
+      array (
+        'type' => 'Latn',
+        'regional' => 'zu_ZA',
+      ),
+    ),
   ),
   'tinker' => 
   array (

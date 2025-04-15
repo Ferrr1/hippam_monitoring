@@ -53,14 +53,15 @@ function PaginationLink({
     return (
         <a
             aria-current={isActive ? "page" : undefined}
+            aria-disabled={isDisabled} // accessibility
             data-slot="pagination-link"
             data-active={isActive}
-            data-disabled={isDisabled}
             className={cn(
                 buttonVariants({
                     variant: isActive ? "default" : "ghost",
                     size,
                 }),
+                isDisabled && "pointer-events-none opacity-50 cursor-not-allowed",
                 className
             )}
             {...props}
@@ -94,7 +95,6 @@ function PaginationNext({
             aria-label="Go to next page"
             size="default"
             className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
-            isDisabled
             {...props}
         >
             <span className="hidden sm:block">Next</span>

@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import ConfirmDialog from '@/pages/admin/pengguna/delete/confirm-dialog';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/UserTableHandler';
+import ConfirmDialog from '@/pages/admin/warga/delete/confirm-dialog';
+import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/WargaTableHandler';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
@@ -22,32 +22,35 @@ interface Pagination {
     total: number;
 }
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
+interface Warga {
+    warga_id: number;
+    users_id: number;
+    no_telp: number;
+    alamat: string;
+    user: {
+        name: string;
+        email: string;
+    };
     created_at: string;
     updated_at: string;
 }
 
 type DataTableProps = {
-    users: {
-        data: User[];
+    wargas: {
+        data: Warga[];
     };
     filters: Filters;
     pagination: Pagination;
     total: number;
 };
 
-export default function DataTable({ users, total, filters, pagination }: DataTableProps) {
+export default function DataTable({ wargas, total, filters, pagination }: DataTableProps) {
     const [search, setSearch] = useState('');
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const [selectedName, setSelectedName] = useState<string | null>(null);
-    const [selectedEmail, setSelectedEmail] = useState<string | null>(null);
-    const [selectedRole, setSelectedRole] = useState<string | null>(null);
+    const [selectedNoTelp, setSelectedNoTelp] = useState<string | null>(null);
+    const [selectedAlamat, setSelectedAlamat] = useState<string | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
     const showCountOptions = ['10', '20', '30'];
     const handlePageChangeWrapper = (page: number) => {
@@ -116,66 +119,43 @@ export default function DataTable({ users, total, filters, pagination }: DataTab
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('role', filters)}
+                                    onClick={() => handleSortWrapper('no_telp', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Role
-                                        {filters.sortBy === 'role' &&
+                                        No Telepon
+                                        {filters.sortBy === 'no_telp' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('created_at', filters)}
+                                    onClick={() => handleSortWrapper('alamat', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Created At
-                                        {filters.sortBy === 'created_at' &&
-                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
-                                    </div>
-                                </TableHead>
-                                <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('updated_at', filters)}
-                                >
-                                    <div className="flex items-center justify-center gap-1 text-center">
-                                        Updated At
-                                        {filters.sortBy === 'updated_at' &&
+                                        Alamat
+                                        {filters.sortBy === 'alamat' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead className="text-center">Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        {users.data.length > 0 ? (
-                            users.data.map((user, index) => (
-                                <TableBody key={user.id}>
+                        {wargas.data.length > 0 ? (
+                            wargas.data.map((warga, index) => (
+                                <TableBody key={warga.warga_id}>
                                     <TableRow className="text-center">
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{user.name}</TableCell>
-                                        <TableCell>{user.email}</TableCell>
-                                        <TableCell>
-                                            <span
-                                                className={`rounded-full px-2 py-1 text-sm font-medium ${user.role === 'admin'
-                                                    ? 'bg-green-100 text-green-700'
-                                                    : user.role === 'user'
-                                                        ? 'bg-yellow-100 text-yellow-700'
-                                                        : 'bg-gray-100 text-gray-600'
-                                                    } `}
-                                            >
-                                                {user.role}
-                                            </span>
-                                        </TableCell>
-                                        <TableCell>{user.created_at}</TableCell>
-                                        <TableCell>{user.updated_at}</TableCell>
+                                        <TableCell>{warga.user.name}</TableCell>
+                                        <TableCell>{warga.user.email}</TableCell>
+                                        <TableCell>{warga.no_telp}</TableCell>
+                                        <TableCell>{warga.alamat}</TableCell>
                                         <TableCell className="flex items-center justify-center gap-4">
                                             <Button
                                                 variant="default"
                                                 onClick={() => {
-                                                    setSelectedId(user.id);
-                                                    setSelectedName(user.name);
-                                                    setSelectedEmail(user.email);
-                                                    setSelectedRole(user.role);
+                                                    setSelectedId(warga.warga_id);
+                                                    setSelectedNoTelp(String(warga.no_telp));
+                                                    setSelectedAlamat(warga.alamat);
                                                     setEditDialogOpen(true);
                                                 }}
                                             >
@@ -184,7 +164,7 @@ export default function DataTable({ users, total, filters, pagination }: DataTab
                                             <Button
                                                 variant="destructive"
                                                 onClick={() => {
-                                                    setSelectedEmail(user.email);
+                                                    setSelectedId(warga.warga_id);
                                                     setDeleteDialogOpen(true);
                                                 }}
                                             >
@@ -210,41 +190,38 @@ export default function DataTable({ users, total, filters, pagination }: DataTab
                                 setEditDialogOpen(open);
                                 if (!open) {
                                     setSelectedId(null);
-                                    setSelectedName(null);
-                                    setSelectedEmail(null);
-                                    setSelectedRole(null);
+                                    setSelectedNoTelp(null);
+                                    setSelectedAlamat(null);
                                 }
                             }}
-                            title="Update Pengguna"
-                            description="Apakah anda yakin ingin mengupdate pengguna ini?"
+                            title="Update Warga"
+                            description="Apakah anda yakin ingin mengupdate warga ini?"
                             defaultValues={{
-                                id: selectedId,
-                                name: selectedName,
-                                email: selectedEmail,
-                                role: selectedRole,
+                                warga_id: selectedId,
+                                no_telp: selectedNoTelp,
+                                alamat: selectedAlamat,
                             }}
                             onClose={() => {
                                 setEditDialogOpen(false);
                                 setSelectedId(null);
-                                setSelectedName(null);
-                                setSelectedEmail(null);
-                                setSelectedRole(null);
+                                setSelectedNoTelp(null);
+                                setSelectedAlamat(null);
                             }}
                         />
                     )}
-                    {selectedEmail && (
+                    {selectedId && (
                         <ConfirmDialog
                             open={deleteDialogOpen}
                             onOpenChange={(open) => {
                                 setDeleteDialogOpen(open);
-                                if (!open) setSelectedEmail(null);
+                                if (!open) setSelectedId(null);
                             }}
-                            title="Delete Pengguna"
-                            description="Apakah anda yakin ingin menghapus pengguna ini?"
-                            email={selectedEmail}
+                            title="Delete Warga"
+                            description="Apakah anda yakin ingin menghapus warga ini?"
+                            warga_id={selectedId}
                             onClose={() => {
                                 setDeleteDialogOpen(false);
-                                setSelectedEmail(null);
+                                setSelectedId(null);
                             }}
                         />
                     )}

@@ -39,7 +39,7 @@ export function AppSidebar() {
                     },
                     {
                         title: 'Data Warga',
-                        href: '/admin/data-warga',
+                        href: '/admin/warga',
                         icon: BookUser,
                     },
                     {

@@ -21,7 +21,7 @@ export const handleSearchKeyDown = (
     filters: Filters
 ) => {
     if (e.key === 'Enter' && search !== filters.search) {
-        router.get('/admin/pengguna', { ...filters, search }, {
+        router.get('/admin/warga', { ...filters, search }, {
             preserveState: true,
             preserveScroll: true
         });
@@ -30,7 +30,7 @@ export const handleSearchKeyDown = (
 
 export const handleSort = (column: string, filters: Filters) => {
     const newDir = filters.sortBy === column && filters.sortDir === 'asc' ? 'desc' : 'asc';
-    router.get('/admin/pengguna', {
+    router.get('/admin/warga', {
         ...filters,
         sortBy: column,
         sortDir: newDir,
@@ -41,7 +41,7 @@ export const handleSort = (column: string, filters: Filters) => {
 };
 
 export const handlePageChange = (page: number, filters: Filters) => {
-    router.get('/admin/pengguna', { ...filters, page }, {
+    router.get('/admin/warga', { ...filters, page }, {
         preserveState: true,
         preserveScroll: true
     });
@@ -49,7 +49,7 @@ export const handlePageChange = (page: number, filters: Filters) => {
 
 
 export const handlePerPageChange = (value: string, filters: Filters) => {
-    router.get('/admin/pengguna', { ...filters, perPage: value }, {
+    router.get('/admin/warga', { ...filters, perPage: value }, {
         preserveState: true,
         preserveScroll: true
     });

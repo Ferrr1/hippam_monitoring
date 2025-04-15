@@ -16,8 +16,7 @@ export default function AppSidebarLayout({ children, breadcrumbs = [] }: PropsWi
                 <Toaster
                     position="top-right"
                     richColors={true}
-                    duration={2000}
-                    closeButton={true}
+                    duration={5000}
                     swipeDirections={['top', 'right']}
                 />
             </AppContent>

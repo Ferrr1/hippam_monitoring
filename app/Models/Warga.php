@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Warga extends Model
 {
+
+    protected $primaryKey = 'warga_id';
     protected $fillable = [
         'users_id',
         'no_telp',

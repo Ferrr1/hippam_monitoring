@@ -3,23 +3,32 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
-import FormHeader from '@/pages/admin/pengguna/create/form-header';
 import DataTable from './create/data-table';
+import FormHeader from './create/form-header';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Daftar Pengguna',
-        href: '/admin/pengguna',
+        title: 'Daftar Warga',
+        href: '/admin/warga',
     },
 ];
 
+interface Warga {
+    warga_id: number;
+    users_id: number;
+    no_telp: number;
+    alamat: string;
+    user: {
+        name: string;
+        email: string;
+    };
+    created_at: string;
+    updated_at: string;
+}
 interface User {
     id: number;
     name: string;
     email: string;
-    role: string;
-    created_at: string;
-    updated_at: string;
 }
 interface Filters {
     search: string;
@@ -34,31 +43,30 @@ interface Pagination {
 }
 
 type Props = {
-    users: {
-        data: User[];
+    wargas: {
+        data: Warga[];
     };
+    users: User[];
     filters: Filters;
     pagination: Pagination;
-    success?: string;
 }
 
-export default function Pengguna({ users, filters, pagination, success }: Props) {
-
+export default function Warga({ wargas, users, filters, pagination }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Pengguna" />
+            <Head title="Warga" />
             <div className="px-4 py-6">
-                <Heading title="Daftar Pengguna" description="Halaman untuk menambahkan pengguna sistem" />
+                <Heading title="Daftar Warga" description="Halaman untuk menambahkan daftar warga sistem" />
 
                 <FormHeader
-                    action={'register.store'}
-                    success={success}
+                    action={'warga.store'}
+                    users={users}
                 />
 
                 <Separator className="my-4" />
 
                 <DataTable
-                    users={users}
+                    wargas={wargas}
                     pagination={pagination}
                     total={pagination.total}
                     filters={filters}

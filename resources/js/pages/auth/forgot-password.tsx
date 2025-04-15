@@ -15,6 +15,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
         email: '',
     });
 
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 

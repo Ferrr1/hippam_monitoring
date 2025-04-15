@@ -40,7 +40,7 @@ export default function PaginationWrapper({
         <Pagination className="my-4">
             <PaginationContent>
                 <PaginationItem>
-                    <PaginationPrevious href="#" onClick={() => onPageChange(currentPage - 1)} data-disabled={currentPage === 1} />
+                    <PaginationPrevious href="#" onClick={() => onPageChange(currentPage - 1)} isDisabled={currentPage === 1} />
                 </PaginationItem>
                 {getPageNumbers(currentPage, totalPages).map((item, idx) =>
                     item === "ellipsis" ? (
@@ -59,7 +59,7 @@ export default function PaginationWrapper({
                     )
                 )}
                 <PaginationItem>
-                    <PaginationNext href="#" onClick={() => onPageChange(currentPage + 1)} data-disabled={currentPage === totalPages} />
+                    <PaginationNext href="#" onClick={() => onPageChange(currentPage + 1)} isDisabled={currentPage === totalPages} />
                 </PaginationItem>
             </PaginationContent>
         </Pagination>

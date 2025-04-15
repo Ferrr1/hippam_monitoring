@@ -10,18 +10,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "@inertiajs/react";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import { FormEventHandler } from "react";
 import InputError from "@/components/input-error";
+import { Textarea } from "@/components/ui/textarea";
 
 interface FormDialogProps {
     open: boolean;
@@ -29,10 +23,9 @@ interface FormDialogProps {
     title: string;
     description?: string;
     defaultValues: {
-        id: number | null;
-        name: string | null;
-        email: string | null;
-        role: string | null;
+        warga_id: number | null;
+        no_telp: string | null;
+        alamat: string | null;
     };
     onClose?: () => void;
 }
@@ -46,24 +39,23 @@ export default function FormDialog({
     onClose,
 }: FormDialogProps) {
     const { put, processing, data, setData, errors } = useForm({
-        id: defaultValues.id,
-        name: defaultValues.name,
-        email: defaultValues.email,
-        role: defaultValues.role,
+        warga_id: defaultValues.warga_id,
+        no_telp: defaultValues.no_telp,
+        alamat: defaultValues.alamat,
     });
 
     const handleUpdate: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route("register.update", data.id!), {
+        put(route("warga.update", data.warga_id!), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success("Data Pengguna Berhasil diubah");
+                toast.success("Data Warga Berhasil diubah");
                 onOpenChange(false);
                 onClose?.();
             },
             onError: () => {
-                toast.error("Gagal Mengubah Data Pengguna");
+                toast.error("Gagal Mengubah Data Warga");
             },
         });
     };
@@ -78,43 +70,27 @@ export default function FormDialog({
 
                 <form onSubmit={handleUpdate} className="space-y-4 py-2">
                     <div>
-                        <Label htmlFor="name">Nama</Label>
+                        <Label htmlFor="no_telp">No Telepon</Label>
                         <Input
-                            id="name"
-                            value={data.name!}
-                            onChange={(e) => setData("name", e.target.value)}
+                            id="no_telp"
+                            type="number"
+                            value={data.no_telp!}
+                            onChange={(e) => setData("no_telp", e.target.value)}
                             disabled={processing}
                         />
-                        <InputError message={errors.name} className="mt-1" />
+                        <InputError message={errors.no_telp} className="mt-1" />
                     </div>
 
                     <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            value={data.email!}
-                            onChange={(e) => setData("email", e.target.value)}
+                        <Label htmlFor="alamat">Alamat</Label>
+                        <Textarea
+                            id="alamat"
+                            value={data.alamat!}
+                            onChange={(e) => setData("alamat", e.target.value)}
                             disabled={processing}
+                            className="max-h-28"
                         />
-                        <InputError message={errors.email} className="mt-1" />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="role">Role</Label>
-                        <Select
-                            value={data.role!}
-                            onValueChange={(val) => setData("role", val)}
-                            disabled={processing}
-                        >
-                            <SelectTrigger id="role">
-                                <SelectValue placeholder="Pilih role" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="admin">Admin</SelectItem>
-                                <SelectItem value="user">User</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <InputError message={errors.role} className="mt-1" />
+                        <InputError message={errors.alamat} className="mt-1" />
                     </div>
 
                     <DialogFooter className="gap-2 pt-4">
