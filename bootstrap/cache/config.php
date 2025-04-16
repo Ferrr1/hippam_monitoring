@@ -324,6 +324,164 @@
       ),
     ),
   ),
+  'debugbar' => 
+  array (
+    'enabled' => true,
+    'hide_empty_tabs' => true,
+    'except' => 
+    array (
+      0 => 'telescope*',
+      1 => 'horizon*',
+    ),
+    'storage' => 
+    array (
+      'enabled' => true,
+      'open' => NULL,
+      'driver' => 'file',
+      'path' => 'D:\\Document\\SKRIPSI_BROK\\Website\\hippam_monitoring\\storage\\debugbar',
+      'connection' => NULL,
+      'provider' => '',
+      'hostname' => '127.0.0.1',
+      'port' => 2304,
+    ),
+    'editor' => 'phpstorm',
+    'remote_sites_path' => NULL,
+    'local_sites_path' => NULL,
+    'include_vendors' => true,
+    'capture_ajax' => true,
+    'add_ajax_timing' => false,
+    'ajax_handler_auto_show' => true,
+    'ajax_handler_enable_tab' => true,
+    'defer_datasets' => false,
+    'error_handler' => false,
+    'clockwork' => false,
+    'collectors' => 
+    array (
+      'phpinfo' => false,
+      'messages' => true,
+      'time' => true,
+      'memory' => true,
+      'exceptions' => true,
+      'log' => true,
+      'db' => true,
+      'views' => true,
+      'route' => false,
+      'auth' => false,
+      'gate' => true,
+      'session' => false,
+      'symfony_request' => true,
+      'mail' => true,
+      'laravel' => true,
+      'events' => false,
+      'default_request' => false,
+      'logs' => false,
+      'files' => false,
+      'config' => false,
+      'cache' => false,
+      'models' => true,
+      'livewire' => true,
+      'jobs' => false,
+      'pennant' => false,
+    ),
+    'options' => 
+    array (
+      'time' => 
+      array (
+        'memory_usage' => false,
+      ),
+      'messages' => 
+      array (
+        'trace' => true,
+        'capture_dumps' => false,
+      ),
+      'memory' => 
+      array (
+        'reset_peak' => false,
+        'with_baseline' => false,
+        'precision' => 0,
+      ),
+      'auth' => 
+      array (
+        'show_name' => true,
+        'show_guards' => true,
+      ),
+      'db' => 
+      array (
+        'with_params' => true,
+        'exclude_paths' => 
+        array (
+        ),
+        'backtrace' => true,
+        'backtrace_exclude_paths' => 
+        array (
+        ),
+        'timeline' => false,
+        'duration_background' => true,
+        'explain' => 
+        array (
+          'enabled' => false,
+        ),
+        'hints' => false,
+        'show_copy' => true,
+        'slow_threshold' => false,
+        'memory_usage' => false,
+        'soft_limit' => 100,
+        'hard_limit' => 500,
+      ),
+      'mail' => 
+      array (
+        'timeline' => true,
+        'show_body' => true,
+      ),
+      'views' => 
+      array (
+        'timeline' => true,
+        'data' => false,
+        'group' => 50,
+        'exclude_paths' => 
+        array (
+          0 => 'vendor/filament',
+        ),
+      ),
+      'route' => 
+      array (
+        'label' => true,
+      ),
+      'session' => 
+      array (
+        'hiddens' => 
+        array (
+        ),
+      ),
+      'symfony_request' => 
+      array (
+        'label' => true,
+        'hiddens' => 
+        array (
+        ),
+      ),
+      'events' => 
+      array (
+        'data' => false,
+      ),
+      'logs' => 
+      array (
+        'file' => NULL,
+      ),
+      'cache' => 
+      array (
+        'values' => true,
+      ),
+    ),
+    'inject' => true,
+    'route_prefix' => '_debugbar',
+    'route_middleware' => 
+    array (
+    ),
+    'route_domain' => NULL,
+    'theme' => 'auto',
+    'debug_backtrace_limit' => 50,
+  ),
   'filesystems' => 
   array (
     'default' => 'local',

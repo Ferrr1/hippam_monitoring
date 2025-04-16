@@ -4,30 +4,38 @@ import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
 import DataTable from './create/data-table';
-import FormHeader from './create/form-header';
+import { Button } from '@/components/ui/button';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Daftar Warga',
+        title: 'Daftar Tagihan',
         href: '/admin/warga',
     },
 ];
 
-interface Warga {
-    warga_id: number;
-    no_telp: number;
-    alamat: string;
-    user: {
-        name: string;
-        email: string;
+interface Tagihan {
+    tagihan_id: number;
+    periode: string;
+    pemakaian: number;
+    total_bayar: number;
+    warga: {
+        user: {
+            name: string;
+            email: string;
+        }
+        no_telp: number;
+        alamat: string;
+    };
+    device: {
+        device_id: string;
+        mac_address: number | string;
+        status: string;
+    };
+    tarif: {
+        harga: number;
     };
     created_at: string;
     updated_at: string;
-}
-interface User {
-    id: number;
-    name: string;
-    email: string;
 }
 interface Filters {
     search: string;
@@ -42,30 +50,24 @@ interface Pagination {
 }
 
 type Props = {
-    wargas: {
-        data: Warga[];
+    tagihans: {
+        data: Tagihan[];
     };
-    users: User[];
     filters: Filters;
     pagination: Pagination;
 }
 
-export default function Warga({ wargas, users, filters, pagination }: Props) {
+export default function Tagihan({ tagihans, filters, pagination }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Warga" />
+            <Head title="Tagihan" />
             <div className="px-4 py-6">
-                <Heading title="Daftar Warga" description="Halaman untuk menambahkan daftar warga sistem" />
-
-                <FormHeader
-                    action={'warga.store'}
-                    users={users}
-                />
-
+                <Heading title="Daftar Tagihan" description="Halaman untuk menambahkan daftar warga sistem" />
+                <Button className='mt-2'>Cetak Laporan</Button>
                 <Separator className="my-4" />
 
                 <DataTable
-                    wargas={wargas}
+                    tagihans={tagihans}
                     pagination={pagination}
                     total={pagination.total}
                     filters={filters}

@@ -24,6 +24,7 @@ interface Pagination {
 
 interface Warga {
     warga_id: number;
+    users_id: number;
     no_telp: number;
     alamat: string;
     user: {
@@ -147,8 +148,8 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                         <TableCell>{warga.user.name}</TableCell>
                                         <TableCell>{warga.user.email}</TableCell>
                                         <TableCell>{warga.no_telp}</TableCell>
-                                        <TableCell className='max-w-md break-words'>{warga.alamat}</TableCell>
-                                        <TableCell className="flex justify-center items-center gap-4">
+                                        <TableCell>{warga.alamat}</TableCell>
+                                        <TableCell className="flex items-center justify-center gap-4">
                                             <Button
                                                 variant="default"
                                                 onClick={() => {

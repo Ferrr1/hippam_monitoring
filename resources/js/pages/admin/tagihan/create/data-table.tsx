@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/WargaTableHandler';
+import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/TagihanTableHandler';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
@@ -22,28 +22,41 @@ interface Pagination {
     total: number;
 }
 
-interface Warga {
-    warga_id: number;
-    no_telp: number;
-    alamat: string;
-    user: {
-        name: string;
-        email: string;
+interface Tagihan {
+    tagihan_id: number;
+    periode: string;
+    pemakaian: number;
+    total_bayar: number;
+    warga: {
+        user: {
+            name: string;
+            email: string;
+        }
+        no_telp: number;
+        alamat: string;
+    };
+    device: {
+        device_id: string;
+        mac_address: number | string;
+        status: string;
+    };
+    tarif: {
+        harga: number;
     };
     created_at: string;
     updated_at: string;
 }
 
 type DataTableProps = {
-    wargas: {
-        data: Warga[];
+    tagihans: {
+        data: Tagihan[];
     };
     filters: Filters;
     pagination: Pagination;
     total: number;
 };
 
-export default function DataTable({ wargas, total, filters, pagination }: DataTableProps) {
+export default function DataTable({ tagihans, total, filters, pagination }: DataTableProps) {
     const [search, setSearch] = useState('');
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -118,43 +131,87 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('no_telp', filters)}
+                                    onClick={() => handleSortWrapper('device_id', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        No Telepon
-                                        {filters.sortBy === 'no_telp' &&
+                                        Device ID
+                                        {filters.sortBy === 'device_id' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('alamat', filters)}
+                                    onClick={() => handleSortWrapper('harga', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Alamat
-                                        {filters.sortBy === 'alamat' &&
+                                        Tarif Air
+                                        {filters.sortBy === 'harga' &&
+                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
+                                    </div>
+                                </TableHead>
+                                <TableHead
+                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    onClick={() => handleSortWrapper('periode', filters)}
+                                >
+                                    <div className="flex items-center justify-center gap-1 text-center">
+                                        Periode
+                                        {filters.sortBy === 'periode' &&
+                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
+                                    </div>
+                                </TableHead>
+                                <TableHead
+                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    onClick={() => handleSortWrapper('pemakaian', filters)}
+                                >
+                                    <div className="flex items-center justify-center gap-1 text-center">
+                                        Pemakaian
+                                        {filters.sortBy === 'pemakaian' &&
+                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
+                                    </div>
+                                </TableHead>
+                                <TableHead
+                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    onClick={() => handleSortWrapper('total_bayar', filters)}
+                                >
+                                    <div className="flex items-center justify-center gap-1 text-center">
+                                        Total
+                                        {filters.sortBy === 'total_bayar' &&
+                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
+                                    </div>
+                                </TableHead>
+                                <TableHead
+                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    onClick={() => handleSortWrapper('created_at', filters)}
+                                >
+                                    <div className="flex items-center justify-center gap-1 text-center">
+                                        Created At
+                                        {filters.sortBy === 'created_at' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead className="text-center">Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        {wargas.data.length > 0 ? (
-                            wargas.data.map((warga, index) => (
-                                <TableBody key={warga.warga_id}>
+                        {tagihans.data.length > 0 ? (
+                            tagihans.data.map((tagihan, index) => (
+                                <TableBody key={tagihan.tagihan_id}>
                                     <TableRow className="text-center">
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{warga.user.name}</TableCell>
-                                        <TableCell>{warga.user.email}</TableCell>
-                                        <TableCell>{warga.no_telp}</TableCell>
-                                        <TableCell className='max-w-md break-words'>{warga.alamat}</TableCell>
-                                        <TableCell className="flex justify-center items-center gap-4">
+                                        <TableCell>{tagihan.warga.user.name}</TableCell>
+                                        <TableCell>{tagihan.warga.user.email}</TableCell>
+                                        <TableCell>{tagihan.device.device_id}</TableCell>
+                                        <TableCell>{tagihan.tarif.harga}</TableCell>
+                                        <TableCell>{tagihan.periode}</TableCell>
+                                        <TableCell>{tagihan.pemakaian} m³</TableCell>
+                                        <TableCell>Rp. {tagihan.total_bayar}</TableCell>
+                                        <TableCell>{tagihan.created_at}</TableCell>
+                                        <TableCell className="flex items-center justify-center gap-4">
                                             <Button
                                                 variant="default"
                                                 onClick={() => {
-                                                    setSelectedId(warga.warga_id);
-                                                    setSelectedNoTelp(String(warga.no_telp));
-                                                    setSelectedAlamat(warga.alamat);
+                                                    setSelectedId(tagihan.tagihan_id);
+                                                    setSelectedNoTelp(String(tagihan.no_telp));
+                                                    setSelectedAlamat(tagihan.alamat);
                                                     setEditDialogOpen(true);
                                                 }}
                                             >
@@ -163,7 +220,7 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                             <Button
                                                 variant="destructive"
                                                 onClick={() => {
-                                                    setSelectedId(warga.warga_id);
+                                                    setSelectedId(tagihan.tagihan_id);
                                                     setDeleteDialogOpen(true);
                                                 }}
                                             >
@@ -193,10 +250,10 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                     setSelectedAlamat(null);
                                 }
                             }}
-                            title="Update Warga"
-                            description="Apakah anda yakin ingin mengupdate warga ini?"
+                            title="Update Tagihan"
+                            description="Apakah anda yakin ingin mengupdate tagihan ini?"
                             defaultValues={{
-                                warga_id: selectedId,
+                                tagihan_id: selectedId,
                                 no_telp: selectedNoTelp,
                                 alamat: selectedAlamat,
                             }}
@@ -215,9 +272,9 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                 setDeleteDialogOpen(open);
                                 if (!open) setSelectedId(null);
                             }}
-                            title="Delete Warga"
+                            title="Delete Tagihan"
                             description="Apakah anda yakin ingin menghapus warga ini?"
-                            warga_id={selectedId}
+                            tagihan_id={selectedId}
                             onClose={() => {
                                 setDeleteDialogOpen(false);
                                 setSelectedId(null);

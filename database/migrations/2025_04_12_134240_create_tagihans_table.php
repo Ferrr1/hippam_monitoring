@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('tagihans', function (Blueprint $table) {
             $table->id('tagihan_id');
-            $table->foreignId('warga_id')->references('warga_id')->on('wargas')->onDelete('cascade');
-            $table->string('device_id');
-            $table->foreign('device_id')->references('device_id')->on('devices')->onDelete('cascade');
-            $table->foreignId('tarif_id')->references('tarif_id')->on('tarifs')->onDelete('cascade');
+            $table->foreignId('warga_id')
+                ->constrained('wargas', 'warga_id')
+                ->onDelete('cascade');
+            $table->foreignId('device_id')
+                ->constrained('devices')
+                ->onDelete('cascade');
+            $table->foreignId('tarif_id')
+                ->constrained('tarifs', 'tarif_id')
+                ->onDelete('cascade');
             $table->string('periode');
             $table->float('pemakaian');
             $table->bigInteger('total_bayar');

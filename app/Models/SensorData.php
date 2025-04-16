@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class SensorData extends Model
 {
+    protected $primaryKey = 'sensor_data_id';
+    protected $fillable = [
+        'device_id',
+        'value',
+    ];
     // SensorData.php
     public function device()
     {
         return $this->belongsTo(Device::class, 'device_id');
-    }
-
-    public function sensorType()
-    {
-        return $this->belongsTo(SensorType::class, 'sensor_type_id');
     }
 }

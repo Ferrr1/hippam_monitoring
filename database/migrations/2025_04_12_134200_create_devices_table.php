@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('devices', function (Blueprint $table) {
-            $table->string('device_id')->primary();
-            $table->string('mac_address', 100);
-            $table->enum('status', ['aktif', 'tidak aktif']);
+            $table->id();
+            $table->string('device_id')->unique();
+            $table->string('mac_address', 100)->unique();
+            $table->enum('status', ['aktif', 'tidak_aktif']);
             $table->timestamps();
         });
     }

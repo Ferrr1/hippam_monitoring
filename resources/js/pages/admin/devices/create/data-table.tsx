@@ -3,11 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/WargaTableHandler';
+import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/DeviceTableHandler';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
 import ConfirmDialog from '../delete/confirm-dialog';
+import { router } from '@inertiajs/react';
 
 interface Filters {
     search: string;
@@ -22,34 +23,32 @@ interface Pagination {
     total: number;
 }
 
-interface Warga {
-    warga_id: number;
-    no_telp: number;
-    alamat: string;
-    user: {
-        name: string;
-        email: string;
-    };
+interface Perangkat {
+    id: number;
+    device_id: string;
+    mac_address: number | string;
+    status: string;
     created_at: string;
     updated_at: string;
 }
 
 type DataTableProps = {
-    wargas: {
-        data: Warga[];
+    devices: {
+        data: Perangkat[];
     };
     filters: Filters;
     pagination: Pagination;
     total: number;
 };
 
-export default function DataTable({ wargas, total, filters, pagination }: DataTableProps) {
+export default function DataTable({ devices, total, filters, pagination }: DataTableProps) {
     const [search, setSearch] = useState('');
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const [selectedNoTelp, setSelectedNoTelp] = useState<string | null>(null);
-    const [selectedAlamat, setSelectedAlamat] = useState<string | null>(null);
+    const [selectedDeviceID, setSelectedDeviceID] = useState<string | null>(null);
+    const [selectedMacAddress, setSelectedMacAddress] = useState<string | null>(null);
+    const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
     const showCountOptions = ['10', '20', '30'];
     const handlePageChangeWrapper = (page: number) => {
@@ -98,63 +97,70 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('name', filters)}
+                                    onClick={() => handleSortWrapper('device_id', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Nama
-                                        {filters.sortBy === 'name' &&
+                                        Device ID
+                                        {filters.sortBy === 'device_id' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('email', filters)}
+                                    onClick={() => handleSortWrapper('mac_address', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Email
-                                        {filters.sortBy === 'email' &&
+                                        Mac Address
+                                        {filters.sortBy === 'mac_address' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('no_telp', filters)}
+                                    onClick={() => handleSortWrapper('status', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        No Telepon
-                                        {filters.sortBy === 'no_telp' &&
-                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
-                                    </div>
-                                </TableHead>
-                                <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('alamat', filters)}
-                                >
-                                    <div className="flex items-center justify-center gap-1 text-center">
-                                        Alamat
-                                        {filters.sortBy === 'alamat' &&
+                                        Status
+                                        {filters.sortBy === 'status' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead className="text-center">Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        {wargas.data.length > 0 ? (
-                            wargas.data.map((warga, index) => (
-                                <TableBody key={warga.warga_id}>
+                        {devices.data.length > 0 ? (
+                            devices.data.map((device, index) => (
+                                <TableBody key={device.id}>
                                     <TableRow className="text-center">
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{warga.user.name}</TableCell>
-                                        <TableCell>{warga.user.email}</TableCell>
-                                        <TableCell>{warga.no_telp}</TableCell>
-                                        <TableCell className='max-w-md break-words'>{warga.alamat}</TableCell>
-                                        <TableCell className="flex justify-center items-center gap-4">
+                                        <TableCell>{device.device_id}</TableCell>
+                                        <TableCell>{device.mac_address}</TableCell>
+                                        <TableCell><span
+                                            className={`rounded-full px-2 py-1 text-sm font-medium ${device.status === 'aktif'
+                                                ? 'bg-green-100 text-green-700'
+                                                : device.status === 'tidak_aktif'
+                                                    ? 'bg-red-100 text-red-700'
+                                                    : 'bg-gray-100 text-gray-600'
+                                                } `}
+                                        >
+                                            {device.status === 'aktif' ? "Aktif" : "Tidak Aktif"}
+                                        </span></TableCell>
+                                        <TableCell className="flex items-center justify-center gap-4">
+                                            <Button
+                                                variant="secondary"
+                                                onClick={() => {
+                                                    router.get(`/admin/devices/${device.device_id}/show`);
+                                                }}
+                                            >
+                                                View
+                                            </Button>
                                             <Button
                                                 variant="default"
                                                 onClick={() => {
-                                                    setSelectedId(warga.warga_id);
-                                                    setSelectedNoTelp(String(warga.no_telp));
-                                                    setSelectedAlamat(warga.alamat);
+                                                    setSelectedId(device.id);
+                                                    setSelectedDeviceID(device.device_id);
+                                                    setSelectedMacAddress(String(device.mac_address));
+                                                    setSelectedStatus(device.status);
                                                     setEditDialogOpen(true);
                                                 }}
                                             >
@@ -163,7 +169,7 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                             <Button
                                                 variant="destructive"
                                                 onClick={() => {
-                                                    setSelectedId(warga.warga_id);
+                                                    setSelectedId(device.id);
                                                     setDeleteDialogOpen(true);
                                                 }}
                                             >
@@ -189,22 +195,25 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                 setEditDialogOpen(open);
                                 if (!open) {
                                     setSelectedId(null);
-                                    setSelectedNoTelp(null);
-                                    setSelectedAlamat(null);
+                                    setSelectedDeviceID(null);
+                                    setSelectedMacAddress(null);
+                                    setSelectedStatus(null);
                                 }
                             }}
-                            title="Update Warga"
-                            description="Apakah anda yakin ingin mengupdate warga ini?"
+                            title="Update Device"
+                            description="Apakah anda yakin ingin mengupdate perangkat ini?"
                             defaultValues={{
-                                warga_id: selectedId,
-                                no_telp: selectedNoTelp,
-                                alamat: selectedAlamat,
+                                id: selectedId,
+                                device_id: selectedDeviceID,
+                                mac_address: selectedMacAddress,
+                                status: selectedStatus,
                             }}
                             onClose={() => {
                                 setEditDialogOpen(false);
                                 setSelectedId(null);
-                                setSelectedNoTelp(null);
-                                setSelectedAlamat(null);
+                                setSelectedDeviceID(null);
+                                setSelectedMacAddress(null);
+                                setSelectedStatus(null);
                             }}
                         />
                     )}
@@ -215,9 +224,9 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                 setDeleteDialogOpen(open);
                                 if (!open) setSelectedId(null);
                             }}
-                            title="Delete Warga"
-                            description="Apakah anda yakin ingin menghapus warga ini?"
-                            warga_id={selectedId}
+                            title="Delete Device"
+                            description="Apakah anda yakin ingin menghapus perangkat ini?"
+                            id={selectedId}
                             onClose={() => {
                                 setDeleteDialogOpen(false);
                                 setSelectedId(null);

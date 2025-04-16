@@ -4,31 +4,28 @@ import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
 import DataTable from './create/data-table';
-import FormHeader from './create/form-header';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Daftar Warga',
-        href: '/admin/warga',
+        title: 'Daftar Perangkat',
+        href: '/admin/devices',
+    },
+    {
+        title: 'Data Sensor',
+        href: '/admin/devices/sensor',
     },
 ];
 
-interface Warga {
-    warga_id: number;
-    no_telp: number;
-    alamat: string;
-    user: {
-        name: string;
-        email: string;
+interface Sensor {
+    sensor_data_id: number;
+    device: {
+        device_id: string;
     };
+    value: JSON;
     created_at: string;
     updated_at: string;
 }
-interface User {
-    id: number;
-    name: string;
-    email: string;
-}
+
 interface Filters {
     search: string;
     sortBy: string;
@@ -42,34 +39,29 @@ interface Pagination {
 }
 
 type Props = {
-    wargas: {
-        data: Warga[];
+    sensors: {
+        data: Sensor[];
     };
-    users: User[];
     filters: Filters;
     pagination: Pagination;
 }
 
-export default function Warga({ wargas, users, filters, pagination }: Props) {
+export default function Perangkat({ sensors, filters, pagination }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Warga" />
+            <Head title="Sensor" />
             <div className="px-4 py-6">
-                <Heading title="Daftar Warga" description="Halaman untuk menambahkan daftar warga sistem" />
-
-                <FormHeader
-                    action={'warga.store'}
-                    users={users}
-                />
+                <Heading title="Data Sensor" description="Halaman untuk melihat data dari sensor yang tersimpan didatabase" />
 
                 <Separator className="my-4" />
 
                 <DataTable
-                    wargas={wargas}
+                    sensors={sensors}
                     pagination={pagination}
                     total={pagination.total}
                     filters={filters}
                 />
+
             </div>
         </AppLayout>
     );

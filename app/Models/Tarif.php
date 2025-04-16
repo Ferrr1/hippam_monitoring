@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tarif extends Model
 {
+    protected $primaryKey = 'tarif_id';
     protected $fillable = [
         'harga',
     ];

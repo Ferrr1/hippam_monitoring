@@ -3,7 +3,7 @@ import { NavMain } from '@/components/nav-main';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, UserCog, BookUser, CreditCard, ClipboardMinus, Droplets, Calculator } from 'lucide-react';
+import { LayoutGrid, UserCog, BookUser, CreditCard, ClipboardMinus, Droplets, Calculator, Laptop } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -33,7 +33,7 @@ export function AppSidebar() {
                 label: "Management Data",
                 items: [
                     {
-                        title: 'Pengguna',
+                        title: 'Data Pengguna',
                         href: '/admin/pengguna',
                         icon: UserCog,
                     },
@@ -42,6 +42,16 @@ export function AppSidebar() {
                         href: '/admin/warga',
                         icon: BookUser,
                     },
+                    {
+                        title: 'Data Perangkat',
+                        href: '/admin/devices',
+                        icon: Laptop,
+                    },
+                ],
+            },
+            {
+                label: "Administrasi Menu",
+                items: [
                     {
                         title: 'Tagihan',
                         href: '/admin/tagihan',

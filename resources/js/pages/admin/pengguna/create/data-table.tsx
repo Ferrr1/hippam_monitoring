@@ -3,11 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import ConfirmDialog from '@/pages/admin/pengguna/delete/confirm-dialog';
 import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/UserTableHandler';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
+import ConfirmDialog from '../delete/confirm-dialog';
 
 interface Filters {
     search: string;
@@ -232,7 +232,7 @@ export default function DataTable({ users, total, filters, pagination }: DataTab
                             }}
                         />
                     )}
-                    {selectedEmail && (
+                    {deleteDialogOpen && (
                         <ConfirmDialog
                             open={deleteDialogOpen}
                             onOpenChange={(open) => {

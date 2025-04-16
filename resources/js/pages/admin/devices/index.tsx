@@ -8,27 +8,20 @@ import FormHeader from './create/form-header';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Daftar Warga',
+        title: 'Daftar Perangkat',
         href: '/admin/warga',
     },
 ];
 
-interface Warga {
-    warga_id: number;
-    no_telp: number;
-    alamat: string;
-    user: {
-        name: string;
-        email: string;
-    };
+interface Perangkat {
+    id: number;
+    device_id: string;
+    mac_address: number | string;
+    status: string;
     created_at: string;
     updated_at: string;
 }
-interface User {
-    id: number;
-    name: string;
-    email: string;
-}
+
 interface Filters {
     search: string;
     sortBy: string;
@@ -42,30 +35,28 @@ interface Pagination {
 }
 
 type Props = {
-    wargas: {
-        data: Warga[];
+    devices: {
+        data: Perangkat[];
     };
-    users: User[];
     filters: Filters;
     pagination: Pagination;
 }
 
-export default function Warga({ wargas, users, filters, pagination }: Props) {
+export default function Perangkat({ devices, filters, pagination }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Warga" />
+            <Head title="Perangkat" />
             <div className="px-4 py-6">
-                <Heading title="Daftar Warga" description="Halaman untuk menambahkan daftar warga sistem" />
+                <Heading title="Daftar Perangkat" description="Halaman untuk menambahkan daftar warga sistem" />
 
                 <FormHeader
-                    action={'warga.store'}
-                    users={users}
+                    action={'devices.store'}
                 />
 
                 <Separator className="my-4" />
 
                 <DataTable
-                    wargas={wargas}
+                    devices={devices}
                     pagination={pagination}
                     total={pagination.total}
                     filters={filters}

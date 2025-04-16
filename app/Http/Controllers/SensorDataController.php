@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SensorData;
 use Illuminate\Http\Request;
 
 class SensorDataController extends Controller
@@ -57,8 +58,10 @@ class SensorDataController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($sensorData)
     {
-        //
+        $sensorData = SensorData::where('sensor_data_id', $sensorData)->first();
+        $sensorData->delete();
+        return back()->with('success', __('Data berhasil dihapus'));
     }
 }

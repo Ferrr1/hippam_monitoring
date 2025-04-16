@@ -3,10 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/WargaTableHandler';
+import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/SensorDataTableHandler';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
-import FormDialog from '../update/form-dialog';
 import ConfirmDialog from '../delete/confirm-dialog';
 
 interface Filters {
@@ -22,43 +21,39 @@ interface Pagination {
     total: number;
 }
 
-interface Warga {
-    warga_id: number;
-    no_telp: number;
-    alamat: string;
-    user: {
-        name: string;
-        email: string;
+interface Sensor {
+    sensor_data_id: number;
+    device: {
+        device_id: string;
     };
+    value: JSON;
     created_at: string;
     updated_at: string;
 }
 
 type DataTableProps = {
-    wargas: {
-        data: Warga[];
+    sensors: {
+        data: Sensor[];
     };
     filters: Filters;
     pagination: Pagination;
     total: number;
 };
 
-export default function DataTable({ wargas, total, filters, pagination }: DataTableProps) {
+export default function DataTable({ sensors, total, filters, pagination }: DataTableProps) {
     const [search, setSearch] = useState('');
-    const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const [selectedNoTelp, setSelectedNoTelp] = useState<string | null>(null);
-    const [selectedAlamat, setSelectedAlamat] = useState<string | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
     const showCountOptions = ['10', '20', '30'];
+
     const handlePageChangeWrapper = (page: number) => {
-        handlePageChange(page, filters);
+        handlePageChange(page, filters, sensors.data[0].device.device_id);
     };
     const handlePerPageChangeWrapper = (perPage: string) => {
-        handlePerPageChange(perPage, filters);
+        handlePerPageChange(perPage, filters, sensors.data[0].device.device_id);
     };
-    const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters);
+    const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters, sensors.data[0].device.device_id);
 
     return (
         <div>
@@ -83,7 +78,7 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                         placeholder="Search..."
                         value={search}
                         onChange={(e) => handleSearchChange(e.target.value, setSearch)}
-                        onKeyDown={(e) => handleSearchKeyDown(e, search, filters)}
+                        onKeyDown={(e) => handleSearchKeyDown(e, search, filters, sensors.data[0].device.device_id)}
                         className="max-w-xs"
                     />
                 </div>
@@ -98,72 +93,69 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('name', filters)}
+                                    onClick={() => handleSortWrapper('device_id', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Nama
-                                        {filters.sortBy === 'name' &&
+                                        Device ID
+                                        {filters.sortBy === 'device_id' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('email', filters)}
+                                    onClick={() => handleSortWrapper('value', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Email
-                                        {filters.sortBy === 'email' &&
+                                        Value
+                                        {filters.sortBy === 'value' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('no_telp', filters)}
+                                    onClick={() => handleSortWrapper('created_at', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        No Telepon
-                                        {filters.sortBy === 'no_telp' &&
+                                        Created at
+                                        {filters.sortBy === 'created_at' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('alamat', filters)}
+                                    onClick={() => handleSortWrapper('updated_at', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Alamat
-                                        {filters.sortBy === 'alamat' &&
+                                        Updated at
+                                        {filters.sortBy === 'updated_at' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
                                 <TableHead className="text-center">Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        {wargas.data.length > 0 ? (
-                            wargas.data.map((warga, index) => (
-                                <TableBody key={warga.warga_id}>
+                        {sensors.data.length > 0 ? (
+                            sensors.data.map((sensor, index) => (
+                                <TableBody key={sensor.sensor_data_id}>
                                     <TableRow className="text-center">
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{warga.user.name}</TableCell>
-                                        <TableCell>{warga.user.email}</TableCell>
-                                        <TableCell>{warga.no_telp}</TableCell>
-                                        <TableCell className='max-w-md break-words'>{warga.alamat}</TableCell>
-                                        <TableCell className="flex justify-center items-center gap-4">
-                                            <Button
-                                                variant="default"
-                                                onClick={() => {
-                                                    setSelectedId(warga.warga_id);
-                                                    setSelectedNoTelp(String(warga.no_telp));
-                                                    setSelectedAlamat(warga.alamat);
-                                                    setEditDialogOpen(true);
-                                                }}
-                                            >
-                                                Edit
-                                            </Button>
+                                        <TableCell>{sensor.device.device_id}</TableCell>
+                                        <TableCell className='flex justify-center'>
+                                            <div className='rounded-sm px-2 py-1 max-w-28 text-sm font-medium bg-green-100 text-green-700'>
+                                                {Object.entries(JSON.parse(sensor.value)).map(([key, val]) => (
+                                                    <div key={key} className='flex justify-between gap-2'>
+                                                        <span className='uppercase flex-1 text-left'>{key}</span> <span>:</span> <span className='flex-1 text-left'>{val}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>{sensor.created_at}</TableCell>
+                                        <TableCell>{sensor.updated_at}</TableCell>
+                                        <TableCell className="">
                                             <Button
                                                 variant="destructive"
                                                 onClick={() => {
-                                                    setSelectedId(warga.warga_id);
+                                                    setSelectedId(sensor.sensor_data_id);
                                                     setDeleteDialogOpen(true);
                                                 }}
                                             >
@@ -182,42 +174,16 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                         )}
                     </Table>
 
-                    {editDialogOpen && (
-                        <FormDialog
-                            open={editDialogOpen}
-                            onOpenChange={(open) => {
-                                setEditDialogOpen(open);
-                                if (!open) {
-                                    setSelectedId(null);
-                                    setSelectedNoTelp(null);
-                                    setSelectedAlamat(null);
-                                }
-                            }}
-                            title="Update Warga"
-                            description="Apakah anda yakin ingin mengupdate warga ini?"
-                            defaultValues={{
-                                warga_id: selectedId,
-                                no_telp: selectedNoTelp,
-                                alamat: selectedAlamat,
-                            }}
-                            onClose={() => {
-                                setEditDialogOpen(false);
-                                setSelectedId(null);
-                                setSelectedNoTelp(null);
-                                setSelectedAlamat(null);
-                            }}
-                        />
-                    )}
-                    {deleteDialogOpen && (
+                    {selectedId !== null && deleteDialogOpen && (
                         <ConfirmDialog
                             open={deleteDialogOpen}
                             onOpenChange={(open) => {
                                 setDeleteDialogOpen(open);
                                 if (!open) setSelectedId(null);
                             }}
-                            title="Delete Warga"
-                            description="Apakah anda yakin ingin menghapus warga ini?"
-                            warga_id={selectedId}
+                            title="Delete Sensor Data"
+                            description="Apakah anda yakin ingin menghapus data ini?"
+                            sensor_data_id={selectedId!}
                             onClose={() => {
                                 setDeleteDialogOpen(false);
                                 setSelectedId(null);
