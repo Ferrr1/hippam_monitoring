@@ -22,7 +22,8 @@ return new class extends Migration
             $table->foreignId('tarif_id')
                 ->constrained('tarifs', 'tarif_id')
                 ->onDelete('cascade');
-            $table->string('periode');
+            $table->date('tanggal_mulai');
+            $table->date('tanggal_akhir');
             $table->float('pemakaian');
             $table->bigInteger('total_bayar');
             $table->timestamps();
