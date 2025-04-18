@@ -29,6 +29,17 @@ export const handleSearchKeyDown = (
     }
 };
 
+export const handleSearchonClick = (
+    search: string,
+    filters: Filters,
+    device_id: string | null
+) => {
+    router.get(`/admin/devices/${device_id}/show`, { ...filters, search }, {
+        preserveState: true,
+        preserveScroll: true
+    });
+};
+
 export const handleSort = (column: string, filters: Filters, device_id: string | null) => {
     const newDir = filters.sortBy === column && filters.sortDir === 'asc' ? 'desc' : 'asc';
     router.get(`/admin/devices/${device_id}/show`, {

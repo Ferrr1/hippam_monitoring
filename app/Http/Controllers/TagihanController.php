@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tagihan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -33,16 +34,15 @@ class TagihanController extends Controller
             });
         }
 
-        // Sorting logic
-        $allowedSorts = ['periode', 'pemakaian', 'created_at', 'updated_at', 'name'];
+        $allowedSorts = ['name', 'email', 'device_id', 'tanggal_mulai', 'pemakaian', 'total_bayar', 'created_at'];
         if (in_array($sortBy, $allowedSorts)) {
-            if ($sortBy === 'name') {
-                // Join users table to sort by user name
-                $query->join('wargas', 'tagihans.warga.users_id', '=', 'users.id')
-                    ->orderBy('users.name', $sortDir)
-                    ->select('tagihans.*'); // Prevent column name conflicts
+            if ($sortBy === 'name' || $sortBy === 'email') {
+                // Join users table to sort by user name or email
+                $query->join('wargas', 'tagihans.warga_id', '=', 'wargas.warga_id')
+                    ->join('users', 'wargas.users_id', '=', 'users.id')
+                    ->orderBy('users.' . $sortBy, $sortDir);
             } else {
-                $query->orderBy($sortBy, $sortDir);
+                $query->orderBy($sortBy, $sortDir);  // Untuk kolom lain yang ada di tagihans
             }
         }
 
@@ -51,7 +51,8 @@ class TagihanController extends Controller
         return Inertia::render('admin/tagihan/index', [
             'tagihans' => $tagihans->through(fn($tagihan) => [
                 'tagihan_id' => $tagihan->tagihan_id,
-                'periode' => $tagihan->periode,
+                'tanggal_mulai' => Carbon::parse($tagihan->tanggal_mulai)->format('d/m/Y'),
+                'tanggal_akhir' => Carbon::parse($tagihan->tanggal_akhir)->format('d/m/Y'),
                 'pemakaian' => $tagihan->pemakaian,
                 'total_bayar' => $tagihan->total_bayar,
                 'warga' => [
@@ -68,7 +69,6 @@ class TagihanController extends Controller
                     'status' => $tagihan->device->status,
                 ],
                 'tarif' => [
-                    'tarif_id' => $tagihan->tarif->tarif_id,
                     'harga' => $tagihan->tarif->harga
                 ],
                 'created_at' => $tagihan->created_at->format('d/m/Y H:i:s'),

@@ -27,6 +27,8 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'no_telp' => ['numeric', 'max_digits:16'],
+            'alamat' => ['string', 'min:20', 'max:255'],
         ];
     }
 }

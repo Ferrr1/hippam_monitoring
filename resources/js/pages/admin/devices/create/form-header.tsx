@@ -46,7 +46,7 @@ export default function FormHeader({ action }: FormHeaderProps) {
                                 type="text"
                                 value={data.device_id}
                                 onChange={(e) => setData("device_id", e.target.value)}
-                                placeholder="Full device_id"
+                                placeholder="ESP_01"
 
                                 disabled={processing}
                                 className="mt-1 block"

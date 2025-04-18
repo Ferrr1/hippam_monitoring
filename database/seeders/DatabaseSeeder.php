@@ -25,6 +25,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 100 user dummy
-        User::factory(20)->create();
+        User::factory(100)->create();
     }
 }

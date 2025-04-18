@@ -91,6 +91,7 @@ export default function FormDialog({
                             className="max-h-28"
                         />
                         <InputError message={errors.alamat} className="mt-1" />
+                        <InputError className="mt-2" message={errors.message} />
                     </div>
 
                     <DialogFooter className="gap-2 pt-4">

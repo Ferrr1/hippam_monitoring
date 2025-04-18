@@ -3,10 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/TagihanTableHandler';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSearchonClick, handleSort } from '@/services/TagihanTableHandler';
+import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
-import FormDialog from '../update/form-dialog';
 import ConfirmDialog from '../delete/confirm-dialog';
 
 interface Filters {
@@ -24,7 +23,8 @@ interface Pagination {
 
 interface Tagihan {
     tagihan_id: number;
-    periode: string;
+    tanggal_mulai: string;
+    tanggal_akhir: string;
     pemakaian: number;
     total_bayar: number;
     warga: {
@@ -58,11 +58,8 @@ type DataTableProps = {
 
 export default function DataTable({ tagihans, total, filters, pagination }: DataTableProps) {
     const [search, setSearch] = useState('');
-    const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const [selectedNoTelp, setSelectedNoTelp] = useState<string | null>(null);
-    const [selectedAlamat, setSelectedAlamat] = useState<string | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
     const showCountOptions = ['10', '20', '30'];
     const handlePageChangeWrapper = (page: number) => {
@@ -99,6 +96,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                         onKeyDown={(e) => handleSearchKeyDown(e, search, filters)}
                         className="max-w-xs"
                     />
+                    <Button onClick={() => handleSearchonClick(search, filters)}><Search className="h-4 w-4" /></Button>
                 </div>
             </div>
             <div className="overflow-auto pt-4">
@@ -140,22 +138,17 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('harga', filters)}
+                                    className="max-w-md border-r border-white text-center"
                                 >
-                                    <div className="flex items-center justify-center gap-1 text-center">
-                                        Tarif Air
-                                        {filters.sortBy === 'harga' &&
-                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
-                                    </div>
+                                    Tarif Air
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('periode', filters)}
+                                    onClick={() => handleSortWrapper('tanggal_mulai', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
                                         Periode
-                                        {filters.sortBy === 'periode' &&
+                                        {filters.sortBy === 'tanggal_mulai' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
@@ -198,25 +191,14 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     <TableRow className="text-center">
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{tagihan.warga.user.name}</TableCell>
-                                        <TableCell>{tagihan.warga.user.email}</TableCell>
+                                        <TableCell className='break-normal'>{tagihan.warga.user.email}</TableCell>
                                         <TableCell>{tagihan.device.device_id}</TableCell>
-                                        <TableCell>{tagihan.tarif.harga}</TableCell>
-                                        <TableCell>{tagihan.periode}</TableCell>
+                                        <TableCell>Rp. {tagihan.tarif.harga}</TableCell>
+                                        <TableCell>{tagihan.tanggal_mulai} - {tagihan.tanggal_akhir}</TableCell>
                                         <TableCell>{tagihan.pemakaian} m³</TableCell>
                                         <TableCell>Rp. {tagihan.total_bayar}</TableCell>
                                         <TableCell>{tagihan.created_at}</TableCell>
                                         <TableCell className="flex items-center justify-center gap-4">
-                                            <Button
-                                                variant="default"
-                                                onClick={() => {
-                                                    setSelectedId(tagihan.tagihan_id);
-                                                    setSelectedNoTelp(String(tagihan.no_telp));
-                                                    setSelectedAlamat(tagihan.alamat);
-                                                    setEditDialogOpen(true);
-                                                }}
-                                            >
-                                                Edit
-                                            </Button>
                                             <Button
                                                 variant="destructive"
                                                 onClick={() => {
@@ -233,39 +215,13 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                         ) : (
                             <TableBody>
                                 <TableRow className="h-28 text-center">
-                                    <TableCell colSpan={7}>Tidak ada data</TableCell>
+                                    <TableCell colSpan={12}>Tidak ada data</TableCell>
                                 </TableRow>
                             </TableBody>
                         )}
                     </Table>
 
-                    {editDialogOpen && (
-                        <FormDialog
-                            open={editDialogOpen}
-                            onOpenChange={(open) => {
-                                setEditDialogOpen(open);
-                                if (!open) {
-                                    setSelectedId(null);
-                                    setSelectedNoTelp(null);
-                                    setSelectedAlamat(null);
-                                }
-                            }}
-                            title="Update Tagihan"
-                            description="Apakah anda yakin ingin mengupdate tagihan ini?"
-                            defaultValues={{
-                                tagihan_id: selectedId,
-                                no_telp: selectedNoTelp,
-                                alamat: selectedAlamat,
-                            }}
-                            onClose={() => {
-                                setEditDialogOpen(false);
-                                setSelectedId(null);
-                                setSelectedNoTelp(null);
-                                setSelectedAlamat(null);
-                            }}
-                        />
-                    )}
-                    {deleteDialogOpen && (
+                    {selectedId !== null && deleteDialogOpen && (
                         <ConfirmDialog
                             open={deleteDialogOpen}
                             onOpenChange={(open) => {
@@ -273,8 +229,8 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                 if (!open) setSelectedId(null);
                             }}
                             title="Delete Tagihan"
-                            description="Apakah anda yakin ingin menghapus warga ini?"
-                            tagihan_id={selectedId}
+                            description="Apakah anda yakin ingin menghapus tagihan ini?"
+                            tagihan_id={selectedId!}
                             onClose={() => {
                                 setDeleteDialogOpen(false);
                                 setSelectedId(null);

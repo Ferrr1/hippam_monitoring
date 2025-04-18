@@ -28,6 +28,16 @@ export const handleSearchKeyDown = (
     }
 };
 
+export const handleSearchonClick = (
+    search: string,
+    filters: Filters
+) => {
+    router.get('/admin/tagihan', { ...filters, search }, {
+        preserveState: true,
+        preserveScroll: true
+    });
+};
+
 export const handleSort = (column: string, filters: Filters) => {
     const newDir = filters.sortBy === column && filters.sortDir === 'asc' ? 'desc' : 'asc';
     router.get('/admin/tagihan', {

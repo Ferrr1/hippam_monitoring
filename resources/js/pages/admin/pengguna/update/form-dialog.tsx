@@ -115,6 +115,7 @@ export default function FormDialog({
                             </SelectContent>
                         </Select>
                         <InputError message={errors.role} className="mt-1" />
+                        <InputError className="mt-2" message={errors.message} />
                     </div>
 
                     <DialogFooter className="gap-2 pt-4">

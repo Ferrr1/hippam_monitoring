@@ -18,7 +18,7 @@ interface ConfirmDialogProps {
     onOpenChange: (open: boolean) => void;
     title: string;
     description?: string;
-    warga_id: number;
+    tagihan_id: number;
     onClose?: () => void;
     confirmText?: string;
     cancelText?: string;
@@ -29,7 +29,7 @@ export default function ConfirmDialog({
     onOpenChange,
     title,
     description,
-    warga_id,
+    tagihan_id,
     onClose,
     confirmText = "Yes, confirm",
     cancelText = "Cancel",
@@ -37,10 +37,10 @@ export default function ConfirmDialog({
     const {
         delete: destroy,
         processing,
-    } = useForm({ warga_id: null });
+    } = useForm({ tagihan_id: null });
     const handleDelete: FormEventHandler = (e) => {
         e.preventDefault();
-        destroy(route("warga.destroy", warga_id), {
+        destroy(route("warga.destroy", tagihan_id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {

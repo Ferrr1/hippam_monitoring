@@ -14,8 +14,8 @@ class WargaController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Warga::query();
-        $users = User::all();
+        $queryWarga = Warga::query();
+        $queryUser = User::query();
 
         $search = $request->input('search');
         $sortBy = $request->input('sortBy', 'created_at');
@@ -25,7 +25,8 @@ class WargaController extends Controller
         // Search logic
         if ($search) {
             $searchTerm = addcslashes($search, '%_\\');
-            $query->where(function ($q) use ($searchTerm) {
+
+            $queryWarga->where(function ($q) use ($searchTerm) {
                 $q->where('no_telp', 'like', "%{$searchTerm}%")
                     ->orWhere('alamat', 'like', "%{$searchTerm}%")
                     ->orWhereHas('user', function ($q) use ($searchTerm) {
@@ -33,22 +34,33 @@ class WargaController extends Controller
                             ->orWhere('email', 'like', "%{$searchTerm}%");
                     });
             });
+
+            $queryUser->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'like', "%{$searchTerm}%")
+                    ->orWhere('email', 'like', "%{$searchTerm}%");
+            });
         }
 
-        // Sorting logic
-        $allowedSorts = ['no_telp', 'alamat', 'created_at', 'updated_at', 'name'];
+
+        $allowedSorts = ['no_telp', 'alamat', 'created_at', 'updated_at', 'name', 'email'];
         if (in_array($sortBy, $allowedSorts)) {
-            if ($sortBy === 'name') {
-                // Join users table to sort by user name
-                $query->join('users', 'wargas.users_id', '=', 'users.id')
-                    ->orderBy('users.name', $sortDir)
-                    ->select('wargas.*'); // Prevent column name conflicts
+            if ($sortBy === 'name' || $sortBy === 'email') {
+                // Join users table to sort by user name or email
+                $queryWarga->join('users', 'wargas.users_id', '=', 'users.id')
+                    ->orderBy('users.' . $sortBy, $sortDir);  // Sort by users.name or users.email
             } else {
-                $query->orderBy($sortBy, $sortDir);
+                $queryWarga->orderBy($sortBy, $sortDir);
             }
         }
 
-        $wargas = $query->paginate($perPage)->withQueryString();
+        $users = $queryUser->paginate(10)->withQueryString();
+        if ($request->wantsJson()) {
+            return response()->json([
+                'users' => $users,
+            ]);
+        }
+
+        $wargas = $queryWarga->paginate($perPage)->withQueryString();
 
         return Inertia::render('admin/warga/index', [
             'wargas' => $wargas->through(fn($warga) => [

@@ -15,7 +15,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Tagihan {
     tagihan_id: number;
-    periode: string;
+    tanggal_mulai: string;
+    tanggal_akhir: string;
     pemakaian: number;
     total_bayar: number;
     warga: {

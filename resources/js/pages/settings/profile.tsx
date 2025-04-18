@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,14 +22,18 @@ const breadcrumbs: BreadcrumbItem[] = [
 type ProfileForm = {
     name: string;
     email: string;
+    no_telp: string;
+    alamat: string;
 }
 
-export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
+export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string; }) {
     const { auth } = usePage<SharedData>().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
         name: auth.user.name,
         email: auth.user.email,
+        no_telp: auth.user?.warga?.no_telp || '',
+        alamat: auth.user?.warga?.alamat || '',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -36,6 +41,12 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
         patch(route('profile.update'), {
             preserveScroll: true,
+            onSuccess: () => {
+                toast.success("Data Berhasil diubah");
+            },
+            onError: () => {
+                toast.error("Gagal Mengubah Data");
+            },
         });
     };
 
@@ -79,6 +90,37 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             />
 
                             <InputError className="mt-2" message={errors.email} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="no_telp">No Telepon</Label>
+
+                            <Input
+                                id="no_telp"
+                                type="number"
+                                className="mt-1 block w-full"
+                                value={data.no_telp}
+                                onChange={(e) => setData('no_telp', e.target.value)}
+                                placeholder="Masukkan No Telepon"
+                            />
+
+                            <InputError className="mt-2" message={errors.no_telp} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="alamat">Alamat</Label>
+
+                            <Input
+                                id="alamat"
+                                type="text"
+                                className="mt-1 block w-full"
+                                value={data.alamat}
+                                onChange={(e) => setData('alamat', e.target.value)}
+                                placeholder="Masukkan Alamat"
+                            />
+
+                            <InputError className="mt-2" message={errors.alamat} />
+                            <InputError className="mt-2" message={errors.message} />
                         </div>
 
                         {mustVerifyEmail && auth.user.email_verified_at === null && (

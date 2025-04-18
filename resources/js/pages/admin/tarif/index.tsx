@@ -82,7 +82,7 @@ export default function Tarif({ tarif }: { tarif: TarifForm }) {
                 </div>
                 <div className='flex flex-col gap-8'>
                     <HeadingSmall title={tarif ? "Ubah Tarif Air" : "Tarif Air Input"} description="Form untuk mengatur tarif air" />
-                    <Heading title={`Rp. ${tarif?.harga ?? 0} / m3`} />
+                    <Heading title={`Rp. ${tarif?.harga ?? 0} / m³`} />
                 </div>
             </div>
         </AppLayout>

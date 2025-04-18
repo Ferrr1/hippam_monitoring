@@ -73,7 +73,7 @@ class DeviceController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'device_id' => 'required|string|min:6|max:10|unique:devices,device_id',
+            'device_id' => 'required|string|min:6|max:20|unique:devices,device_id',
             'mac_address' => 'required|string|min:17|max:17|unique:devices,mac_address',
             'status' => 'required|in:aktif,tidak_aktif',
         ]);

@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/SensorDataTableHandler';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSearchonClick, handleSort } from '@/services/SensorDataTableHandler';
+import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import ConfirmDialog from '../delete/confirm-dialog';
 
@@ -81,6 +81,7 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                         onKeyDown={(e) => handleSearchKeyDown(e, search, filters, sensors.data[0].device.device_id)}
                         className="max-w-xs"
                     />
+                    <Button onClick={() => handleSearchonClick(search, filters, sensors.data[0].device.device_id)}><Search className="h-4 w-4" /></Button>
                 </div>
             </div>
             <div className="overflow-auto pt-4">

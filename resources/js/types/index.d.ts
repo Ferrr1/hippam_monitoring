@@ -49,6 +49,10 @@ export interface User {
     name: string;
     email: string;
     role: string;
+    warga: {
+        no_telp: string;
+        alamat: string;
+    }
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...

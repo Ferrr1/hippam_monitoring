@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSort } from '@/services/DeviceTableHandler';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSearchonClick, handleSort } from '@/services/DeviceTableHandler';
+import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
 import ConfirmDialog from '../delete/confirm-dialog';
@@ -85,6 +85,7 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                         onKeyDown={(e) => handleSearchKeyDown(e, search, filters)}
                         className="max-w-xs"
                     />
+                    <Button onClick={() => handleSearchonClick(search, filters)}><Search className="h-4 w-4" /></Button>
                 </div>
             </div>
             <div className="overflow-auto pt-4">
@@ -217,7 +218,7 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                             }}
                         />
                     )}
-                    {deleteDialogOpen && (
+                    {selectedId !== null && deleteDialogOpen && (
                         <ConfirmDialog
                             open={deleteDialogOpen}
                             onOpenChange={(open) => {
@@ -226,7 +227,7 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                             }}
                             title="Delete Device"
                             description="Apakah anda yakin ingin menghapus perangkat ini?"
-                            id={selectedId}
+                            id={selectedId!}
                             onClose={() => {
                                 setDeleteDialogOpen(false);
                                 setSelectedId(null);

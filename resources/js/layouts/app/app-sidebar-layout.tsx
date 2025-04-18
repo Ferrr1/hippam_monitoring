@@ -10,14 +10,14 @@ export default function AppSidebarLayout({ children, breadcrumbs = [] }: PropsWi
     return (
         <AppShell variant="sidebar">
             <AppSidebar />
-            <AppContent variant="sidebar">
+            <AppContent>
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
                 {children}
                 <Toaster
-                    position="top-right"
+                    position="bottom-right"
                     richColors={true}
                     duration={5000}
-                    swipeDirections={['top', 'right']}
+                    swipeDirections={['bottom', 'right']}
                 />
             </AppContent>
         </AppShell>
