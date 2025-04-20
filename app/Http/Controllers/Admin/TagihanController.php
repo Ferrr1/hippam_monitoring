@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 use Inertia\Inertia;
 
 class TagihanController extends Controller
@@ -34,7 +36,7 @@ class TagihanController extends Controller
             });
         }
 
-        $allowedSorts = ['name', 'email', 'device_id', 'tanggal_mulai', 'pemakaian', 'total_bayar', 'created_at'];
+        $allowedSorts = ['name', 'email', 'device_id', 'meter_awal', 'meter_akhir', 'tanggal_mulai', 'pemakaian', 'total_bayar', 'status', 'created_at'];
         if (in_array($sortBy, $allowedSorts)) {
             if ($sortBy === 'name' || $sortBy === 'email') {
                 // Join users table to sort by user name or email
@@ -51,10 +53,13 @@ class TagihanController extends Controller
         return Inertia::render('admin/tagihan/index', [
             'tagihans' => $tagihans->through(fn($tagihan) => [
                 'tagihan_id' => $tagihan->tagihan_id,
+                'meter_awal' => $tagihan->meter_awal,
+                'meter_akhir' => $tagihan->meter_akhir,
                 'tanggal_mulai' => Carbon::parse($tagihan->tanggal_mulai)->format('d/m/Y'),
                 'tanggal_akhir' => Carbon::parse($tagihan->tanggal_akhir)->format('d/m/Y'),
                 'pemakaian' => $tagihan->pemakaian,
-                'total_bayar' => $tagihan->total_bayar,
+                'total_bayar' => Number::currency($tagihan->total_bayar, locale: 'id'),
+                'status' => $tagihan->status,
                 'warga' => [
                     'user' => [
                         'name' => $tagihan->warga->user->name,
@@ -69,7 +74,7 @@ class TagihanController extends Controller
                     'status' => $tagihan->device->status,
                 ],
                 'tarif' => [
-                    'harga' => $tagihan->tarif->harga
+                    'harga' => Number::currency($tagihan->tarif->harga, locale: 'id'),
                 ],
                 'created_at' => $tagihan->created_at->format('d/m/Y H:i:s'),
                 'updated_at' => $tagihan->updated_at->format('d/m/Y H:i:s'),
@@ -123,9 +128,15 @@ class TagihanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Tagihan $tagihan)
     {
-        //
+        $validated = $request->validate([
+            'status' => 'required|in:lunas,belum_lunas',
+        ]);
+
+        $tagihan->update($validated);
+
+        return back()->with('success', __('Tagihan berhasil diperbarui'));
     }
 
     /**

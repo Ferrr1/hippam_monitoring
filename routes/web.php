@@ -1,14 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\DeviceController;
+use App\Http\Controllers\Admin\SensorDataController;
+use App\Http\Controllers\Admin\TagihanController;
+use App\Http\Controllers\Admin\TarifAirController;
+use App\Http\Controllers\Admin\WargaController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\User\TagihanUserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Mail;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\DeviceController;
-use App\Http\Controllers\SensorDataController;
-use App\Http\Controllers\TagihanController;
-use App\Http\Controllers\TarifAirController;
-use App\Http\Controllers\WargaController;
 
 Route::get('/', function () {
     return to_route('login');
@@ -16,7 +16,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin/dashboard', function () {
-        return Inertia::render('dashboard');
+        return Inertia::render('admin/dashboard');
     })->name('admin.dashboard');
     // Route Untuk Pengguna/User
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register.store');
@@ -38,6 +38,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('admin/devices/sensor/{sensor}/destroy', [SensorDataController::class, 'destroy'])->name('devices.sensor.destroy');
     // Route Untuk Tagihan
     Route::get('admin/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');
+    Route::put('admin/tagihan/{tagihan}/update', [TagihanController::class, 'update'])->name('tagihan.update');
     // Route Untuk Tarif
     Route::get('admin/tarif', [TarifAirController::class, 'index'])->name('tarif.index');
     Route::post('admin/tarif/store', [TarifAirController::class, 'store'])->name('tarif.store');
@@ -48,8 +49,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('admin/dashboard');
+        return Inertia::render('user/dashboard');
     })->name('user.dashboard');
+    Route::get('/tagihan', [TagihanUserController::class, 'index'])->name('user.tagihan.index');
 });
 
 require __DIR__ . '/settings.php';

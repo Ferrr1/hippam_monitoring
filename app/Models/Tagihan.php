@@ -6,9 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tagihan extends Model
 {
+    protected $primaryKey = 'tagihan_id';
     protected $fillable = [
         'warga_id',
         'device_id',
+        'tarif_id',
+        'meter_awal',
+        'meter_akhir',
+        'tanggal_mulai',
+        'tanggal_akhir',
+        'pemakaian',
+        'total_bayar',
+        'status',
     ];
     public function warga()
     {

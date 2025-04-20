@@ -13,12 +13,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Tagihan {
+export interface Tagihan {
     tagihan_id: number;
+    meter_awal: number;
+    meter_akhir: number;
     tanggal_mulai: string;
     tanggal_akhir: string;
     pemakaian: number;
     total_bayar: number;
+    status: string;
     warga: {
         user: {
             name: string;

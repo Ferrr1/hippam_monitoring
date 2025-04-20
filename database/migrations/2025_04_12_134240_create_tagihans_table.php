@@ -22,10 +22,13 @@ return new class extends Migration
             $table->foreignId('tarif_id')
                 ->constrained('tarifs', 'tarif_id')
                 ->onDelete('cascade');
+            $table->float('meter_awal');
+            $table->float('meter_akhir');
             $table->date('tanggal_mulai');
             $table->date('tanggal_akhir');
             $table->float('pemakaian');
             $table->bigInteger('total_bayar');
+            $table->enum('status', ['lunas', 'belum_lunas']);
             $table->timestamps();
         });
     }

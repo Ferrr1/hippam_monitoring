@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Tarif;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 use Inertia\Inertia;
 
 class TarifAirController extends Controller
@@ -15,7 +17,9 @@ class TarifAirController extends Controller
     {
         $tarif = Tarif::first();
         return Inertia::render('admin/tarif/index', [
-            'tarif' => $tarif
+            'tarif' => [
+                'harga' => Number::currency($tarif->harga, locale: 'id')
+            ]
         ]);
     }
 

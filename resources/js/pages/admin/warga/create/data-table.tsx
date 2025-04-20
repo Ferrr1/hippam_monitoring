@@ -209,7 +209,7 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                             }}
                         />
                     )}
-                    {deleteDialogOpen && (
+                    {selectedId !== null && deleteDialogOpen && (
                         <ConfirmDialog
                             open={deleteDialogOpen}
                             onOpenChange={(open) => {

@@ -62,7 +62,7 @@ export default function FormDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent>
+            <DialogContent className="w-full">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && <DialogDescription>{description}</DialogDescription>}
@@ -88,7 +88,7 @@ export default function FormDialog({
                             value={data.alamat!}
                             onChange={(e) => setData("alamat", e.target.value)}
                             disabled={processing}
-                            className="max-h-28"
+                            className="max-h-28 break-all"
                         />
                         <InputError message={errors.alamat} className="mt-1" />
                         <InputError className="mt-2" message={errors.message} />

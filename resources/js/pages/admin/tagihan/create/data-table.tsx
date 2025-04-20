@@ -7,6 +7,8 @@ import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearch
 import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import ConfirmDialog from '../delete/confirm-dialog';
+import SelectForm from '../update/select-form';
+import { Tagihan } from '../index'
 
 interface Filters {
     search: string;
@@ -19,32 +21,6 @@ interface Pagination {
     current_page: number;
     per_page: number;
     total: number;
-}
-
-interface Tagihan {
-    tagihan_id: number;
-    tanggal_mulai: string;
-    tanggal_akhir: string;
-    pemakaian: number;
-    total_bayar: number;
-    warga: {
-        user: {
-            name: string;
-            email: string;
-        }
-        no_telp: number;
-        alamat: string;
-    };
-    device: {
-        device_id: string;
-        mac_address: number | string;
-        status: string;
-    };
-    tarif: {
-        harga: number;
-    };
-    created_at: string;
-    updated_at: string;
 }
 
 type DataTableProps = {
@@ -138,6 +114,26 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
+                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    onClick={() => handleSortWrapper('meter_awal', filters)}
+                                >
+                                    <div className="flex items-center justify-center gap-1 text-center">
+                                        Meter Awal
+                                        {filters.sortBy === 'meter_awal' &&
+                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
+                                    </div>
+                                </TableHead>
+                                <TableHead
+                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    onClick={() => handleSortWrapper('meter_akhir', filters)}
+                                >
+                                    <div className="flex items-center justify-center gap-1 text-center">
+                                        Meter Akhir
+                                        {filters.sortBy === 'meter_akhir' &&
+                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
+                                    </div>
+                                </TableHead>
+                                <TableHead
                                     className="max-w-md border-r border-white text-center"
                                 >
                                     Tarif Air
@@ -173,12 +169,12 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
-                                    onClick={() => handleSortWrapper('created_at', filters)}
+                                    className="max-w-md w-[200px] cursor-pointer border-r border-white text-center"
+                                    onClick={() => handleSortWrapper('status', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
-                                        Created At
-                                        {filters.sortBy === 'created_at' &&
+                                        Status Pembayaran
+                                        {filters.sortBy === 'status' &&
                                             (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
                                     </div>
                                 </TableHead>
@@ -193,11 +189,20 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                         <TableCell>{tagihan.warga.user.name}</TableCell>
                                         <TableCell className='break-normal'>{tagihan.warga.user.email}</TableCell>
                                         <TableCell>{tagihan.device.device_id}</TableCell>
-                                        <TableCell>Rp. {tagihan.tarif.harga}</TableCell>
+                                        <TableCell>{tagihan.meter_awal}</TableCell>
+                                        <TableCell>{tagihan.meter_akhir}</TableCell>
+                                        <TableCell>{tagihan.tarif.harga}</TableCell>
                                         <TableCell>{tagihan.tanggal_mulai} - {tagihan.tanggal_akhir}</TableCell>
                                         <TableCell>{tagihan.pemakaian} m³</TableCell>
-                                        <TableCell>Rp. {tagihan.total_bayar}</TableCell>
-                                        <TableCell>{tagihan.created_at}</TableCell>
+                                        <TableCell>{tagihan.total_bayar}</TableCell>
+                                        <TableCell>
+                                            <SelectForm
+                                                defaultValues={{
+                                                    tagihan_id: tagihan.tagihan_id,
+                                                    status: tagihan.status,
+                                                }}
+                                            />
+                                        </TableCell>
                                         <TableCell className="flex items-center justify-center gap-4">
                                             <Button
                                                 variant="destructive"
@@ -220,7 +225,6 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                             </TableBody>
                         )}
                     </Table>
-
                     {selectedId !== null && deleteDialogOpen && (
                         <ConfirmDialog
                             open={deleteDialogOpen}

@@ -92,7 +92,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::3zEavNk7ti1rHogB',
+            '_route' => 'generated::EiNcwU28B1Elpkyk',
           ),
           1 => NULL,
           2 => 
@@ -168,7 +168,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::hoD24poB5260Bpg4',
+            '_route' => 'generated::dEqkBbrzVvIAYLE9',
           ),
           1 => NULL,
           2 => 
@@ -379,13 +379,33 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/tagihan' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'user.tagihan.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/settings' => 
       array (
         0 => 
         array (
           0 => 
           array (
-            '_route' => 'generated::Mb7n2D11OMmAOMJf',
+            '_route' => 'generated::NewWAkQf4MDUcR3j',
           ),
           1 => NULL,
           2 => 
@@ -535,7 +555,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::N02FFN1MUW9fgX5B',
+            '_route' => 'generated::ol52VR0YVxcxiitv',
           ),
           1 => NULL,
           2 => 
@@ -665,7 +685,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::cgDGqK7ZcrL1QfMU',
+            '_route' => 'generated::KZSMYMnNdJ4Kh3Mn',
           ),
           1 => NULL,
           2 => 
@@ -700,7 +720,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/_debugbar/c(?|lockwork/([^/]++)(*:39)|ache/([^/]++)(?:/([^/]++))?(*:73))|/re(?|gister/(?|([^/]++)/update(*:112)|delete/([^/]++)(*:135))|set\\-password/([^/]++)(*:166))|/admin/(?|warga/([^/]++)/(?|update(*:209)|destroy(*:224))|devices/(?|([^/]++)/(?|update(*:262)|destroy(*:277)|show(*:289))|sensor/([^/]++)/destroy(*:321)))|/verify\\-email/([^/]++)/([^/]++)(*:363)|/storage/(.*)(*:384))/?$}sDu',
+      0 => '{^(?|/_debugbar/c(?|lockwork/([^/]++)(*:39)|ache/([^/]++)(?:/([^/]++))?(*:73))|/re(?|gister/(?|([^/]++)/update(*:112)|delete/([^/]++)(*:135))|set\\-password/([^/]++)(*:166))|/admin/(?|warga/([^/]++)/(?|update(*:209)|destroy(*:224))|devices/(?|([^/]++)/(?|update(*:262)|destroy(*:277)|show(*:289))|sensor/([^/]++)/destroy(*:321))|tagihan/([^/]++)/update(*:353))|/verify\\-email/([^/]++)/([^/]++)(*:394)|/storage/(.*)(*:415))/?$}sDu',
     ),
     3 => 
     array (
@@ -951,7 +971,29 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      363 => 
+      353 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'tagihan.update',
+          ),
+          1 => 
+          array (
+            0 => 'tagihan',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      394 => 
       array (
         0 => 
         array (
@@ -975,7 +1017,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      384 => 
+      415 => 
       array (
         0 => 
         array (
@@ -1239,7 +1281,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::3zEavNk7ti1rHogB' => 
+    'generated::EiNcwU28B1Elpkyk' => 
     array (
       'methods' => 
       array (
@@ -1267,8 +1309,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'D:\\\\Document\\\\SKRIPSI_BROK\\\\Website\\\\hippam_monitoring\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000005c90000000000000000";}}',
-        'as' => 'generated::3zEavNk7ti1rHogB',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000005c40000000000000000";}}',
+        'as' => 'generated::EiNcwU28B1Elpkyk',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1300,7 +1342,7 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:46:"function () {
     return \\to_route(\'login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005cd0000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005c80000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1338,9 +1380,9 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:73:"function () {
-        return \\Inertia\\Inertia::render(\'dashboard\');
-    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005d10000000000000000";}}',
+        'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:79:"function () {
+        return \\Inertia\\Inertia::render(\'admin/dashboard\');
+    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005cc0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1531,8 +1573,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\WargaController@index',
-        'controller' => 'App\\Http\\Controllers\\WargaController@index',
+        'uses' => 'App\\Http\\Controllers\\Admin\\WargaController@index',
+        'controller' => 'App\\Http\\Controllers\\Admin\\WargaController@index',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1569,8 +1611,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\WargaController@store',
-        'controller' => 'App\\Http\\Controllers\\WargaController@store',
+        'uses' => 'App\\Http\\Controllers\\Admin\\WargaController@store',
+        'controller' => 'App\\Http\\Controllers\\Admin\\WargaController@store',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1607,8 +1649,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\WargaController@update',
-        'controller' => 'App\\Http\\Controllers\\WargaController@update',
+        'uses' => 'App\\Http\\Controllers\\Admin\\WargaController@update',
+        'controller' => 'App\\Http\\Controllers\\Admin\\WargaController@update',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1645,8 +1687,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\WargaController@destroy',
-        'controller' => 'App\\Http\\Controllers\\WargaController@destroy',
+        'uses' => 'App\\Http\\Controllers\\Admin\\WargaController@destroy',
+        'controller' => 'App\\Http\\Controllers\\Admin\\WargaController@destroy',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1684,8 +1726,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\DeviceController@index',
-        'controller' => 'App\\Http\\Controllers\\DeviceController@index',
+        'uses' => 'App\\Http\\Controllers\\Admin\\DeviceController@index',
+        'controller' => 'App\\Http\\Controllers\\Admin\\DeviceController@index',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1722,8 +1764,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\DeviceController@store',
-        'controller' => 'App\\Http\\Controllers\\DeviceController@store',
+        'uses' => 'App\\Http\\Controllers\\Admin\\DeviceController@store',
+        'controller' => 'App\\Http\\Controllers\\Admin\\DeviceController@store',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1760,8 +1802,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\DeviceController@update',
-        'controller' => 'App\\Http\\Controllers\\DeviceController@update',
+        'uses' => 'App\\Http\\Controllers\\Admin\\DeviceController@update',
+        'controller' => 'App\\Http\\Controllers\\Admin\\DeviceController@update',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1798,8 +1840,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\DeviceController@destroy',
-        'controller' => 'App\\Http\\Controllers\\DeviceController@destroy',
+        'uses' => 'App\\Http\\Controllers\\Admin\\DeviceController@destroy',
+        'controller' => 'App\\Http\\Controllers\\Admin\\DeviceController@destroy',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1837,8 +1879,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\DeviceController@show',
-        'controller' => 'App\\Http\\Controllers\\DeviceController@show',
+        'uses' => 'App\\Http\\Controllers\\Admin\\DeviceController@show',
+        'controller' => 'App\\Http\\Controllers\\Admin\\DeviceController@show',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1876,8 +1918,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\SensorDataController@destroy',
-        'controller' => 'App\\Http\\Controllers\\SensorDataController@destroy',
+        'uses' => 'App\\Http\\Controllers\\Admin\\SensorDataController@destroy',
+        'controller' => 'App\\Http\\Controllers\\Admin\\SensorDataController@destroy',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1915,14 +1957,52 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\TagihanController@index',
-        'controller' => 'App\\Http\\Controllers\\TagihanController@index',
+        'uses' => 'App\\Http\\Controllers\\Admin\\TagihanController@index',
+        'controller' => 'App\\Http\\Controllers\\Admin\\TagihanController@index',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
         'as' => 'tagihan.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'tagihan.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'admin/tagihan/{tagihan}/update',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:admin',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\TagihanController@update',
+        'controller' => 'App\\Http\\Controllers\\Admin\\TagihanController@update',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'tagihan.update',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1954,8 +2034,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\TarifAirController@index',
-        'controller' => 'App\\Http\\Controllers\\TarifAirController@index',
+        'uses' => 'App\\Http\\Controllers\\Admin\\TarifAirController@index',
+        'controller' => 'App\\Http\\Controllers\\Admin\\TarifAirController@index',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1992,8 +2072,8 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:admin',
         ),
-        'uses' => 'App\\Http\\Controllers\\TarifAirController@store',
-        'controller' => 'App\\Http\\Controllers\\TarifAirController@store',
+        'uses' => 'App\\Http\\Controllers\\Admin\\TarifAirController@store',
+        'controller' => 'App\\Http\\Controllers\\Admin\\TarifAirController@store',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -2033,7 +2113,7 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:75:"function () {
         return \\Inertia\\Inertia::render(\'admin/fuzzy\');
-    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005e40000000000000000";}}',
+    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005e00000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -2071,9 +2151,9 @@ app('router')->setCompiledRoutes(
           1 => 'auth',
           2 => 'role:user',
         ),
-        'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:79:"function () {
-        return \\Inertia\\Inertia::render(\'admin/dashboard\');
-    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005e60000000000000000";}}',
+        'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:78:"function () {
+        return \\Inertia\\Inertia::render(\'user/dashboard\');
+    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005e20000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -2095,7 +2175,46 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Mb7n2D11OMmAOMJf' => 
+    'user.tagihan.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'tagihan',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'role:user',
+        ),
+        'uses' => 'App\\Http\\Controllers\\User\\TagihanUserController@index',
+        'controller' => 'App\\Http\\Controllers\\User\\TagihanUserController@index',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'user.tagihan.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::NewWAkQf4MDUcR3j' => 
     array (
       'methods' => 
       array (
@@ -2122,7 +2241,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Mb7n2D11OMmAOMJf',
+        'as' => 'generated::NewWAkQf4MDUcR3j',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2344,7 +2463,7 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:83:"function () {
         return \\Inertia\\Inertia::render(\'settings/appearance\');
-    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005ee0000000000000000";}}',
+    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005eb0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -2366,7 +2485,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::hoD24poB5260Bpg4' => 
+    'generated::dEqkBbrzVvIAYLE9' => 
     array (
       'methods' => 
       array (
@@ -2383,13 +2502,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:40:"function () {
         \\abort(404);
-    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005f00000000000000000";}}',
+    }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005ed0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::hoD24poB5260Bpg4',
+        'as' => 'generated::dEqkBbrzVvIAYLE9',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2443,7 +2562,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::N02FFN1MUW9fgX5B' => 
+    'generated::ol52VR0YVxcxiitv' => 
     array (
       'methods' => 
       array (
@@ -2464,7 +2583,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::N02FFN1MUW9fgX5B',
+        'as' => 'generated::ol52VR0YVxcxiitv',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2784,7 +2903,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::cgDGqK7ZcrL1QfMU' => 
+    'generated::KZSMYMnNdJ4Kh3Mn' => 
     array (
       'methods' => 
       array (
@@ -2805,7 +2924,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::cgDGqK7ZcrL1QfMU',
+        'as' => 'generated::KZSMYMnNdJ4Kh3Mn',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2874,7 +2993,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000005cf0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000005ca0000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,

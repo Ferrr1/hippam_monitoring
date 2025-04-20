@@ -35,7 +35,7 @@ class MqttStart extends Command
     public function handle()
     {
         $this->mqttService->connect();
-        $this->mqttService->subscribe('water_monitoring/device_02/data');  // Ganti dengan topik yang sesuai
+        $this->mqttService->subscribe('water_monitoring/ESP_02_FLOW/data');  // Ganti dengan topik yang sesuai
         $this->info('MQTT Client started and subscribed to topic "your/topic"');
 
         // Menjaga aplikasi berjalan dan mendengarkan pesan MQTT
