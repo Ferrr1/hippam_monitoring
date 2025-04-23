@@ -45,15 +45,16 @@ export default function Tarif({ tarif }: { tarif: TarifForm }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tarif Air" />
             <div className='px-4 py-6 gap-2 flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-12'>
-                <div>
+                <div className='flex-2 bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border p-6 rounded-xl'>
                     <div className='flex-1'>
                         <Heading title="Tarif" description="Halaman untuk mengatur tarif air dan yang sedang digunakan pada Hippam Dusun Medangan" />
                         <HeadingSmall title="Tarif Air Input" description='Form untuk mengatur tarif air' />
                     </div>
                     <form onSubmit={submit} className="space-y-6">
                         <div className='grid gap-2 mt-2 flex-1'>
-                            <Label>Tarif Air</Label>
+                            <Label htmlFor="tarif">Tarif Air</Label>
                             <Input
+                                id='tarif'
                                 placeholder="Tarif Air"
                                 type='number'
                                 value={data.harga!}
@@ -80,7 +81,7 @@ export default function Tarif({ tarif }: { tarif: TarifForm }) {
                         </div>
                     </form>
                 </div>
-                <div className='flex flex-col gap-8'>
+                <div className='flex flex-col flex-1 gap-8 bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border p-6 rounded-xl'>
                     <HeadingSmall title={tarif ? "Ubah Tarif Air" : "Tarif Air Input"} description="Form untuk mengatur tarif air" />
                     <Heading title={`${tarif?.harga ?? 0} / m³`} />
                 </div>

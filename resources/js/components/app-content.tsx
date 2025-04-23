@@ -11,7 +11,7 @@ export function AppContent({ variant = 'header', children, ...props }: AppConten
     }
 
     return (
-        <main className="mx-auto flex min-h-screen h-full w-full flex-1 flex-col gap-4 shadow rounded-xl" {...props}>
+        <main className="mx-auto bg-background flex min-h-screen h-full w-full flex-1 flex-col gap-4 shadow rounded-xl" {...props}>
             {children}
         </main>
     );

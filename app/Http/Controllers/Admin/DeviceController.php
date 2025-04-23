@@ -73,14 +73,12 @@ class DeviceController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'device_id' => 'required|string|min:6|max:20|unique:devices,device_id',
-            'mac_address' => 'required|string|min:17|max:17|unique:devices,mac_address',
+            'device_id' => 'required|string|min:4|max:20|unique:devices,device_id',
             'status' => 'required|in:aktif,tidak_aktif',
         ]);
 
         $device = Device::create([
             'device_id' => $validated['device_id'],
-            'mac_address' => $validated['mac_address'],
             'status' => $validated['status'],
         ]);
 
@@ -154,8 +152,7 @@ class DeviceController extends Controller
     public function update(Request $request, Device $devices): RedirectResponse
     {
         $validated = $request->validate([
-            'device_id' => 'required|string|min:6|max:10',
-            'mac_address' => 'required|string|min:17|max:17',
+            'device_id' => 'required|string|min:4|max:20',
             'status' => 'required|in:aktif,tidak_aktif',
         ]);
         $existsDeviceId = Device::where('device_id', $validated['device_id'])
@@ -166,16 +163,8 @@ class DeviceController extends Controller
             return back()->withErrors(['device_id' => 'Device ID sudah digunakan.']);
         }
 
-        $existsMac = Device::where('mac_address', $validated['mac_address'])
-            ->where('id', '!=', $devices->id)
-            ->exists();
-
-        if ($existsMac) {
-            return back()->withErrors(['mac_address' => 'MAC Address sudah digunakan.']);
-        }
         if (
             $validated['device_id'] === $devices->device_id &&
-            $validated['mac_address'] === $devices->mac_address &&
             $validated['status'] === $devices->status
         ) {
             return back()->withErrors(['message' => 'Tidak ada perubahan data.']);

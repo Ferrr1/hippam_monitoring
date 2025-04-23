@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class SensorData extends Model
 {
     protected $primaryKey = 'sensor_data_id';
+    protected $casts = [
+        'value' => 'array',
+    ];
     protected $fillable = [
         'device_id',
         'value',
     ];
+
     // SensorData.php
     public function device()
     {

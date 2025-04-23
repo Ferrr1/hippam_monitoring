@@ -6,32 +6,32 @@ type DataTableProps = {
 
 export default function DataTable({ tagihan }: DataTableProps) {
     return (
-        <div className='my-4'>
+        <div>
             <div className="overflow-auto pt-4">
-                <div className="inline-block w-full overflow-x-auto rounded-md shadow">
+                <div className="inline-block w-full overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="bg-muted">
-                                <TableHead className="w-12 border-r border-white text-center">
+                            <TableRow>
+                                <TableHead className="w-12 text-center">
                                     No
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md border-r border-white text-center"
+                                    className="max-w-md text-center"
                                 >
                                     Meter Awal
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md border-r border-white text-center"
+                                    className="max-w-md text-center"
                                 >
                                     Meter Akhir
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md border-r border-white text-center"
+                                    className="max-w-md text-center"
                                 >
                                     Pemakaian
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md border-r border-white text-center"
+                                    className="max-w-md text-center"
                                 >
                                     Biaya /m³
                                 </TableHead>

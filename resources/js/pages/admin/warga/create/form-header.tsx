@@ -22,6 +22,12 @@ interface User {
     name: string;
     email: string;
 }
+
+interface Device {
+    id: number;
+    device_id: string;
+    status: string;
+}
 interface Filters {
     search: string;
     sortBy: string;
@@ -33,37 +39,29 @@ type FormHeaderProps = {
         data: User[];
         next_page_url: string;
     }
+    devices: {
+        data: Device[];
+        next_page_url: string;
+    }
     filters: Filters;
     action: string;
 };
 
 
-export default function FormHeader({ users, action }: FormHeaderProps) {
+export default function FormHeader({ users, devices, action }: FormHeaderProps) {
     const { data, setData, post, processing, errors, reset } = useForm({
         users_id: "",
+        device_id: "",
         no_telp: "",
         alamat: "",
     });
     const [search, setSearch] = useState('');
     const [usersData, setUsersData] = useState<User[]>(users.data);
-    // const [usersNextPage, setUsersNextPage] = useState(users.next_page_url);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+    const [devicesData, setDevicesData] = useState<Device[]>(devices.data); // dari props
+    const [isLoadingDevices, setIsLoadingDevices] = useState(false);
+    const [searchDevice, setSearchDevice] = useState("");
 
-    // const loadMoreUsers = async () => {
-    //     if (!usersNextPage || isLoadingUsers) return;
-
-    //     setIsLoadingUsers(true);
-    //     try {
-    //         const res = await axios.get(usersNextPage);
-    //         const newUsers = res.data.users.data;
-    //         setUsersData(prev => [...prev, ...newUsers]);
-    //         setUsersNextPage(res.data.users.next_page_url);
-    //     } catch (error) {
-    //         console.error("Failed to load more users", error);
-    //     } finally {
-    //         setIsLoadingUsers(false);
-    //     }
-    // };
     const searchUsers = useCallback(
         debounce(async (keyword: string) => {
             try {
@@ -80,7 +78,6 @@ export default function FormHeader({ users, action }: FormHeaderProps) {
                     }
                 });
                 setUsersData(res.data.users.data);
-                setUsersNextPage(res.data.users.next_page_url);
             } catch (error) {
                 console.error("Search user error", error);
             } finally {
@@ -94,6 +91,37 @@ export default function FormHeader({ users, action }: FormHeaderProps) {
             searchUsers.cancel();
         };
     }, [searchUsers]);
+
+    const searchDevices = useCallback(
+        debounce(async (keyword: string) => {
+            try {
+                setIsLoadingDevices(true);
+                const res = await axios.get(route('warga.index'), {
+                    params: {
+                        search: keyword,
+                        sortBy: 'device_id',
+                        sortDir: 'asc',
+                        perPage: 10,
+                    },
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
+                setDevicesData(res.data.devices.data);
+            } catch (error) {
+                console.error("Search device error", error);
+            } finally {
+                setIsLoadingDevices(false);
+            }
+        }, 500),
+        []
+    );
+
+    useEffect(() => {
+        return () => {
+            searchDevices.cancel();
+        };
+    }, [searchDevices]);
 
 
     const submit: FormEventHandler = (e) => {
@@ -112,7 +140,7 @@ export default function FormHeader({ users, action }: FormHeaderProps) {
     return (
         <form onSubmit={submit}>
             <div className="flex h-fit flex-col gap-4 rounded-xl">
-                <div className="flex md:flex-row flex-col px-4 pt-2 pb-4 gap-2 justify-between border-sidebar-border/70 dark:border-sidebar-border overflow-hidden rounded-xl border">
+                <div className="flex md:flex-row flex-col p-4 gap-2 justify-between bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border overflow-hidden rounded-xl">
                     <div className="w-full grid md:grid-cols-2 gap-4">
                         {/* Pengguna */}
                         <div className="grid gap-1">
@@ -144,16 +172,46 @@ export default function FormHeader({ users, action }: FormHeaderProps) {
                                             {user.email}
                                         </SelectItem>
                                     ))}
-                                    {/* {usersNextPage && (
-                                        <div className="p-2 text-center">
-                                            <Button size="sm" variant={"ghost"} className="w-full" onClick={loadMoreUsers} disabled={isLoadingUsers}>
-                                                {isLoadingUsers ? <LoaderCircle className="h-4 w-4 animate-spin mr-2" /> : "Muat Lagi"}
-                                            </Button>
-                                        </div>
-                                    )} */}
                                 </SelectContent>
                             </Select>
                             <InputError message={errors.users_id} className="mt-1" />
+                        </div>
+
+                        {/* Device */}
+                        <div className="grid gap-1">
+                            <Label htmlFor="device">Device</Label>
+                            <Select
+                                value={data.device_id}
+                                onValueChange={(value) => setData("device_id", value)}
+                            >
+                                <SelectTrigger className="mt-1" id="device">
+                                    <SelectValue placeholder="Pilih Device" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-64 overflow-y-auto">
+                                    <div className="sticky top-0 z-10 bg-background">
+                                        <Input
+                                            type="text"
+                                            placeholder="Search Device..."
+                                            value={searchDevice}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                setSearchDevice(value);
+                                                searchDevices(value);
+                                            }}
+                                            className="relative max-w-full mb-2"
+                                        />
+                                        {isLoadingDevices && (
+                                            <LoaderCircle className="absolute right-0 top-2 h-5 w-5 animate-spin mr-2" />
+                                        )}
+                                    </div>
+                                    {devicesData.map((device) => (
+                                        <SelectItem key={device.id} value={String(device.id)}>
+                                            {device.device_id}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <InputError message={errors.device_id} className="mt-1" />
                         </div>
 
                         {/* No Telepon */}

@@ -8,6 +8,7 @@ import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
 import ConfirmDialog from '../delete/confirm-dialog';
+import { Device } from '..';
 
 interface Filters {
     search: string;
@@ -30,6 +31,10 @@ interface Warga {
         name: string;
         email: string;
     };
+    device: {
+        id: number;
+        device_id: number;
+    }
     created_at: string;
     updated_at: string;
 }
@@ -38,16 +43,21 @@ type DataTableProps = {
     wargas: {
         data: Warga[];
     };
+    devices: {
+        data: Device[];
+    }
     filters: Filters;
     pagination: Pagination;
     total: number;
 };
 
-export default function DataTable({ wargas, total, filters, pagination }: DataTableProps) {
+export default function DataTable({ wargas, devices, total, filters, pagination }: DataTableProps) {
     const [search, setSearch] = useState('');
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    // const [selectedDevice, setSelectedDevice] = useState<number | null>(null);
+    const [selectedDeviceID, setSelectedDeviceID] = useState<number | null>(null);
     const [selectedNoTelp, setSelectedNoTelp] = useState<string | null>(null);
     const [selectedAlamat, setSelectedAlamat] = useState<string | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
@@ -61,9 +71,9 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
     const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters);
 
     return (
-        <div>
-            <div className="rounded-xl border p-4">
-                <div className="mb-4 flex items-center gap-2">
+        <div className='flex flex-col gap-4'>
+            <div className="rounded-xl p-4 bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border">
+                <div className="flex items-center gap-2">
                     <span className="text-sm">Show:</span>
                     <Select value={filters.perPage} onValueChange={handlePerPageChangeWrapper}>
                         <SelectTrigger className="w-[80px]">
@@ -89,16 +99,26 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                     <Button onClick={() => handleSearchonClick(search, filters)}><Search className="h-4 w-4" /></Button>
                 </div>
             </div>
-            <div className="overflow-auto pt-4">
-                <div className="inline-block w-full overflow-x-auto rounded-md shadow">
+            <div className="overflow-auto rounded-md bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border">
+                <div className="inline-block w-full overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="bg-muted">
-                                <TableHead className="w-12 border-r border-white text-center">
+                            <TableRow>
+                                <TableHead className="w-12 text-center">
                                     <div className="flex items-center justify-center gap-1 text-center">No</div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
+                                    onClick={() => handleSortWrapper('device_id', filters)}
+                                >
+                                    <div className="flex items-center justify-center gap-1 text-center">
+                                        Perangkat
+                                        {filters.sortBy === 'device_id' &&
+                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
+                                    </div>
+                                </TableHead>
+                                <TableHead
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('name', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -108,7 +128,7 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('email', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -118,7 +138,7 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('no_telp', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -128,7 +148,7 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('alamat', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -140,20 +160,23 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                 <TableHead className="text-center">Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        {wargas.data.length > 0 ? (
-                            wargas.data.map((warga, index) => (
-                                <TableBody key={warga.warga_id}>
-                                    <TableRow className="text-center">
+                        <TableBody >
+                            {wargas.data.length > 0 ? (
+                                wargas.data.map((warga, index) => (
+                                    <TableRow key={warga.warga_id} className="text-center">
                                         <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{warga.device?.device_id ?? '-'}</TableCell>
                                         <TableCell>{warga.user.name}</TableCell>
                                         <TableCell>{warga.user.email}</TableCell>
                                         <TableCell>{warga.no_telp}</TableCell>
-                                        <TableCell className='max-w-md break-words'>{warga.alamat}</TableCell>
+                                        <TableCell className='max-w-md break-all'>{warga.alamat}</TableCell>
                                         <TableCell className="flex justify-center items-center gap-4">
                                             <Button
                                                 variant="default"
                                                 onClick={() => {
                                                     setSelectedId(warga.warga_id);
+                                                    // setSelectedDevice(warga.device?.id ?? 0);
+                                                    setSelectedDeviceID(warga.device?.id ?? 0);
                                                     setSelectedNoTelp(String(warga.no_telp));
                                                     setSelectedAlamat(warga.alamat);
                                                     setEditDialogOpen(true);
@@ -172,38 +195,43 @@ export default function DataTable({ wargas, total, filters, pagination }: DataTa
                                             </Button>
                                         </TableCell>
                                     </TableRow>
-                                </TableBody>
-                            ))
-                        ) : (
-                            <TableBody>
+                                ))
+                            ) : (
                                 <TableRow className="h-28 text-center">
                                     <TableCell colSpan={7}>Tidak ada data</TableCell>
                                 </TableRow>
-                            </TableBody>
-                        )}
+                            )}
+                        </TableBody>
                     </Table>
 
-                    {selectedId !== null && editDialogOpen && (
+                    {selectedId !== null && selectedDeviceID !== null && editDialogOpen && (
                         <FormDialog
                             open={editDialogOpen}
                             onOpenChange={(open) => {
                                 setEditDialogOpen(open);
                                 if (!open) {
                                     setSelectedId(null);
+                                    // setSelectedDevice(null);
+                                    setSelectedDeviceID(null);
                                     setSelectedNoTelp(null);
                                     setSelectedAlamat(null);
                                 }
                             }}
                             title="Update Warga"
                             description="Apakah anda yakin ingin mengupdate warga ini?"
+                            devices={devices.data}
                             defaultValues={{
                                 warga_id: selectedId,
+                                // device: selectedDevice,
+                                device_id: selectedDeviceID,
                                 no_telp: selectedNoTelp,
                                 alamat: selectedAlamat,
                             }}
                             onClose={() => {
                                 setEditDialogOpen(false);
                                 setSelectedId(null);
+                                // setSelectedDevice(null);
+                                setSelectedDeviceID(null);
                                 setSelectedNoTelp(null);
                                 setSelectedAlamat(null);
                             }}

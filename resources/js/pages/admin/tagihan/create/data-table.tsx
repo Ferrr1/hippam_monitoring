@@ -47,9 +47,9 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
     const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters);
 
     return (
-        <div>
-            <div className="rounded-xl border p-4">
-                <div className="mb-4 flex items-center gap-2">
+        <div className='flex flex-col gap-4'>
+            <div className="rounded-xl p-4 bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border">
+                <div className="flex items-center gap-2">
                     <span className="text-sm">Show:</span>
                     <Select value={filters.perPage} onValueChange={handlePerPageChangeWrapper}>
                         <SelectTrigger className="w-[80px]">
@@ -75,16 +75,16 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                     <Button onClick={() => handleSearchonClick(search, filters)}><Search className="h-4 w-4" /></Button>
                 </div>
             </div>
-            <div className="overflow-auto pt-4">
-                <div className="inline-block w-full overflow-x-auto rounded-md shadow">
+            <div className="overflow-auto rounded-md bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border">
+                <div className="inline-block w-full overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="bg-muted">
-                                <TableHead className="w-12 border-r border-white text-center">
+                            <TableRow>
+                                <TableHead className="w-12 text-center">
                                     <div className="flex items-center justify-center gap-1 text-center">No</div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('name', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -94,7 +94,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('email', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -104,7 +104,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('device_id', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -114,7 +114,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('meter_awal', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -124,7 +124,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('meter_akhir', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -134,12 +134,12 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md border-r border-white text-center"
+                                    className="max-w-md  text-center"
                                 >
                                     Tarif Air
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('tanggal_mulai', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -149,7 +149,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('pemakaian', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -159,7 +159,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer border-r border-white text-center"
+                                    className="max-w-md cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('total_bayar', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -169,7 +169,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md w-[200px] cursor-pointer border-r border-white text-center"
+                                    className="max-w-md w-[200px] cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('status', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">

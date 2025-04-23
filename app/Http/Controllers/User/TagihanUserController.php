@@ -26,10 +26,10 @@ class TagihanUserController extends Controller
                     'tanggal_mulai'  => $invoice->tanggal_mulai ? Carbon::parse($invoice->tanggal_mulai)->locale('id')->translatedFormat('j F Y') : '-',
                     'tanggal_akhir'  => $invoice->tanggal_akhir ? Carbon::parse($invoice->tanggal_akhir)->locale('id')->translatedFormat('j F Y') : '-',
                     'pemakaian'      => $invoice->pemakaian ?? '-',
-                    'total_bayar'    => Number::currency($invoice->total_bayar, locale: 'id') ?? '-',
+                    'total_bayar'    => $invoice->total_bayar ? Number::useCurrency($invoice->total_bayar, locale: 'id') : Number::useCurrency(0, locale: 'id'),
                     'status'         => $invoice->status ?? '-',
                     'tarif'          => [
-                        'harga' => Number::currency($invoice->tarif->harga, locale: 'id') ?? '-',
+                        'harga' => Number::useCurrency($invoice->tarif->harga, locale: 'id') ?? Number::useCurrency(0, locale: 'id'),
                     ],
                     'created_at'     => $invoice->created_at ? $invoice->created_at->format('d/m/Y H:i:s') : '-',
                     'updated_at'     => $invoice->updated_at ? $invoice->updated_at->format('d/m/Y H:i:s') : '-',

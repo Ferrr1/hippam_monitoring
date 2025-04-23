@@ -52,6 +52,18 @@
       0 => 'Laravel\\Pail\\PailServiceProvider',
     ),
   ),
+  'laravel/reverb' => 
+  array (
+    'aliases' => 
+    array (
+      'Output' => 'Laravel\\Reverb\\Output',
+    ),
+    'providers' => 
+    array (
+      0 => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',
+      1 => 'Laravel\\Reverb\\ReverbServiceProvider',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 
@@ -85,6 +97,17 @@
     'providers' => 
     array (
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    ),
+  ),
+  'php-mqtt/laravel-client' => 
+  array (
+    'aliases' => 
+    array (
+      'MQTT' => 'PhpMqtt\\Client\\Facades\\MQTT',
+    ),
+    'providers' => 
+    array (
+      0 => 'PhpMqtt\\Client\\MqttClientServiceProvider',
     ),
   ),
   'tightenco/ziggy' => 

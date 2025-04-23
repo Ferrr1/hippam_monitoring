@@ -1,11 +1,14 @@
 <?php
 
+use App\Events\SensorUpdated;
 use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\SensorDataController;
 use App\Http\Controllers\Admin\TagihanController;
 use App\Http\Controllers\Admin\TarifAirController;
 use App\Http\Controllers\Admin\WargaController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\User\RiwayatTagihanController;
 use App\Http\Controllers\User\TagihanUserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,9 +18,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('admin/dashboard', function () {
-        return Inertia::render('admin/dashboard');
-    })->name('admin.dashboard');
+    Route::get('admin/dashboard', [DashboardController::class, 'getDataMonitoringDevice'])->name('admin.dashboard');
     // Route Untuk Pengguna/User
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register.store');
     Route::put('/register/{user}/update', [RegisteredUserController::class, 'update'])->name('register.update');
@@ -48,10 +49,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     })->name('fuzzy.index');
 });
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('user/dashboard');
-    })->name('user.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'getDataMonitoringDevice'])->name('user.dashboard');
     Route::get('/tagihan', [TagihanUserController::class, 'index'])->name('user.tagihan.index');
+    Route::get('/riwayat-tagihan', [RiwayatTagihanController::class, 'index'])->name('user.riwayat_tagihan.index');
+});
+
+Route::get('/test-broadcast', function () {
+    broadcast(new SensorUpdated('ESP_02_FLOW', [
+        'value' => ['volume_liters' => 10.5, 'volume_m3' => 0.01]
+    ]));
+
+    return 'broadcasted!';
 });
 
 require __DIR__ . '/settings.php';

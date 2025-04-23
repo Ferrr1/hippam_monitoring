@@ -1,5 +1,4 @@
 <?php return array (
-  2 => 'broadcasting',
   4 => 'concurrency',
   5 => 'cors',
   8 => 'hashing',
@@ -136,6 +135,62 @@
       ),
     ),
     'password_timeout' => 10800,
+  ),
+  'broadcasting' => 
+  array (
+    'default' => 'reverb',
+    'connections' => 
+    array (
+      'reverb' => 
+      array (
+        'driver' => 'reverb',
+        'key' => 'hhqixhyttot0sedphb9w',
+        'secret' => 'c2rl8ivl2bzuza9dresb',
+        'app_id' => '605115',
+        'options' => 
+        array (
+          'host' => '127.0.0.1',
+          'port' => '8080',
+          'scheme' => 'http',
+          'useTLS' => false,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'pusher' => 
+      array (
+        'driver' => 'pusher',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'cluster' => NULL,
+          'host' => 'api-mt1.pusher.com',
+          'port' => 443,
+          'scheme' => 'https',
+          'encrypted' => true,
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'ably' => 
+      array (
+        'driver' => 'ably',
+        'key' => NULL,
+      ),
+      'log' => 
+      array (
+        'driver' => 'log',
+      ),
+      'null' => 
+      array (
+        'driver' => 'null',
+      ),
+    ),
   ),
   'cache' => 
   array (
@@ -786,6 +841,71 @@
       'table' => 'failed_jobs',
     ),
   ),
+  'reverb' => 
+  array (
+    'default' => 'reverb',
+    'servers' => 
+    array (
+      'reverb' => 
+      array (
+        'host' => '0.0.0.0',
+        'port' => 8080,
+        'path' => '',
+        'hostname' => '127.0.0.1',
+        'options' => 
+        array (
+          'tls' => 
+          array (
+          ),
+        ),
+        'max_request_size' => 10000,
+        'scaling' => 
+        array (
+          'enabled' => false,
+          'channel' => 'reverb',
+          'server' => 
+          array (
+            'url' => NULL,
+            'host' => '127.0.0.1',
+            'port' => '6379',
+            'username' => NULL,
+            'password' => NULL,
+            'database' => '0',
+            'timeout' => 60,
+          ),
+        ),
+        'pulse_ingest_interval' => 15,
+        'telescope_ingest_interval' => 15,
+      ),
+    ),
+    'apps' => 
+    array (
+      'provider' => 'config',
+      'apps' => 
+      array (
+        0 => 
+        array (
+          'key' => 'hhqixhyttot0sedphb9w',
+          'secret' => 'c2rl8ivl2bzuza9dresb',
+          'app_id' => '605115',
+          'options' => 
+          array (
+            'host' => '127.0.0.1',
+            'port' => '8080',
+            'scheme' => 'http',
+            'useTLS' => false,
+          ),
+          'allowed_origins' => 
+          array (
+            0 => '*',
+          ),
+          'ping_interval' => 60,
+          'activity_timeout' => 30,
+          'max_message_size' => 10000,
+        ),
+      ),
+    ),
+  ),
   'services' => 
   array (
     'postmark' => 
@@ -833,62 +953,6 @@
     'http_only' => true,
     'same_site' => 'lax',
     'partitioned' => false,
-  ),
-  'broadcasting' => 
-  array (
-    'default' => 'log',
-    'connections' => 
-    array (
-      'reverb' => 
-      array (
-        'driver' => 'reverb',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'host' => NULL,
-          'port' => 443,
-          'scheme' => 'https',
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'pusher' => 
-      array (
-        'driver' => 'pusher',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'cluster' => NULL,
-          'host' => 'api-mt1.pusher.com',
-          'port' => 443,
-          'scheme' => 'https',
-          'encrypted' => true,
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'ably' => 
-      array (
-        'driver' => 'ably',
-        'key' => NULL,
-      ),
-      'log' => 
-      array (
-        'driver' => 'log',
-      ),
-      'null' => 
-      array (
-        'driver' => 'null',
-      ),
-    ),
   ),
   'concurrency' => 
   array (
@@ -1770,6 +1834,61 @@
       array (
         'type' => 'Latn',
         'regional' => 'zu_ZA',
+      ),
+    ),
+  ),
+  'mqtt-client' => 
+  array (
+    'default_connection' => 'default',
+    'connections' => 
+    array (
+      'default' => 
+      array (
+        'host' => 'broker.emqx.io',
+        'port' => '1883',
+        'protocol' => '3.1',
+        'client_id' => NULL,
+        'use_clean_session' => true,
+        'enable_logging' => true,
+        'log_channel' => NULL,
+        'repository' => 'PhpMqtt\\Client\\Repositories\\MemoryRepository',
+        'connection_settings' => 
+        array (
+          'tls' => 
+          array (
+            'enabled' => false,
+            'allow_self_signed_certificate' => false,
+            'verify_peer' => true,
+            'verify_peer_name' => true,
+            'ca_file' => NULL,
+            'ca_path' => NULL,
+            'client_certificate_file' => NULL,
+            'client_certificate_key_file' => NULL,
+            'client_certificate_key_passphrase' => NULL,
+          ),
+          'auth' => 
+          array (
+            'username' => NULL,
+            'password' => NULL,
+          ),
+          'last_will' => 
+          array (
+            'topic' => NULL,
+            'message' => NULL,
+            'quality_of_service' => 0,
+            'retain' => false,
+          ),
+          'connect_timeout' => 60,
+          'socket_timeout' => 5,
+          'resend_timeout' => 10,
+          'keep_alive_interval' => 10,
+          'auto_reconnect' => 
+          array (
+            'enabled' => false,
+            'max_reconnect_attempts' => 3,
+            'delay_between_reconnect_attempts' => 0,
+          ),
+        ),
       ),
     ),
   ),

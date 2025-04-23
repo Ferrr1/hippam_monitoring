@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('wargas', function (Blueprint $table) {
             $table->id('warga_id');
-            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('users_id')->unique()->constrained('users')->onDelete('cascade');
+            $table->foreignId('device_id')->unique()->nullable()->constrained('devices')->onDelete('cascade');
             $table->string('no_telp', 16);
             $table->text('alamat');
             $table->timestamps();

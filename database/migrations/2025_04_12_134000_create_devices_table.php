@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
             $table->string('device_id')->unique();
-            $table->string('mac_address', 100)->unique();
             $table->enum('status', ['aktif', 'tidak_aktif']);
+            $table->timestamp('last_seen_at')->nullable();
             $table->timestamps();
         });
     }

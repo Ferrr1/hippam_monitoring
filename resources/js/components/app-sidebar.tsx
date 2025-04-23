@@ -38,14 +38,14 @@ export function AppSidebar() {
                         icon: UserCog,
                     },
                     {
-                        title: 'Data Warga',
-                        href: '/admin/warga',
-                        icon: BookUser,
-                    },
-                    {
                         title: 'Data Perangkat',
                         href: '/admin/devices',
                         icon: Laptop,
+                    },
+                    {
+                        title: 'Data Warga',
+                        href: '/admin/warga',
+                        icon: BookUser,
                     },
                 ],
             },
@@ -100,8 +100,8 @@ export function AppSidebar() {
                         icon: CreditCard,
                     },
                     {
-                        title: 'Riwayat Pembayaran',
-                        href: '/riwayat',
+                        title: 'Riwayat Tagihan',
+                        href: '/riwayat-tagihan',
                         icon: ClipboardMinus,
                     },
                 ],
@@ -110,7 +110,7 @@ export function AppSidebar() {
 
     const dashboardPath = role === 'admin' ? '/admin/dashboard' : '/dashboard';
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="floating">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>

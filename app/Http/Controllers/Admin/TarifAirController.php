@@ -15,12 +15,16 @@ class TarifAirController extends Controller
      */
     public function index()
     {
-        $tarif = Tarif::first();
-        return Inertia::render('admin/tarif/index', [
-            'tarif' => [
-                'harga' => Number::currency($tarif->harga, locale: 'id')
-            ]
-        ]);
+        try {
+            $tarif = Tarif::first();
+            return Inertia::render('admin/tarif/index', [
+                'tarif' => [
+                    'harga' => $tarif ? Number::useCurrency($tarif->harga) : Number::useCurrency(0)
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     }
 
     /**

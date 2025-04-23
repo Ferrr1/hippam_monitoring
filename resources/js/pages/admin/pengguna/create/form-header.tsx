@@ -43,7 +43,7 @@ export default function FormHeader({ action }: FormHeaderProps) {
     return (
         <form onSubmit={submit}>
             <div className="flex h-fit flex-col gap-4 rounded-xl">
-                <div className="flex md:flex-row flex-col px-4 pt-2 pb-4 gap-2 justify-between border-sidebar-border/70 dark:border-sidebar-border overflow-hidden rounded-xl border">
+                <div className="flex md:flex-row flex-col p-4 gap-2 justify-between bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border overflow-hidden rounded-xl">
                     <div className="w-full grid md:grid-cols-2 gap-4">
                         {/* Name */}
                         <div className="grid gap-1">

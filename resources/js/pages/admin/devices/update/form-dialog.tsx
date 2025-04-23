@@ -31,7 +31,6 @@ interface FormDialogProps {
     defaultValues: {
         id: number | null;
         device_id: string | null;
-        mac_address: string | null;
         status: string | null;
     };
     onClose?: () => void;
@@ -48,7 +47,6 @@ export default function FormDialog({
     const { put, processing, data, setData, errors } = useForm({
         id: defaultValues.id,
         device_id: defaultValues.device_id,
-        mac_address: defaultValues.mac_address,
         status: defaultValues.status,
     });
     const handleUpdate: FormEventHandler = (e) => {
@@ -86,18 +84,6 @@ export default function FormDialog({
                             disabled={processing}
                         />
                         <InputError message={errors.device_id} className="mt-1" />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="mac_address">Mac Address</Label>
-                        <Input
-                            id="mac_address"
-                            type="text"
-                            value={data.mac_address!}
-                            onChange={(e) => setData("mac_address", e.target.value)}
-                            disabled={processing}
-                        />
-                        <InputError message={errors.mac_address} className="mt-1" />
                     </div>
 
                     <div>

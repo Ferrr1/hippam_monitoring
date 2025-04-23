@@ -42,71 +42,72 @@ export default function Tagihan({ tagihan }: TagihanProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tagihan" />
-            <div className="px-4 py-6">
-                <div className='flex justify-between'>
-                    <div className='flex-1'>
-                        <Heading title="Tagihan" />
-                        <p className="font-medium tracking-tight text-sm -mt-6">Status :
-                            {tagihan && tagihan.status === "belum_lunas" ? (
-                                <span className='px-2 py-1 rounded-md bg-red-100 text-red-700'>Belum Lunas</span>
-                            ) : tagihan ? (
-                                <span className='px-2 py-1 rounded-md bg-green-100 text-green-700'>Lunas</span>
-                            ) : (
-                                <span className='px-2 py-1 rounded-md bg-gray-100 text-gray-700'>Belum ditetapkan</span>
-                            )}
-                        </p>
+            <div className="px-4 py-6 flex flex-col gap-4">
+                <div className='text-slate-600 dark:text-slate-200 bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border shadow-sm rounded-md p-6'>
+                    <div className='flex justify-between'>
+                        <div className='flex-1'>
+                            <Heading title="Tagihan" className='text-blue-500 dark:text-slate-200' />
+                            <p className="font-medium tracking-tight text-sm -mt-6">Status :
+                                {tagihan && tagihan.status === "belum_lunas" ? (
+                                    <span className='px-2 py-1 rounded-md bg-red-100 text-red-700'>Belum Lunas</span>
+                                ) : tagihan ? (
+                                    <span className='px-2 py-1 rounded-md bg-green-100 text-green-700'>Lunas</span>
+                                ) : (
+                                    <span className='px-2 py-1 rounded-md bg-gray-700 text-gray-100 dark:bg-gray-100 dark:text-gray-700'>Belum ditetapkan</span>
+                                )}
+                            </p>
+                        </div>
+                        <div>
+                            <AppLogo />
+                        </div>
                     </div>
+                    <div className='flex justify-between space-y-2 my-6'>
+                        <div className='flex-1'>
+                            <p className="font-semibold tracking-tight text-sm">Ditagihkan Kepada : </p>
+                            <p className="tracking-tight text-sm">Nama : {user.name}</p>
+                            <p className="tracking-tight text-sm"> Email : {user.email}</p>
+                            <p className="tracking-tight text-sm">
+                                No Telepon : {user?.warga?.no_telp || '-'}
+                            </p>
+                            <p className="tracking-tight text-sm break-all">
+                                Alamat : {user?.warga?.alamat || '-'}
+                            </p>
+                        </div>
+                        <div className='flex-2'>
+                            <p className="font-semibold tracking-tight text-sm text-right">Periode</p>
+                            <p className="font-medium tracking-tight text-sm text-right">
+                                {tagihan ? (
+                                    `${tagihan.tanggal_mulai} - ${tagihan.tanggal_akhir}`
+                                ) : (
+                                    <span className='px-2 py-1 rounded-md bg-gray-700 text-gray-100 dark:bg-gray-100 dark:text-gray-700'>Belum ditetapkan</span>
+                                )}
+                            </p>
+                        </div>
+                    </div>
+                    <div className='-mt-6'>
+                        <p className="font-semibold tracking-tight text-sm">Metode Pembayaran</p>
+                        <p className="tracking-tight text-sm">Transfer Manual <span className='font-semibold'>Mandiri</span></p>
+                        <p className="tracking-tight text-sm">No. Rekening : <span className='font-semibold'>123456789</span></p>
+                        <p className="tracking-tight text-sm">Atas Nama : <span className='font-semibold'>Maulana Feri Setyawan</span></p>
+                    </div>
+                </div>
+                <div className='text-slate-600 dark:text-slate-200 bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border shadow-sm rounded-md p-6'>
+                    <h3 className="text-xl font-semibold tracking-tight text-blue-500 dark:text-slate-200">Detail</h3>
+                    <Separator className="my-2" />
+                    <DataTable
+                        tagihan={tagihan}
+                    />
                     <div>
-                        <AppLogo />
+                        <p className="font-medium tracking-tight text-sm mt-6 text-right">Total Bayar</p>
+                        <h2 className="text-xl font-semibold tracking-tight text-right">
+                            {`${tagihan?.total_bayar ?? "Rp 0,00"}`}
+                        </h2>
                     </div>
-                </div>
-                <div className='flex justify-between my-12'>
-                    <div className='flex-1'>
-                        <p className="font-semibold tracking-tight text-sm">Ditagihkan Kepada : </p>
-                        <p className="tracking-tight text-sm">{user.name}</p>
-                        <p className="tracking-tight text-sm">{user.email}</p>
-                        <p className="tracking-tight text-sm">
-                            {user?.warga?.no_telp || '-'}
-                        </p>
-                        <p className="tracking-tight text-sm break-all">
-                            {user?.warga?.alamat || '-'}
-                        </p>
-
+                    <div className='flex gap-4 flex-col w-1/2'>
+                        <Label htmlFor="picture" className='font-semibold'>Upload Bukti Pembayaran</Label>
+                        <Input id="picture" type="file" />
+                        <Button className='mt-2'>Upload</Button>
                     </div>
-                    <div className='flex-2'>
-                        <p className="font-semibold tracking-tight text-sm text-right">Periode</p>
-                        <p className="font-medium tracking-tight text-sm text-right">
-                            {tagihan ? (
-                                `${tagihan.tanggal_mulai} - ${tagihan.tanggal_akhir}`
-                            ) : (
-                                <span className='px-2 py-1 rounded-md bg-gray-100 text-gray-700'>Belum ditetapkan</span>
-                            )}
-                        </p>
-                    </div>
-                </div>
-                <div className='-mt-6'>
-                    <p className="font-semibold tracking-tight text-sm">Metode Pembayaran</p>
-                    <p className="tracking-tight text-sm">Transfer Manual <span className='font-semibold'>Mandiri</span></p>
-                    <p className="tracking-tight text-sm">No. Rekening : <span className='font-semibold'>123456789</span></p>
-                    <p className="tracking-tight text-sm">Atas Nama : <span className='font-semibold'>Maulana Feri Setyawan</span></p>
-                </div>
-                <div className='mt-12'>
-                    <h3 className="text-xl font-semibold tracking-tight">Detail</h3>
-                </div>
-                <Separator className="my-2" />
-                <DataTable
-                    tagihan={tagihan}
-                />
-                <div>
-                    <p className="font-medium tracking-tight text-sm mt-6 text-right">Total</p>
-                    <h2 className="text-xl font-semibold tracking-tight text-right">
-                        {tagihan ? `${tagihan.total_bayar}` : '-'}
-                    </h2>
-                </div>
-                <div className='flex gap-4 flex-col w-sm'>
-                    <Label htmlFor="picture" className='font-semibold'>Upload Bukti Pembayaran</Label>
-                    <Input id="picture" type="file" />
-                    <Button className='mt-2'>Upload</Button>
                 </div>
             </div>
         </AppLayout>

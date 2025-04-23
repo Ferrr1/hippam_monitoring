@@ -28,47 +28,50 @@ class ProfileController extends Controller
     /**
      * Update the user's profile settings.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request)
     {
-        $user = $request->user();
-        $validated = $request->validated();
+        try {
+            $user = $request->user();
+            $validated = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $user->fill($validated);
-        $user->save();
-
-        $warga = $user->warga;
-        if (!$warga) {
-            $checkData = Warga::where('no_telp', $validated['no_telp'])
-                ->orWhere('alamat', $validated['alamat'])
-                ->first();
-            if ($checkData) {
-                return back()->withErrors(['message' => 'No Telepon atau Alamat sudah digunakan.']);
-            } else {
-                Warga::create([
-                    'users_id' => $user->id,
-                    'no_telp' => $validated['no_telp'],
-                    'alamat' => $validated['alamat'],
-                ]);
+            if ($request->user()->isDirty('email')) {
+                $request->user()->email_verified_at = null;
             }
-        } elseif ($warga) {
-            if (
-                $validated['no_telp'] === $warga->no_telp &&
-                $validated['alamat'] === $warga->alamat
-            ) {
-                return back()->withErrors(['message' => 'Tidak ada perubahan data.']);
-            } else {
-                $warga->update([
-                    'no_telp' => $validated['no_telp'],
-                    'alamat' => $validated['alamat'],
-                ]);
-            }
-        }
 
-        return to_route('profile.edit');
+            $user->fill($validated);
+            $user->save();
+
+            $warga = $user->warga;
+            if (!$warga) {
+                $checkData = Warga::where('no_telp', $validated['no_telp'])
+                    ->orWhere('alamat', $validated['alamat'])
+                    ->first();
+                if ($checkData) {
+                    return back()->withErrors(['message' => 'No Telepon atau Alamat sudah digunakan.']);
+                } else {
+                    Warga::create([
+                        'users_id' => $user->id,
+                        'no_telp' => $validated['no_telp'],
+                        'alamat' => $validated['alamat'],
+                    ]);
+                }
+            } elseif ($warga) {
+                if (
+                    $validated['no_telp'] === $warga->no_telp &&
+                    $validated['alamat'] === $warga->alamat
+                ) {
+                    return back()->withErrors(['message' => 'Tidak ada perubahan data.']);
+                } else {
+                    $warga->update([
+                        'no_telp' => $validated['no_telp'],
+                        'alamat' => $validated['alamat'],
+                    ]);
+                }
+            }
+            return to_route('profile.edit');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     }
 
     /**

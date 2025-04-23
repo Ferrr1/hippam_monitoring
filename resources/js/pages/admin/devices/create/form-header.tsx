@@ -16,7 +16,6 @@ type FormHeaderProps = {
 export default function FormHeader({ action }: FormHeaderProps) {
     const { data, setData, post, processing, errors, reset } = useForm({
         device_id: "",
-        mac_address: "",
         status: "",
     });
 
@@ -24,7 +23,7 @@ export default function FormHeader({ action }: FormHeaderProps) {
         e.preventDefault();
         post(route(action), {
             onSuccess: () => {
-                reset("device_id", "mac_address", "status");
+                reset("device_id", "status");
                 toast.success("Berhasil menambahkan data warga");
             },
             onError: (errors) => {
@@ -36,7 +35,7 @@ export default function FormHeader({ action }: FormHeaderProps) {
     return (
         <form onSubmit={submit}>
             <div className="flex h-fit flex-col gap-4 rounded-xl">
-                <div className="flex md:flex-row flex-col px-4 pt-2 pb-4 gap-2 justify-between border-sidebar-border/70 dark:border-sidebar-border overflow-hidden rounded-xl border">
+                <div className="flex md:flex-row flex-col p-4 gap-2 justify-between bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border overflow-hidden rounded-xl">
                     <div className="w-full grid md:grid-cols-2 gap-4">
                         {/* Devices */}
                         <div className="grid gap-1">
@@ -52,22 +51,6 @@ export default function FormHeader({ action }: FormHeaderProps) {
                                 className="mt-1 block"
                             />
                             <InputError message={errors.device_id} className="mt-1" />
-                        </div>
-
-                        {/* No Telepon */}
-                        <div className="grid gap-1">
-                            <Label htmlFor="mac_address">Mac Address</Label>
-                            <Input
-                                id="mac_address"
-                                type="text"
-                                value={data.mac_address!}
-                                onChange={(e) => setData("mac_address", (e.target.value))}
-                                placeholder="30:AE:A4:07:0D:64"
-
-                                disabled={processing}
-                                className="mt-1 block"
-                            />
-                            <InputError message={errors.mac_address} className="mt-1" />
                         </div>
 
                         {/* Status */}

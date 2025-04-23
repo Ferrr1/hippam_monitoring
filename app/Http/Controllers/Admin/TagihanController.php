@@ -58,7 +58,7 @@ class TagihanController extends Controller
                 'tanggal_mulai' => Carbon::parse($tagihan->tanggal_mulai)->format('d/m/Y'),
                 'tanggal_akhir' => Carbon::parse($tagihan->tanggal_akhir)->format('d/m/Y'),
                 'pemakaian' => $tagihan->pemakaian,
-                'total_bayar' => Number::currency($tagihan->total_bayar, locale: 'id'),
+                'total_bayar' => Number::useCurrency($tagihan->total_bayar),
                 'status' => $tagihan->status,
                 'warga' => [
                     'user' => [
@@ -74,7 +74,7 @@ class TagihanController extends Controller
                     'status' => $tagihan->device->status,
                 ],
                 'tarif' => [
-                    'harga' => Number::currency($tagihan->tarif->harga, locale: 'id'),
+                    'harga' => Number::useCurrency($tagihan->tarif->harga),
                 ],
                 'created_at' => $tagihan->created_at->format('d/m/Y H:i:s'),
                 'updated_at' => $tagihan->updated_at->format('d/m/Y H:i:s'),

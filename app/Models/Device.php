@@ -8,13 +8,18 @@ class Device extends Model
 {
     protected $fillable = [
         'device_id',
-        'mac_address',
         'status',
+        'last_seen_at'
     ];
     // Device.php
     public function tagihan()
     {
         return $this->hasMany(Tagihan::class, 'device_id');
+    }
+
+    public function warga()
+    {
+        return $this->hasOne(Warga::class, 'warga_id');
     }
 
     public function sensorData()

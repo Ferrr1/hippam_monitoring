@@ -15,6 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Warga {
     warga_id: number;
+    device_id: string;
     no_telp: number;
     alamat: string;
     user: {
@@ -28,6 +29,12 @@ interface User {
     id: number;
     name: string;
     email: string;
+}
+
+export interface Device {
+    id: number;
+    device_id: string;
+    status: string;
 }
 interface Filters {
     search: string;
@@ -46,11 +53,12 @@ type Props = {
         data: Warga[];
     };
     users: User[];
+    devices: Device[];
     filters: Filters;
     pagination: Pagination;
 }
 
-export default function Warga({ wargas, users, filters, pagination }: Props) {
+export default function Warga({ wargas, users, devices, filters, pagination }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Warga" />
@@ -60,12 +68,14 @@ export default function Warga({ wargas, users, filters, pagination }: Props) {
                 <FormHeader
                     action={'warga.store'}
                     users={users}
+                    devices={devices}
                 />
 
                 <Separator className="my-4" />
 
                 <DataTable
                     wargas={wargas}
+                    devices={devices}
                     pagination={pagination}
                     total={pagination.total}
                     filters={filters}
