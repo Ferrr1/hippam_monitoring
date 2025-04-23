@@ -52,7 +52,6 @@ export default function FormDialog({
     defaultValues,
     onClose,
 }: FormDialogProps) {
-    console.log(defaultValues)
     const { put, processing, data, setData, errors } = useForm({
         warga_id: defaultValues.warga_id,
         device_id: defaultValues.device_id,
@@ -123,7 +122,8 @@ export default function FormDialog({
                         <Label htmlFor="device">Device</Label>
                         <Select
                             value={data.device_id!}
-                            onValueChange={(value) => setData("device_id", value)}
+                            onValueChange={(value) =>
+                                setData("device_id", Number(value))}
                         >
                             <SelectTrigger className="mt-1" id="device">
                                 <SelectValue placeholder="Pilih Device" />
