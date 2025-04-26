@@ -148,10 +148,10 @@ export default function DataTable({ users, total, filters, pagination }: DataTab
                                 <TableHead className="text-center">Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        {users.data.length > 0 ? (
-                            users.data.map((user, index) => (
-                                <TableBody key={user.id}>
-                                    <TableRow className="text-center">
+                        <TableBody>
+                            {users.data.length > 0 ? (
+                                users.data.map((user, index) => (
+                                    <TableRow key={user.id} className="text-center">
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{user.name}</TableCell>
                                         <TableCell>{user.email}</TableCell>
@@ -193,15 +193,13 @@ export default function DataTable({ users, total, filters, pagination }: DataTab
                                             </Button>
                                         </TableCell>
                                     </TableRow>
-                                </TableBody>
-                            ))
-                        ) : (
-                            <TableBody>
+                                ))
+                            ) : (
                                 <TableRow className="h-28 text-center">
                                     <TableCell colSpan={7}>Tidak ada data</TableCell>
                                 </TableRow>
-                            </TableBody>
-                        )}
+                            )}
+                        </TableBody>
                     </Table>
 
                     {editDialogOpen && (

@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'name' => 'Feri User ' . $i,
             'email' => 'feriuser' . $i++ . '@example.com',
             'password' => bcrypt('password'),
-            'role' => $this->faker->randomElement(['admin', 'user']),
+            'role' => 'user',
             'remember_token' => Str::random(10),
         ];
     }

@@ -3,52 +3,6 @@ import { Info, Server, } from "lucide-react";
 export default function InfoSection() {
     return (
         <div className="mt-8 grid grid-cols-1 gap-6">
-            {/* User Login Information Column */}
-            {/* <div className="bg-white rounded-lg shadow-md p-6 border border-blue-100">
-                <div className="flex items-center gap-3 mb-4">
-                    <User className="h-5 w-5 text-blue-600" />
-                    <h2 className="text-lg font-semibold text-slate-800">User Information</h2>
-                </div>
-
-                <div className="space-y-4">
-                    <div className="flex gap-3 items-center">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                            <span className="font-medium">SA</span>
-                        </div>
-                        <div>
-                            <p className="font-medium text-slate-800">System Administrator</p>
-                            <p className="text-sm text-slate-500">admin@aquamonitor.com</p>
-                        </div>
-                    </div>
-
-                    <div className="pt-2 space-y-3">
-                        <div className="flex items-start gap-2">
-                            <Clock className="h-4 w-4 text-slate-400 mt-0.5" />
-                            <div>
-                                <p className="text-sm text-slate-600">Last Login</p>
-                                <p className="font-medium text-slate-800">March 5, 2025 - 17:45:30</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-2">
-                            <MapPin className="h-4 w-4 text-slate-400 mt-0.5" />
-                            <div>
-                                <p className="text-sm text-slate-600">Location</p>
-                                <p className="font-medium text-slate-800">Jakarta Water Monitoring Station</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-2">
-                            <Shield className="h-4 w-4 text-slate-400 mt-0.5" />
-                            <div>
-                                <p className="text-sm text-slate-600">Role & Permissions</p>
-                                <p className="font-medium text-slate-800">Full Access - System Control</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
-
             {/* Application Information Column */}
             <div className="rounded-lg border bg-slate-50 dark:bg-accent p-6 transition-all duration-300 hover:shadow-md">
                 <div className="mb-4 flex items-center gap-3">
@@ -89,7 +43,7 @@ export default function InfoSection() {
 
                         <div className="mt-4 rounded-md border border-blue-100 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 p-3">
                             <p className="text-sm text-blue-800 dark:text-blue-200">
-                                <span className="font-medium">Note:</span> Sistem ini dikembangkan oleh Maulana Feri Setaywan.
+                                <span className="font-medium">Note:</span> Sistem ini dikembangkan oleh Maulana Feri Setyawan.
                             </p>
                         </div>
                     </div>

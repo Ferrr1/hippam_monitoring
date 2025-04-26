@@ -148,7 +148,7 @@ export default function DataTable({ wargas, devices, total, filters, pagination 
                                     </div>
                                 </TableHead>
                                 <TableHead
-                                    className="max-w-md cursor-pointer text-center"
+                                    className="max-w-md w-2xl cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('alamat', filters)}
                                 >
                                     <div className="flex items-center justify-center gap-1 text-center">
@@ -169,7 +169,7 @@ export default function DataTable({ wargas, devices, total, filters, pagination 
                                         <TableCell>{warga.user.name}</TableCell>
                                         <TableCell>{warga.user.email}</TableCell>
                                         <TableCell>{warga.no_telp}</TableCell>
-                                        <TableCell className='max-w-md break-all'>{warga.alamat}</TableCell>
+                                        <TableCell className='break-inside-avoid-column'>{warga.alamat}</TableCell>
                                         <TableCell className="flex justify-center items-center gap-4">
                                             <Button
                                                 variant="default"

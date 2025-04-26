@@ -18,7 +18,7 @@ interface ConfirmDialogProps {
     onOpenChange: (open: boolean) => void;
     title: string;
     description?: string;
-    tagihan_id: number;
+    sensor_data_id: number;
     onClose?: () => void;
     confirmText?: string;
     cancelText?: string;
@@ -29,7 +29,7 @@ export default function ConfirmDialog({
     onOpenChange,
     title,
     description,
-    tagihan_id,
+    sensor_data_id,
     onClose,
     confirmText = "Yes, confirm",
     cancelText = "Cancel",
@@ -37,19 +37,21 @@ export default function ConfirmDialog({
     const {
         delete: destroy,
         processing,
-    } = useForm({ tagihan_id: null });
+    } = useForm({ sensor_data_id: null });
+
+    console.log(sensor_data_id);
     const handleDelete: FormEventHandler = (e) => {
         e.preventDefault();
-        destroy(route("tagihan.destroy", tagihan_id), {
+        destroy(route("devices.sensor.destroy", sensor_data_id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success("Data Tagihan Berhasil dihapus");
+                toast.success("Sensor Data Berhasil dihapus");
                 onOpenChange(false);
                 onClose?.();
             },
             onError: () => {
-                toast.error("Gagal Menghapus Data Tagihan");
+                toast.error("Gagal Menghapus Sensor Data");
                 onOpenChange(false);
                 onClose?.();
             },

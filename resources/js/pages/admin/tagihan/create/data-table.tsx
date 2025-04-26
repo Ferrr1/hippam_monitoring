@@ -9,6 +9,7 @@ import { useState } from 'react';
 import ConfirmDialog from '../delete/confirm-dialog';
 import SelectForm from '../update/select-form';
 import { Tagihan } from '../index'
+import ImageModal from '@/components/image-modal';
 
 interface Filters {
     search: string;
@@ -36,7 +37,9 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
     const [search, setSearch] = useState('');
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
+    const [isModalOpen, setModalOpen] = useState(false);
     const showCountOptions = ['10', '20', '30'];
     const handlePageChangeWrapper = (page: number) => {
         handlePageChange(page, filters);
@@ -46,6 +49,10 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
     };
     const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters);
 
+    const handleImageClick = (src: string) => {
+        setSelectedImage(src);
+        setModalOpen(true);
+    };
     return (
         <div className='flex flex-col gap-4'>
             <div className="rounded-xl p-4 bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border">
@@ -169,6 +176,11 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                     </div>
                                 </TableHead>
                                 <TableHead
+                                    className="max-w-md cursor-pointer text-center"
+                                >
+                                    Bukti Pembayaran
+                                </TableHead>
+                                <TableHead
                                     className="max-w-md w-[200px] cursor-pointer text-center"
                                     onClick={() => handleSortWrapper('status', filters)}
                                 >
@@ -181,10 +193,10 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                 <TableHead className="text-center">Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        {tagihans.data.length > 0 ? (
-                            tagihans.data.map((tagihan, index) => (
-                                <TableBody key={tagihan.tagihan_id}>
-                                    <TableRow className="text-center">
+                        <TableBody>
+                            {tagihans.data.length > 0 ? (
+                                tagihans.data.map((tagihan, index) => (
+                                    <TableRow key={tagihan.tagihan_id} className="text-center">
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{tagihan.warga.user.name}</TableCell>
                                         <TableCell className='break-normal'>{tagihan.warga.user.email}</TableCell>
@@ -195,6 +207,18 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                         <TableCell>{tagihan.tanggal_mulai} - {tagihan.tanggal_akhir}</TableCell>
                                         <TableCell>{tagihan.pemakaian} m³</TableCell>
                                         <TableCell>{tagihan.total_bayar}</TableCell>
+                                        <TableCell className='w-40 h-30'>
+                                            {tagihan.bukti_pembayaran ? (
+                                                <img
+                                                    src={`/storage/${tagihan.bukti_pembayaran}`}
+                                                    alt="Bukti Pembayaran"
+                                                    className="w-full h-full object-cover cursor-pointer"
+                                                    onClick={() => handleImageClick(`/storage/${tagihan.bukti_pembayaran}`)}
+                                                />
+                                            ) : (
+                                                "Tidak ada bukti pembayaran"
+                                            )}
+                                        </TableCell>
                                         <TableCell>
                                             <SelectForm
                                                 defaultValues={{
@@ -215,16 +239,25 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                             </Button>
                                         </TableCell>
                                     </TableRow>
-                                </TableBody>
-                            ))
-                        ) : (
-                            <TableBody>
+                                ))
+                            ) : (
                                 <TableRow className="h-28 text-center">
                                     <TableCell colSpan={12}>Tidak ada data</TableCell>
                                 </TableRow>
-                            </TableBody>
-                        )}
+                            )}
+                        </TableBody>
                     </Table>
+                    {selectedImage && isModalOpen && (
+                        <ImageModal
+                            src={selectedImage}
+                            alt="Bukti Pembayaran"
+                            isOpen={isModalOpen}
+                            onClose={() => {
+                                setModalOpen(false);
+                                setSelectedImage(null);
+                            }}
+                        />
+                    )}
                     {selectedId !== null && deleteDialogOpen && (
                         <ConfirmDialog
                             open={deleteDialogOpen}

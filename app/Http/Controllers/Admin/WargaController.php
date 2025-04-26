@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Device;
 use App\Models\User;
 use App\Models\Warga;
+use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -160,24 +161,28 @@ class WargaController extends Controller
      */
     public function update(Request $request, Warga $warga)
     {
-        $validated = $request->validate([
-            'warga_id' => 'required|exists:wargas,warga_id',
-            'device_id' => 'required|unique:wargas,device_id|exists:devices,id',
-            'no_telp' => 'required|numeric|max_digits:16',
-            'alamat' => 'required|string|min:20|max:255',
-        ]);
-        // Validasi jika tidak ada perubahan
-        if (
-            $validated['no_telp'] === $warga->no_telp &&
-            $validated['device_id'] === $warga->device_id &&
-            $validated['alamat'] === $warga->alamat
-        ) {
-            return back()->withErrors(['message' => 'Tidak ada perubahan data.']);
+        try {
+            $validated = $request->validate([
+                'warga_id' => 'required|exists:wargas,warga_id',
+                'device_id' => 'required|exists:devices,id',
+                'no_telp' => 'required|numeric|max_digits:16',
+                'alamat' => 'required|string|min:20|max:255',
+            ]);
+            // Validasi jika tidak ada perubahan
+            if (
+                $validated['no_telp'] === $warga->no_telp &&
+                $validated['device_id'] === $warga->device_id &&
+                $validated['alamat'] === $warga->alamat
+            ) {
+                return back()->withErrors(['message' => 'Tidak ada perubahan data.']);
+            }
+
+            $warga->update($validated);
+
+            return back()->with('success', __('Pengguna berhasil diperbarui'));
+        } catch (Exception $e) {
+            return back()->withErrors(['message' => "Device ID sudah digunakan oleh warga lain."]);
         }
-
-        $warga->update($validated);
-
-        return back()->with('success', __('Pengguna berhasil diperbarui'));
     }
 
     /**

@@ -22,6 +22,7 @@ export interface Tagihan {
     pemakaian: number;
     total_bayar: number;
     status: string;
+    bukti_pembayaran: string;
     tarif: {
         harga: number;
     };

@@ -47,7 +47,6 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [selectedDeviceID, setSelectedDeviceID] = useState<string | null>(null);
-    const [selectedMacAddress, setSelectedMacAddress] = useState<string | null>(null);
     const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
     const showCountOptions = ['10', '20', '30'];
@@ -119,10 +118,10 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                                 <TableHead className="text-center">Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        {devices.data.length > 0 ? (
-                            devices.data.map((device, index) => (
-                                <TableBody key={device.id}>
-                                    <TableRow className="text-center">
+                        <TableBody>
+                            {devices.data.length > 0 ? (
+                                devices.data.map((device, index) => (
+                                    <TableRow key={device.id} className="text-center">
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{device.device_id}</TableCell>
                                         <TableCell><span
@@ -149,7 +148,6 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                                                 onClick={() => {
                                                     setSelectedId(device.id);
                                                     setSelectedDeviceID(device.device_id);
-                                                    setSelectedMacAddress(String(device.mac_address));
                                                     setSelectedStatus(device.status);
                                                     setEditDialogOpen(true);
                                                 }}
@@ -167,15 +165,13 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                                             </Button>
                                         </TableCell>
                                     </TableRow>
-                                </TableBody>
-                            ))
-                        ) : (
-                            <TableBody>
+                                ))
+                            ) : (
                                 <TableRow className="h-28 text-center">
                                     <TableCell colSpan={7}>Tidak ada data</TableCell>
                                 </TableRow>
-                            </TableBody>
-                        )}
+                            )}
+                        </TableBody>
                     </Table>
 
                     {editDialogOpen && (
@@ -186,7 +182,6 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                                 if (!open) {
                                     setSelectedId(null);
                                     setSelectedDeviceID(null);
-                                    setSelectedMacAddress(null);
                                     setSelectedStatus(null);
                                 }
                             }}
@@ -195,14 +190,12 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                             defaultValues={{
                                 id: selectedId,
                                 device_id: selectedDeviceID,
-                                mac_address: selectedMacAddress,
                                 status: selectedStatus,
                             }}
                             onClose={() => {
                                 setEditDialogOpen(false);
                                 setSelectedId(null);
                                 setSelectedDeviceID(null);
-                                setSelectedMacAddress(null);
                                 setSelectedStatus(null);
                             }}
                         />

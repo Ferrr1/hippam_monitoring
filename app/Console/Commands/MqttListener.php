@@ -3,11 +3,17 @@
 namespace App\Console\Commands;
 
 use App\Events\SensorUpdated;
+use App\Events\WaterConditionStatus;
 use App\Models\Device;
 use App\Models\SensorData;
+use App\Models\Tagihan;
+use App\Models\Tarif;
+use App\Models\Warga;
+use App\Services\FuzzyWaterQualityService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Log;
 use PhpMqtt\Client\Facades\MQTT;
 
 class MqttListener extends Command
@@ -52,27 +58,81 @@ class MqttListener extends Command
             $this->error("Data tidak berbentuk array saat ingin disimpan ke kolom JSON.");
             return;
         }
-        if (Str::contains($device->device_id, 'FLOW')) {
-            $keys = ['volume_liters', 'volume_m3'];
-        } else {
-            $keys = ['ph', 'tds', 'turbidity'];
+
+        $warga = Warga::where('device_id', $device->id)->first();
+        $user = Warga::where('device_id', $device->id)->with('user')->first()?->user;
+        $this->info("Info Warga : {$warga}");
+        $this->info("Info User : {$user}");
+        $keys = ['ph', 'tds', 'turbidity'];
+        try {
+            if ($user && $user->role !== 'admin') {
+                $keys = array_merge($keys, ['volume_liters', 'volume_m3']);
+            } else {
+                $waterCondition = $this->WaterStatus([
+                    'device_id' => $device_id,
+                    'ph' => $data['ph'] ?? 0,
+                    'tds' => $data['tds'] ?? 0,
+                    'turbidity' => $data['turbidity'] ?? 0,
+                ]);
+                $this->error("Water Condition: " . $waterCondition);
+            }
+        } catch (\Throwable $th) {
+            $this->error('User tidak ditemukan.' . $th->getMessage());
         }
 
         $filteredValues = Arr::only((array) $data, $keys);
-        SensorUpdated::dispatch($device_id, $filteredValues);
+        $this->error('Filtered Values: ' . json_encode($filteredValues));
+        $this->error("Device ID: {$device_id}");
 
         if (isset($filteredValues['volume_liters'], $filteredValues['volume_m3'])) {
+            $this->error("Masuk Kondisi Volume Liter dan Volume M3");
             // Cek data terakhir dalam 1 bulan terakhir
-            $latestData = SensorData::where('device_id', $device->id)
+            $tagihanPerMonth = Tagihan::where('warga_id', $warga->warga_id)
+                ->whereNotNull('meter_awal')
+                ->whereNotNull('meter_akhir')
+                ->where('created_at', '>=', now()->subMonth())
+                ->latest()
+                ->first();
+            $tarif = Tarif::first();
+            $harga = $tarif->harga;
+            if ($tagihanPerMonth) {
+                $meterAwal = $tagihanPerMonth->meter_awal;
+                $meterAkhirBaru = $filteredValues['volume_m3'];
+                $pemakaian = $meterAkhirBaru - $meterAwal;
+
+                $tagihanPerMonth->update([
+                    'meter_akhir' => $meterAkhirBaru,
+                    'pemakaian' => $pemakaian,
+                    'total_bayar' => $pemakaian * $harga
+                ]);
+            } else {
+                $meterAwal = 0;
+                $meterAkhir = $filteredValues['volume_m3'];
+                $pemakaian = $meterAkhir - $meterAwal;
+
+                Tagihan::create([
+                    'warga_id' => $warga->warga_id,
+                    'device_id' => $device->id,
+                    'tarif_id' => $tarif->tarif_id,
+                    'meter_awal' => $meterAwal,
+                    'meter_akhir' => $meterAkhir,
+                    'tanggal_mulai' => now(),
+                    'tanggal_akhir' => now()->addDays(30),
+                    'pemakaian' => $pemakaian,
+                    'total_bayar' => $pemakaian * $harga,
+                    'status' => 'belum_lunas',
+                ]);
+            }
+            $latestSensorData = SensorData::where('device_id', $device->id)
                 ->whereNotNull('value->volume_liters')
                 ->whereNotNull('value->volume_m3')
                 ->where('created_at', '>=', now()->subMonth())
                 ->latest()
                 ->first();
 
-            if ($latestData) {
+            if ($latestSensorData) {
                 // Update data yang sudah ada
-                $latestData->update([
+                $latestSensorData->update([
                     'value' => $filteredValues,
                 ]);
             } else {
@@ -91,8 +151,23 @@ class MqttListener extends Command
         }
         $this->info("SensorData untuk {$device_id} berhasil diupdate/insert.");
 
+        SensorUpdated::dispatch($device_id, $filteredValues);
+        $this->error("Sensor data dispatched");
+        WaterConditionStatus::dispatch($waterCondition);
+        $this->error("Water Status Condition data dispatched");
+    }
 
-        $this->info("[$device_id] Data updated successfully.");
+    public function WaterStatus($data)
+    {
+        $this->error("Water Status " . "Device ID :" . $data['device_id'] . "PH :" . $data['ph'] . "TDS :" . $data['tds'] . "Turbidity :" . $data['turbidity']);
+        $waterQualityService = new FuzzyWaterQualityService();
+        $valueFuzzy = $waterQualityService->calculateWaterQuality(
+            $ph = $data['ph'] ?? 0,        // Input pH
+            $tds = $data['tds'] ?? 0,     // Input TDS
+            $turbidity = $data['turbidity'] ?? 0 // Input Turbidity
+        );
+        $waterCondition = $waterQualityService->defineWaterCondition($valueFuzzy);
+        return $waterCondition;
     }
 
     public function handle()

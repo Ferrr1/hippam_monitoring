@@ -1,13 +1,15 @@
 import AppLayout from '@/layouts/app-layout';
 import { SharedData, type BreadcrumbItem } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
-import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/app-logo';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import DataTable from './data-table';
+import { useRef, useState } from 'react';
+import { ImageUp, LoaderCircle } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -25,6 +27,7 @@ export interface Tagihan {
     pemakaian: number;
     total_bayar: number;
     status: string;
+    bukti_pembayaran: string;
     tarif: {
         harga: number;
     };
@@ -39,6 +42,53 @@ type TagihanProps = {
 export default function Tagihan({ tagihan }: TagihanProps) {
     const { auth } = usePage<SharedData>().props;
     const user = auth.user;
+
+    const { setData, post, processing, reset, errors } = useForm({
+        bukti_pembayaran: null as File | null, // Explicitly type the field
+    });
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setData('bukti_pembayaran', file);
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handlePreview = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!tagihan?.tagihan_id) {
+            return toast.error("Tagihan tidak ditemukan");
+        }
+
+        post(route('proof.payment', tagihan.tagihan_id), {
+            forceFormData: true,
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                reset();
+                setPreviewUrl(null);
+                toast.success("Bukti Pembayaran Berhasil diupload");
+            },
+            onError: (error) => {
+                toast.error("Gagal Mengupload Bukti Pembayaran");
+                console.log(error);
+            }
+        });
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tagihan" />
@@ -97,17 +147,56 @@ export default function Tagihan({ tagihan }: TagihanProps) {
                     <DataTable
                         tagihan={tagihan}
                     />
-                    <div>
+                    <div className='mb-4'>
                         <p className="font-medium tracking-tight text-sm mt-6 text-right">Total Bayar</p>
                         <h2 className="text-xl font-semibold tracking-tight text-right">
                             {`${tagihan?.total_bayar ?? "Rp 0,00"}`}
                         </h2>
                     </div>
-                    <div className='flex gap-4 flex-col w-1/2'>
+                    <form onSubmit={handleSubmit} className="flex gap-4 flex-col">
                         <Label htmlFor="picture" className='font-semibold'>Upload Bukti Pembayaran</Label>
-                        <Input id="picture" type="file" />
-                        <Button className='mt-2'>Upload</Button>
-                    </div>
+
+                        {/* Gambar Preview */}
+                        <div
+                            className="flex items-center justify-center w-40 h-40 object-cover rounded mt-2 bg-blue-100 dark:bg-blue-950 border border-blue-950 dark:border-blue-100 cursor-pointer overflow-hidden"
+                            onClick={handlePreview}
+                        >
+                            {previewUrl ? (
+                                <img
+                                    src={previewUrl}
+                                    alt="Preview"
+                                    className="w-full h-full object-cover rounded"
+                                />
+                            ) : tagihan?.bukti_pembayaran ? (
+                                <img
+                                    src={`/storage/${tagihan.bukti_pembayaran}`}
+                                    alt="Bukti Pembayaran"
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <ImageUp size={50} className="text-blue-900 dark:text-blue-100" />
+                            )}
+                        </div>
+
+                        {/* File Input Hidden */}
+                        <input
+                            id="bukti_pembayaran"
+                            type="file"
+                            className="hidden"
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
+                            accept="image/jpg, image/jpeg, image/png"
+                        />
+                        <Button type="submit" className="w-40">
+                            {processing && <LoaderCircle className="h-4 w-4 animate-spin mr-2" />}
+                            Submit
+                        </Button>
+
+                        {errors.bukti_pembayaran && (
+                            <div className="text-red-500 text-sm">{errors.bukti_pembayaran}</div>
+                        )}
+
+                    </form>
                 </div>
             </div>
         </AppLayout>

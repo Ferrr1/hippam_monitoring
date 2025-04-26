@@ -7,7 +7,11 @@ use App\Models\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 use Inertia\Inertia;
+use Storage;
+use Throwable;
 
 class TagihanController extends Controller
 {
@@ -60,6 +64,7 @@ class TagihanController extends Controller
                 'pemakaian' => $tagihan->pemakaian,
                 'total_bayar' => Number::useCurrency($tagihan->total_bayar),
                 'status' => $tagihan->status,
+                'bukti_pembayaran' => $tagihan->bukti_pembayaran,
                 'warga' => [
                     'user' => [
                         'name' => $tagihan->warga->user->name,
@@ -90,16 +95,68 @@ class TagihanController extends Controller
                 'per_page' => $tagihans->perPage(),
                 'total' => $tagihans->total(),
             ],
+            'success' => $request->session()->get('success'),
+            'error' => $request->session()->get('error'),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function report(Request $request)
     {
-        //
+        $periode = $request->input('periode'); // ex: '2025-04'
+
+        try {
+            $tagihan = Tagihan::query();
+
+            if ($periode) {
+                [$year, $month] = explode('-', $periode);
+
+                $startOfMonth = Carbon::create($year, $month, 1)->startOfMonth(); // 2025-04-01
+                $endOfMonth = Carbon::create($year, $month, 1)->endOfMonth(); // 2025-04-30
+
+                $tagihan->where(function ($query) use ($startOfMonth, $endOfMonth) {
+                    $query->whereBetween('tanggal_mulai', [$startOfMonth, $endOfMonth])
+                        ->orWhereBetween('tanggal_akhir', [$startOfMonth, $endOfMonth])
+                        ->orWhere(function ($q) use ($startOfMonth, $endOfMonth) {
+                            $q->where('tanggal_mulai', '<=', $startOfMonth)
+                                ->where('tanggal_akhir', '>=', $endOfMonth);
+                        });
+                });
+            } else {
+                return back()->with('error', 'Periode tidak valid.');
+            }
+
+            $data = $tagihan->get();
+            $totalPemakaian = $data->sum('pemakaian');
+            $totalTagihan = $data->sum('total_bayar');
+
+            $pdf = Pdf::loadView('admin.tagihan.report', [
+                'tagihans' => $data?->map(fn($tagihan) => [
+                    'tagihan_id' => $tagihan->tagihan_id,
+                    'name' => $tagihan->warga->user->name,
+                    'device_id' => $tagihan->device->device_id,
+                    'meter_awal' => $tagihan->meter_awal,
+                    'meter_akhir' => $tagihan->meter_akhir,
+                    'periode' => Carbon::parse($tagihan->tanggal_mulai)->format('F Y') . ' - ' . Carbon::parse($tagihan->tanggal_akhir)->format('F Y'),
+                    'tanggal_mulai' => Carbon::parse($tagihan->tanggal_mulai)->format('d F Y'),
+                    'tanggal_akhir' => Carbon::parse($tagihan->tanggal_akhir)->format('d F Y'),
+                    'pemakaian' => $tagihan->pemakaian,
+                    'total_bayar' => Number::useCurrency($tagihan->total_bayar),
+                    'status' => $tagihan->status,
+                    'total_pemakaian' => $totalPemakaian,
+                    'total_tagihan' => Number::useCurrency($totalTagihan),
+                ]),
+            ])
+                ->setPaper('a4', 'portrait');
+
+            return $pdf->stream("laporan_tagihan_{$periode}.pdf");
+        } catch (Throwable $th) {
+            return dd($th->getMessage());
+        }
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -142,8 +199,12 @@ class TagihanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($tagihan)
     {
-        //
+        $tagihan = Tagihan::where('tagihan_id', $tagihan)->first();
+
+        $tagihan->delete();
+
+        return back()->with('success', __('Pengguna berhasil dihapus'));
     }
 }

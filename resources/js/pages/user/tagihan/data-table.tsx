@@ -42,8 +42,8 @@ export default function DataTable({ tagihan }: DataTableProps) {
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
-                        {tagihan && tagihan.tagihan_id !== null ? (
-                            <TableBody>
+                        <TableBody>
+                            {tagihan && tagihan.tagihan_id !== null ? (
                                 <TableRow className="text-center">
                                     <TableCell>1</TableCell>
                                     <TableCell>{tagihan.meter_awal} m³</TableCell>
@@ -52,14 +52,12 @@ export default function DataTable({ tagihan }: DataTableProps) {
                                     <TableCell>{tagihan.tarif ? `${tagihan.tarif.harga} / m³` : 'Tidak ada tarif'}</TableCell>
                                     <TableCell>{tagihan.total_bayar}</TableCell>
                                 </TableRow>
-                            </TableBody>
-                        ) : (
-                            <TableBody>
+                            ) : (
                                 <TableRow className="h-28 text-center">
                                     <TableCell colSpan={6}>Tidak ada data</TableCell>
                                 </TableRow>
-                            </TableBody>
-                        )}
+                            )}
+                        </TableBody>
                     </Table>
                     <div />
                 </div>

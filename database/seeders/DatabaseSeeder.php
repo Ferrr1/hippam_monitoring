@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Device;
+use App\Models\Tarif;
 use App\Models\User;
+use App\Models\Warga;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -25,6 +28,22 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 100 user dummy
-        User::factory(100)->create();
+        $users = User::factory(100)->create();
+
+        // Buat devices
+        $devices = Device::factory()->count(100)->create();
+
+        // Buat warga dan hubungkan dengan user + device (unik)
+        foreach ($users as $index => $user) {
+            Warga::factory()->create([
+                'users_id' => $user->id,
+                'device_id' => $devices[$index]->id,
+            ]);
+        }
+
+        // Buat tarif sekali saja
+        Tarif::create([
+            'harga' => 5000
+        ]);
     }
 }

@@ -21,8 +21,7 @@ class DeviceController extends Controller
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('device_id', 'like', "%{$search}%")
-                    ->orWhere('mac_address', 'like', "%{$search}%");
+                $q->where('device_id', 'like', "%{$search}%");
             });
         }
 
@@ -39,7 +38,6 @@ class DeviceController extends Controller
             'devices' => $devices->through(fn($device) => [
                 'id' => $device->id,
                 'device_id' => $device->device_id,
-                'mac_address' => $device->mac_address,
                 'status' => $device->status,
                 'created_at' => $device->created_at->format('d/m/Y H:i:s'),
                 'updated_at' => $device->updated_at->format('d/m/Y H:i:s'),

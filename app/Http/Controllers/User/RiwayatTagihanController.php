@@ -38,23 +38,24 @@ class RiwayatTagihanController extends Controller
         $total_tagihan = $warga?->tagihan()->sum('total_bayar');
         return Inertia::render('user/riwayat_tagihan/index', [
             'tagihans' => $invoices?->map(fn($invoice) => [
-                'meter_awal'     => $invoice->meter_awal ?? '-',
-                'meter_akhir'    => $invoice->meter_akhir ?? '-',
-                'tanggal_mulai'  => $invoice->tanggal_mulai ? Carbon::parse($invoice->tanggal_mulai)->format('d/m/Y') : '-',
-                'tanggal_akhir'  => $invoice->tanggal_akhir ? Carbon::parse($invoice->tanggal_akhir)->format('d/m/Y') : '-',
-                'pemakaian'      => $invoice->pemakaian ?? '-',
-                'total_bayar'    => isset($invoice->total_bayar) ? Number::useCurrency($invoice->total_bayar) : '-',
-                'status'         => $invoice->status ?? '-',
-                'tarif'          => [
+                'meter_awal' => $invoice->meter_awal ?? '-',
+                'meter_akhir' => $invoice->meter_akhir ?? '-',
+                'tanggal_mulai' => $invoice->tanggal_mulai ? Carbon::parse($invoice->tanggal_mulai)->format('d/m/Y') : '-',
+                'tanggal_akhir' => $invoice->tanggal_akhir ? Carbon::parse($invoice->tanggal_akhir)->format('d/m/Y') : '-',
+                'pemakaian' => $invoice->pemakaian ?? '-',
+                'total_bayar' => isset($invoice->total_bayar) ? Number::useCurrency($invoice->total_bayar) : '-',
+                'status' => $invoice->status ?? '-',
+                'bukti_pembayaran' => $invoice->bukti_pembayaran ?? '-',
+                'tarif' => [
                     'harga' => $invoice->tarif?->harga
                         ? Number::useCurrency($invoice->tarif->harga)
                         : '-',
                 ],
-                'created_at'     => $invoice->created_at ? $invoice->created_at->format('d/m/Y H:i:s') : '-',
-                'updated_at'     => $invoice->updated_at ? $invoice->updated_at->format('d/m/Y H:i:s') : '-',
+                'created_at' => $invoice->created_at ? $invoice->created_at->format('d/m/Y H:i:s') : '-',
+                'updated_at' => $invoice->updated_at ? $invoice->updated_at->format('d/m/Y H:i:s') : '-',
             ]),
-            'total_pemakaian'    => $total_pemakaian ?? '0',
-            'total_tagihan'    => isset($total_tagihan) ? Number::useCurrency($total_tagihan) : Number::useCurrency(0),
+            'total_pemakaian' => $total_pemakaian ?? '0',
+            'total_tagihan' => isset($total_tagihan) ? Number::useCurrency($total_tagihan) : Number::useCurrency(0),
             'pagination' => $pagination,
         ]);
     }

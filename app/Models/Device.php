@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Device extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'device_id',
         'status',
@@ -19,7 +21,7 @@ class Device extends Model
 
     public function warga()
     {
-        return $this->hasOne(Warga::class, 'warga_id');
+        return $this->hasOne(Warga::class, 'device_id');
     }
 
     public function sensorData()

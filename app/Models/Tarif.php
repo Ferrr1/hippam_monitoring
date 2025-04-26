@@ -13,6 +13,6 @@ class Tarif extends Model
     // TarifAir.php
     public function tagihan()
     {
-        return $this->hasMany(Tagihan::class, 'tarif_id');
+        return $this->hasMany(Tagihan::class, 'tagihan_id');
     }
 }

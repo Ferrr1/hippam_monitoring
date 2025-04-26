@@ -119,13 +119,13 @@ export default function FormDialog({
                 <form onSubmit={handleUpdate} className="space-y-4 py-2">
                     {/* Device */}
                     <div className="grid gap-1">
-                        <Label htmlFor="device">Device</Label>
+                        <Label>Device</Label>
                         <Select
                             value={data.device_id!}
                             onValueChange={(value) =>
                                 setData("device_id", Number(value))}
                         >
-                            <SelectTrigger className="mt-1" id="device">
+                            <SelectTrigger className="mt-1">
                                 <SelectValue placeholder="Pilih Device" />
                             </SelectTrigger>
                             <SelectContent className="max-h-64 overflow-y-auto">

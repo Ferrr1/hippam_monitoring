@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\TarifAirController;
 use App\Http\Controllers\Admin\WargaController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FuzzyController;
 use App\Http\Controllers\User\RiwayatTagihanController;
 use App\Http\Controllers\User\TagihanUserController;
 use Illuminate\Support\Facades\Route;
@@ -40,17 +41,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route Untuk Tagihan
     Route::get('admin/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');
     Route::put('admin/tagihan/{tagihan}/update', [TagihanController::class, 'update'])->name('tagihan.update');
+    Route::delete('admin/tagihan/{tagihan}/destroy', [TagihanController::class, 'destroy'])->name('tagihan.destroy');
+    Route::get('admin/tagihan/report', [TagihanController::class, 'report'])->name('tagihan.report');
     // Route Untuk Tarif
     Route::get('admin/tarif', [TarifAirController::class, 'index'])->name('tarif.index');
     Route::post('admin/tarif/store', [TarifAirController::class, 'store'])->name('tarif.store');
     // Route Untuk Fuzzy
-    Route::get('admin/fuzzy', function () {
-        return Inertia::render('admin/fuzzy');
-    })->name('fuzzy.index');
+    Route::get('admin/fuzzy', [FuzzyController::class, 'index'])->name('fuzzy.index');
 });
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'getDataMonitoringDevice'])->name('user.dashboard');
     Route::get('/tagihan', [TagihanUserController::class, 'index'])->name('user.tagihan.index');
+    Route::post('/tagihan/{tagihan}/payment/', [TagihanUserController::class, 'payment'])->name('proof.payment');
     Route::get('/riwayat-tagihan', [RiwayatTagihanController::class, 'index'])->name('user.riwayat_tagihan.index');
 });
 

@@ -62,11 +62,11 @@ export function AppSidebar() {
                         href: '/admin/tarif',
                         icon: Droplets,
                     },
-                    {
-                        title: 'Laporan',
-                        href: '/admin/report',
-                        icon: ClipboardMinus,
-                    },
+                    // {
+                    //     title: 'Laporan',
+                    //     href: '/admin/report',
+                    //     icon: ClipboardMinus,
+                    // },
                 ],
             },
             {
