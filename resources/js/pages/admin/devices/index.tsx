@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { Filters, Pagination, Perangkat as Device, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
@@ -13,30 +13,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Perangkat {
-    id: number;
-    device_id: string;
-    mac_address: number | string;
-    status: string;
-    created_at: string;
-    updated_at: string;
-}
-
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
-
 type Props = {
     devices: {
-        data: Perangkat[];
+        data: Device[];
     };
     filters: Filters;
     pagination: Pagination;

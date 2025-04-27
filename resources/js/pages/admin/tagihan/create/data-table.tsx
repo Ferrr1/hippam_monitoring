@@ -8,21 +8,9 @@ import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import ConfirmDialog from '../delete/confirm-dialog';
 import SelectForm from '../update/select-form';
-import { Tagihan } from '../index'
 import ImageModal from '@/components/image-modal';
+import { Filters, Pagination, Tagihan } from '@/types';
 
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
 
 type DataTableProps = {
     tagihans: {
@@ -210,10 +198,17 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                         <TableCell className='w-40 h-30'>
                                             {tagihan.bukti_pembayaran ? (
                                                 <img
-                                                    src={`/storage/${tagihan.bukti_pembayaran}`}
+                                                    src={tagihan.bukti_pembayaran.startsWith('http')
+                                                        ? tagihan.bukti_pembayaran
+                                                        : `/storage/${tagihan.bukti_pembayaran}`
+                                                    }
                                                     alt="Bukti Pembayaran"
                                                     className="w-full h-full object-cover cursor-pointer"
-                                                    onClick={() => handleImageClick(`/storage/${tagihan.bukti_pembayaran}`)}
+                                                    onClick={() => handleImageClick(
+                                                        tagihan.bukti_pembayaran.startsWith('http')
+                                                            ? tagihan.bukti_pembayaran
+                                                            : `/storage/${tagihan.bukti_pembayaran}`
+                                                    )}
                                                 />
                                             ) : (
                                                 "Tidak ada bukti pembayaran"

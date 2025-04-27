@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { SharedData, type BreadcrumbItem } from '@/types';
+import { SharedData, Tagihan, type BreadcrumbItem } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
@@ -18,28 +18,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export interface Tagihan {
-    tagihan_id: number;
-    meter_awal: number;
-    meter_akhir: number;
-    tanggal_mulai: string;
-    tanggal_akhir: string;
-    pemakaian: number;
-    total_bayar: number;
-    status: string;
-    bukti_pembayaran: string;
-    tarif: {
-        harga: number;
-    };
-    created_at: string;
-    updated_at: string;
-}
 
 type TagihanProps = {
     tagihan: Tagihan;
 }
 
-export default function Tagihan({ tagihan }: TagihanProps) {
+export default function TagihanUser({ tagihan }: TagihanProps) {
     const { auth } = usePage<SharedData>().props;
     const user = auth.user;
 

@@ -6,21 +6,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSearchonClick, handleSort } from '@/services/FuzzyDataTableHandler';
 import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
-import { Sensor } from '..';
 import { useTruncateNumber } from '@/hooks/use-truncate-number';
+import { Filters, Pagination, Sensor } from '@/types';
 
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
 
 type DataTableProps = {
     sensors: {

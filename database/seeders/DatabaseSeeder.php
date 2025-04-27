@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Device;
+use App\Models\Tagihan;
 use App\Models\Tarif;
 use App\Models\User;
 use App\Models\Warga;
@@ -45,5 +46,12 @@ class DatabaseSeeder extends Seeder
         Tarif::create([
             'harga' => 5000
         ]);
+        $wargas = Warga::all();
+
+        foreach ($wargas as $warga) {
+            Tagihan::factory()->create([
+                'warga_id' => $warga->warga_id,
+            ]);
+        }
     }
 }

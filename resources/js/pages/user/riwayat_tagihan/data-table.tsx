@@ -1,15 +1,10 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tagihan } from './index';
 import PaginationWrapper from '@/components/pagination-wrapper';
 import { handlePageChange } from '@/services/RiwayatTagihanTableHandler';
 import ImageModal from '@/components/image-modal';
 import { useState } from 'react';
+import { Pagination, Tagihan } from '@/types';
 
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
 type DataTableProps = {
     tagihans: Tagihan[];
     pagination: Pagination;

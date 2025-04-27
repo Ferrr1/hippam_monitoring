@@ -1,18 +1,8 @@
-import { LucideIcon } from 'lucide-react';
+import { SensorData } from '@/types';
 import React from 'react';
 
 type MonitoringStatus = 'good' | 'moderate' | 'warning' | 'alert';
 
-interface SensorData {
-    id: number;
-    value: number;
-    unit: string;
-    location: string;
-    status: MonitoringStatus;
-    timestamp: string;
-    icon: LucideIcon;
-    description: string;
-}
 
 interface SensorDataCardProps {
     data: SensorData;

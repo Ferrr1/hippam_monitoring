@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { Filters, Pagination, Sensor, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
@@ -16,27 +16,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Sensor {
-    sensor_data_id: number;
-    device: {
-        device_id: string;
-    };
-    value: JSON;
-    created_at: string;
-    updated_at: string;
-}
-
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
 
 type Props = {
     sensors: {

@@ -28,18 +28,14 @@ const ImageModal: React.FC<{
                         animate={{
                             scale: 1,
                             opacity: 1,
-                            transition: {
-                                type: "spring",
-                                stiffness: 300,
-                                damping: 20
-                            }
+                            transition: { type: "spring", stiffness: 300, damping: 20 }
                         }}
                         exit={{
                             scale: 0.7,
                             opacity: 0,
                             transition: { duration: 0.2 }
                         }}
-                        className="relative max-w-[70%] max-h-[70%] flex justify-center items-center"
+                        className="relative w-full max-w-screen-lg max-h-[90vh] p-4 lg:aspect-[16/9] flex justify-center items-center"
                         onClick={onClose}
                     >
                         {!loaded && (
@@ -51,7 +47,8 @@ const ImageModal: React.FC<{
                             src={src}
                             alt={alt}
                             onLoad={() => setLoaded(true)}
-                            className={`max-w-full max-h-full object-contain rounded-lg shadow-2xl ${loaded ? "opacity-100" : "opacity-0"}`}
+                            className={`w-fit h-full object-contain rounded-sm shadow-2xl transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"
+                                }`}
                         />
                     </motion.div>
                 </div>

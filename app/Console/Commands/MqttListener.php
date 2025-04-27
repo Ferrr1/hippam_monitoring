@@ -150,11 +150,11 @@ class MqttListener extends Command
             ]);
         }
         $this->info("SensorData untuk {$device_id} berhasil diupdate/insert.");
-
-        SensorUpdated::dispatch($device_id, $filteredValues);
-        $this->error("Sensor data dispatched");
+        $this->error("Water Condition: " . $waterCondition);
         WaterConditionStatus::dispatch($waterCondition);
         $this->error("Water Status Condition data dispatched");
+        SensorUpdated::dispatch($device_id, $filteredValues);
+        $this->error("Sensor data dispatched");
     }
 
     public function WaterStatus($data)

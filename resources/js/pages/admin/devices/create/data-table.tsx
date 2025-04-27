@@ -9,28 +9,7 @@ import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
 import ConfirmDialog from '../delete/confirm-dialog';
 import { router } from '@inertiajs/react';
-
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
-
-interface Perangkat {
-    id: number;
-    device_id: string;
-    mac_address: number | string;
-    status: string;
-    created_at: string;
-    updated_at: string;
-}
+import { Filters, Pagination, Perangkat } from '@/types';
 
 type DataTableProps = {
     devices: {

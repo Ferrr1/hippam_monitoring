@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { Filters, Pagination, Sensor, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
@@ -7,38 +7,11 @@ import DataTable from './create/data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Daftar Perangkat',
-        href: '/admin/devices',
-    },
-    {
-        title: 'Data Sensor',
-        href: '/admin/devices/sensor',
+        title: 'Perhitungan Fuzzy Mamdani',
+        href: '/admin/fuzzy',
     },
 ];
 
-export interface Sensor {
-    sensor_data_id: number;
-    device: {
-        device_id: string;
-    };
-    value: JSON;
-    value_fuzzy: number;
-    water_condition: string;
-    created_at: string;
-    updated_at: string;
-}
-
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
 
 type Props = {
     sensorDatas: {

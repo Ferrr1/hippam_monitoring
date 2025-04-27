@@ -8,43 +8,15 @@ import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
 import ConfirmDialog from '../delete/confirm-dialog';
-import { Device } from '..';
+import { Filters, Pagination, Perangkat, Warga } from '@/types';
 
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
-
-interface Warga {
-    warga_id: number;
-    no_telp: number;
-    alamat: string;
-    user: {
-        name: string;
-        email: string;
-    };
-    device: {
-        id: number;
-        device_id: number;
-    }
-    created_at: string;
-    updated_at: string;
-}
 
 type DataTableProps = {
     wargas: {
         data: Warga[];
     };
     devices: {
-        data: Device[];
+        data: Perangkat[];
     }
     filters: Filters;
     pagination: Pagination;

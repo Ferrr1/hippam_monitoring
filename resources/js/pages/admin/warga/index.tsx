@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { Filters, Pagination, Perangkat, User, Warga as Wargas, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
@@ -13,47 +13,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Warga {
-    warga_id: number;
-    device_id: string;
-    no_telp: number;
-    alamat: string;
-    user: {
-        name: string;
-        email: string;
-    };
-    created_at: string;
-    updated_at: string;
-}
-interface User {
-    id: number;
-    name: string;
-    email: string;
-}
-
-export interface Device {
-    id: number;
-    device_id: string;
-    status: string;
-}
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
-
 type Props = {
     wargas: {
-        data: Warga[];
+        data: Wargas[];
     };
     users: User[];
-    devices: Device[];
+    devices: Perangkat[];
     filters: Filters;
     pagination: Pagination;
 }

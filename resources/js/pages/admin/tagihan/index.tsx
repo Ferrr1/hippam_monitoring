@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { Filters, Pagination, Tagihan as Fine, type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
@@ -17,50 +17,10 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export interface Tagihan {
-    tagihan_id: number;
-    meter_awal: number;
-    meter_akhir: number;
-    tanggal_mulai: string;
-    tanggal_akhir: string;
-    pemakaian: number;
-    total_bayar: number;
-    status: string;
-    bukti_pembayaran: string;
-    warga: {
-        user: {
-            name: string;
-            email: string;
-        }
-        no_telp: number;
-        alamat: string;
-    };
-    device: {
-        device_id: string;
-        mac_address: number | string;
-        status: string;
-    };
-    tarif: {
-        harga: number;
-    };
-    created_at: string;
-    updated_at: string;
-}
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
 
 type Props = {
     tagihans: {
-        data: Tagihan[];
+        data: Fine[];
     };
     filters: Filters;
     pagination: Pagination;
@@ -69,7 +29,6 @@ type Props = {
 export default function Tagihan({ tagihans, filters, pagination }: Props) {
     const { flash } = usePage().props;
     const [selectedDate, setSelectedDate] = useState<Date>();
-    console.log(selectedDate);
     const printReport = () => {
         const periode = selectedDate ? format(selectedDate, "yyyy-MM") : ""
         window.open(`/admin/tagihan/report?periode=${periode}`);

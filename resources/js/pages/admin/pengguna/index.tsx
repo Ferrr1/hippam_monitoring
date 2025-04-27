@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { Filters, Pagination, User, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
@@ -13,25 +13,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-    created_at: string;
-    updated_at: string;
-}
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
 
 type Props = {
     users: {

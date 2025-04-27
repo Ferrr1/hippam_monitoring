@@ -8,29 +8,8 @@ import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import ConfirmDialog from '../delete/confirm-dialog';
 import { useTruncateNumber } from '@/hooks/use-truncate-number';
+import { Filters, Pagination, Sensor } from '@/types';
 
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
-
-interface Sensor {
-    sensor_data_id: number;
-    device: {
-        device_id: string;
-    };
-    value: JSON;
-    created_at: string;
-    updated_at: string;
-}
 
 type DataTableProps = {
     sensors: {

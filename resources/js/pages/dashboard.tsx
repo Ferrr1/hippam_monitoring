@@ -20,7 +20,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Dashboard({ devices }: { devices: string[] }) {
     const { auth } = usePage<SharedData>().props;
     const isAdmin = auth.user.role === 'admin';
-    // console.log(devices)
     const [sensorValue, setSensorValue] = useState<Record<string, any>>({});
     const [status, setStatus] = useState<string>('');
     useRealtimeSensor(devices,
@@ -36,6 +35,50 @@ export default function Dashboard({ devices }: { devices: string[] }) {
             setStatus(status)
         }
     )
+    // Function untuk menentukan style/status pH
+    const getPhStatus = () => {
+        const ph = sensorValue[devices[0]]?.data.ph;
+
+        if (ph === undefined) return 'good';
+
+        if (ph < 6 || ph > 8.5) {
+            return 'alert';
+        } else if (ph >= 6.5 && ph <= 7.5) {
+            return 'good';
+        } else {
+            return 'warning';
+        }
+    };
+
+    // Function untuk menentukan style/status TDS
+    const getTdsStatus = () => {
+        const tds = sensorValue[devices[0]]?.data.tds;
+
+        if (tds === undefined) return 'good';
+
+        if (tds > 800) {
+            return 'alert';
+        } else if (tds >= 300 && tds <= 800) {
+            return 'warning';
+        } else {
+            return 'good';
+        }
+    };
+
+    // Function untuk menentukan style/status Turbidity
+    const getTurbidityStatus = () => {
+        const turbidity = sensorValue[devices[0]]?.data.turbidity;
+
+        if (turbidity === undefined) return 'good';
+
+        if (turbidity > 30) {
+            return 'alert';
+        } else if (turbidity >= 20 && turbidity <= 30) {
+            return 'warning';
+        } else {
+            return 'good';
+        }
+    };
 
     const monitoringData = [
         {
@@ -43,7 +86,7 @@ export default function Dashboard({ devices }: { devices: string[] }) {
             value: sensorValue[devices[0]]?.data.ph || 0, // Ambil pH dari data sensor
             unit: 'pH',
             location: 'Distribution Line',
-            status: sensorValue[devices[0]]?.data.ph > 8.5 || sensorValue[devices[0]]?.data.ph < 6 ? 'alert' : 'good',
+            status: getPhStatus(),
             timestamp: formatFullDateTime(Date.now()),
             icon: Flask,
             description: 'Acidity Level'
@@ -53,7 +96,7 @@ export default function Dashboard({ devices }: { devices: string[] }) {
             value: sensorValue[devices[0]]?.data.tds || 0, // Ambil TDS dari data sensor
             unit: 'ppm',
             location: 'Distribution Line',
-            status: sensorValue[devices[0]]?.data.tds > 5 ? 'moderate' : 'good',
+            status: getTdsStatus(),
             timestamp: formatFullDateTime(Date.now()),
             icon: Droplets,
             description: 'Total Dissolved Solids'
@@ -63,7 +106,7 @@ export default function Dashboard({ devices }: { devices: string[] }) {
             value: sensorValue[devices[0]]?.data.turbidity || 0, // Ambil turbidity dari data sensor
             unit: 'NTU',
             location: 'Distribution Line',
-            status: sensorValue[devices[0]]?.data.turbidity > 10 ? 'warning' : 'good',
+            status: getTurbidityStatus(),
             timestamp: formatFullDateTime(Date.now()),
             icon: Waves,
             description: 'Turbidity Level'

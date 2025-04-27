@@ -16,31 +16,15 @@ import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import debounce from 'lodash/debounce';
+import { Filters, Perangkat, User } from "@/types";
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-}
-
-interface Device {
-    id: number;
-    device_id: string;
-    status: string;
-}
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
 type FormHeaderProps = {
     users: {
         data: User[];
         next_page_url: string;
     }
     devices: {
-        data: Device[];
+        data: Perangkat[];
         next_page_url: string;
     }
     filters: Filters;
@@ -58,7 +42,7 @@ export default function FormHeader({ users, devices, action }: FormHeaderProps) 
     const [search, setSearch] = useState('');
     const [usersData, setUsersData] = useState<User[]>(users.data);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
-    const [devicesData, setDevicesData] = useState<Device[]>(devices.data); // dari props
+    const [devicesData, setDevicesData] = useState<Perangkat[]>(devices.data); // dari props
     const [isLoadingDevices, setIsLoadingDevices] = useState(false);
     const [searchDevice, setSearchDevice] = useState("");
 

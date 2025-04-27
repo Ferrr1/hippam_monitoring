@@ -8,28 +8,8 @@ import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import FormDialog from '../update/form-dialog';
 import ConfirmDialog from '../delete/confirm-dialog';
+import { Filters, Pagination, User } from '@/types';
 
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    perPage: string;
-}
-
-interface Pagination {
-    current_page: number;
-    per_page: number;
-    total: number;
-}
-
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-    created_at: string;
-    updated_at: string;
-}
 
 type DataTableProps = {
     users: {

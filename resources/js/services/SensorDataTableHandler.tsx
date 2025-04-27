@@ -1,12 +1,6 @@
+import { Filters } from '@/types';
 import { router } from '@inertiajs/react';
 
-interface Filters {
-    search: string;
-    sortBy: string;
-    sortDir: 'asc' | 'desc';
-    page?: number;
-    perPage?: string;
-}
 
 export const handleSearchChange = (
     val: string,
