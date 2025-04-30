@@ -34,6 +34,24 @@ export const handleSearchonClick = (
     });
 };
 
+export const handleImportData = (
+    device_id: string | null
+) => {
+    router.get(`/admin/devices/${device_id}/show`, {
+        preserveState: true,
+        preserveScroll: true
+    });
+};
+
+export const handleExportData = (
+    device_id: string | null
+) => {
+    router.get(`/admin/devices/${device_id}/show`, {
+        preserveState: true,
+        preserveScroll: true
+    });
+};
+
 export const handleSort = (column: string, filters: Filters, device_id: string | null) => {
     const newDir = filters.sortBy === column && filters.sortDir === 'asc' ? 'desc' : 'asc';
     router.get(`/admin/devices/${device_id}/show`, {

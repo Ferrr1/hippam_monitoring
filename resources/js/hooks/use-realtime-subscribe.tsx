@@ -3,7 +3,7 @@ import echo from '@/lib/echo'
 
 const useRealtimeSensor = (
     devices: string[],
-    callback: (deviceId: string, data: any,) => void,
+    callback: (deviceId: string, data: any, flow: string) => void,
     onStatusChange?: (status: string) => void // <- opsional callback tambahan untuk event status global
 ) => {
     useEffect(() => {
@@ -13,7 +13,7 @@ const useRealtimeSensor = (
 
             channel.listen('.SensorUpdated', (data: {
                 device_id: string,
-                status: string,
+                flow: string,
                 value: {
                     ph: number,
                     tds: number,
@@ -23,7 +23,7 @@ const useRealtimeSensor = (
                 }
             }) => {
                 // console.log(`📥 Event from ${deviceId}:`, data)
-                callback(deviceId, data.value)
+                callback(deviceId, data.value, data.flow)
             })
 
             return { deviceId, channel }

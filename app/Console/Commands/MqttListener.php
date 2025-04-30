@@ -23,7 +23,7 @@ class MqttListener extends Command
      *
      * @var string
      */
-    protected $signature = 'mqtt:subscribe';
+    protected $signature = 'mqtt:start';
     public $mqtt;
     /**
      * The console command description.
@@ -150,11 +150,11 @@ class MqttListener extends Command
             ]);
         }
         $this->info("SensorData untuk {$device_id} berhasil diupdate/insert.");
-        $this->error("Water Condition: " . $waterCondition);
+        SensorUpdated::dispatch($device_id, $filteredValues, $data['flow_m3_second']);
+        $this->error("Sensor data dispatched ");
         WaterConditionStatus::dispatch($waterCondition);
+        $this->error("Water Condition: " . $waterCondition);
         $this->error("Water Status Condition data dispatched");
-        SensorUpdated::dispatch($device_id, $filteredValues);
-        $this->error("Sensor data dispatched");
     }
 
     public function WaterStatus($data)

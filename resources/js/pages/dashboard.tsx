@@ -23,11 +23,12 @@ export default function Dashboard({ devices }: { devices: string[] }) {
     const [sensorValue, setSensorValue] = useState<Record<string, any>>({});
     const [status, setStatus] = useState<string>('');
     useRealtimeSensor(devices,
-        (deviceId, data) => {
+        (deviceId, data, flow) => {
             setSensorValue(prev => ({
                 ...prev,
                 [deviceId]: {
-                    data,   // Berisi { ph, tds, turbidity }
+                    data,
+                    flow   // Berisi { ph, tds, turbidity }
                 }
             }))
         },
@@ -113,7 +114,7 @@ export default function Dashboard({ devices }: { devices: string[] }) {
         },
         {
             id: 4,
-            value: sensorValue[devices[1]]?.data.volume_m3 || 0,
+            value: sensorValue[devices[1]]?.flow || 0,
             unit: 'm³/h',
             location: 'Home Line',
             status: 'moderate',

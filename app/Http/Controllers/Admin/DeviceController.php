@@ -90,50 +90,53 @@ class DeviceController extends Controller
      */
     public function show(Request $request, $devices)
     {
-        $device = Device::where('device_id', $devices)->firstOrFail();
-        $query = $device->sensorData();
-        if (!$device) {
-            return abort(404);
-        }
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('device_id', 'like', "%{$search}%")
-                    ->orWhere('value', 'like', "%{$search}%");
-            });
-        }
+        try {
+            $device = Device::where('device_id', $devices)->firstOrFail();
+            $query = $device->sensorData();
+            $search = $request->input('search');
+            $sortBy = $request->input('sortBy', 'created_at');
+            $sortDir = $request->input('sortDir', 'asc');
+            $perPage = $request->input('perPage', 10);
+            if (!$device) {
+                return abort(404);
+            }
+            // if ($request->has('search')) {
+            //     $search = $request->search;
+            //     $query->where(function ($q) use ($search) {
+            //         $q->where('device_id', 'like', "%{$search}%")
+            //             ->orWhere('value', 'like', "%{$search}%");
+            //     });
+            // }
 
-        if ($request->has('sortBy') && $request->has('sortDir')) {
-            $query->orderBy($request->sortBy, $request->sortDir);
-        }
+            if ($request->has('sortBy') && $request->has('sortDir')) {
+                $query->orderBy($request->sortBy, $request->sortDir);
+            }
 
-        $search = $request->input('search');
-        $sortBy = $request->input('sortBy', 'created_at');
-        $sortDir = $request->input('sortDir', 'asc');
-        $perPage = $request->input('perPage', 10);
-        $sensors = $query->paginate($perPage)->withQueryString();
-        return Inertia::render('admin/devices/sensor/index',  [
-            'sensors' => $sensors->through(fn($sensor) => [
-                'sensor_data_id' => $sensor->sensor_data_id,
-                'device' => [
-                    'device_id' => $sensor->device->device_id,
+            $sensors = $query->paginate($perPage)->withQueryString();
+            return Inertia::render('admin/devices/sensor/index', [
+                'sensors' => $sensors->through(fn($sensor) => [
+                    'sensor_data_id' => $sensor->sensor_data_id,
+                    'device' => [
+                        'device_id' => $sensor->device->device_id,
+                    ],
+                    'value' => $sensor->value,
+                    'created_at' => $sensor->created_at->format('d/m/Y H:i:s'),
+                    'updated_at' => $sensor->updated_at->format('d/m/Y H:i:s'),
+                ]),
+                'filters' => [
+                    'sortBy' => $sortBy,
+                    'sortDir' => $sortDir,
+                    'perPage' => $perPage,
                 ],
-                'value' => $sensor->value,
-                'created_at' => $sensor->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $sensor->updated_at->format('d/m/Y H:i:s'),
-            ]),
-            'filters' => [
-                'search' => $search,
-                'sortBy' => $sortBy,
-                'sortDir' => $sortDir,
-                'perPage' => $perPage,
-            ],
-            'pagination' => [
-                'current_page' => $sensors->currentPage(),
-                'per_page' => $sensors->perPage(),
-                'total' => $sensors->total(),
-            ],
-        ]);
+                'pagination' => [
+                    'current_page' => $sensors->currentPage(),
+                    'per_page' => $sensors->perPage(),
+                    'total' => $sensors->total(),
+                ],
+            ]);
+        } catch (\Throwable $th) {
+            return dd($th->getMessage());
+        }
     }
 
     /**

@@ -37,6 +37,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('admin/devices/{devices}/destroy', [DeviceController::class, 'destroy'])->name('devices.destroy');
     // Route Sensor Data Per Device
     Route::get('admin/devices/{devices:device_id}/show', [DeviceController::class, 'show'])->name('devices.show');
+    Route::post('admin/devices/sensor/{sensor}/import', [SensorDataController::class, 'importData'])->name('devices.sensor.importData');
+    Route::get('admin/devices/sensor/{sensor}/export', [SensorDataController::class, 'exportData'])->name('devices.sensor.exportData');
     Route::delete('admin/devices/sensor/{sensor}/destroy', [SensorDataController::class, 'destroy'])->name('devices.sensor.destroy');
     // Route Untuk Tagihan
     Route::get('admin/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');

@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SensorDatasExport;
 use App\Http\Controllers\Controller;
+use App\Imports\SensorDatasImport;
+use App\Models\Device;
 use App\Models\SensorData;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Storage;
 
 class SensorDataController extends Controller
 {
@@ -27,17 +32,51 @@ class SensorDataController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function importData(Request $request, $deviceId)
     {
-        //
+        $request->validate([
+            'file' => 'required|mimes:csv,xls,xlsx',
+            'device_id' => 'required|exists:devices,device_id'
+        ]);
+        try {
+            // Proses import
+            $file = $request->file('file');
+            $id_device = Device::where('device_id', $deviceId)->first()->id;
+            // membuat nama file unik
+            $nama_file = $file->hashName();
+
+            //temporary file
+            $path = $file->storeAs('public/excel/', $nama_file);
+
+            // import data
+            $import = Excel::import(new SensorDatasImport($id_device), $file);
+
+            //remove from server
+            Storage::delete($path);
+
+            if ($import) {
+                //redirect
+                return redirect()->route('devices.show', $deviceId)->with(['success' => 'Data Berhasil Diimport!']);
+            } else {
+                //redirect
+                return redirect()->route('devices.show', $deviceId)->with(['error' => 'Data Gagal Diimport!']);
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('devices.show', $deviceId)->with(['error' => $th->getMessage()]);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function exportData($deviceId)
     {
-        //
+        try {
+            $id_device = Device::where('device_id', $deviceId)->first()->id;
+            return Excel::download(new SensorDatasExport($id_device), 'sensor_data.xlsx');
+        } catch (\Throwable $th) {
+            return dd($th->getMessage());
+        }
     }
 
     /**

@@ -39,7 +39,6 @@ export default function ConfirmDialog({
         processing,
     } = useForm({ sensor_data_id: null });
 
-    console.log(sensor_data_id);
     const handleDelete: FormEventHandler = (e) => {
         e.preventDefault();
         destroy(route("devices.sensor.destroy", sensor_data_id), {

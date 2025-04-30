@@ -3,12 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSearchonClick, handleSort } from '@/services/SensorDataTableHandler';
-import { ArrowDown, ArrowUp, Search } from 'lucide-react';
-import { useState } from 'react';
+import { handlePageChange, handlePerPageChange, handleSort } from '@/services/SensorDataTableHandler';
+import { ArrowDown, ArrowUp, FileSpreadsheet } from 'lucide-react';
+import { FormEvent, useState } from 'react';
 import ConfirmDialog from '../delete/confirm-dialog';
 import { useTruncateNumber } from '@/hooks/use-truncate-number';
 import { Filters, Pagination, Sensor } from '@/types';
+import { useForm } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 
 type DataTableProps = {
@@ -21,19 +23,65 @@ type DataTableProps = {
 };
 
 export default function DataTable({ sensors, total, filters, pagination }: DataTableProps) {
-    const [search, setSearch] = useState('');
+    // const inputFileRef = useRef<HTMLInputElement>(null);
+    const device_id = sensors.data[0]?.device?.device_id;
+    const {
+        post,
+        processing,
+        data,
+        setData,
+        reset,
+    } = useForm({
+        file: null as File | null,
+        device_id: device_id || null
+    });
+    // const [search, setSearch] = useState('');
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
     const showCountOptions = ['10', '20', '30'];
 
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setData('file', file);
+        }
+    };
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (!data.file) {
+            toast.warning('Pilih file terlebih dahulu');
+            return;
+        }
+        post(route('devices.sensor.importData', device_id), {
+            forceFormData: true,
+            onSuccess: () => {
+                reset('file');
+                setData('file', null);
+                toast.success('Data berhasil diimport');
+            },
+            onError: (err) => {
+                reset('file');
+                toast.error('Gagal mengimport data');
+                console.error('Import error:', err);
+            }
+        });
+    };
+
+    const handleExportData = () => {
+        window.open(route('devices.sensor.exportData', device_id));
+    };
+
     const handlePageChangeWrapper = (page: number) => {
-        handlePageChange(page, filters, sensors.data[0].device.device_id);
+        handlePageChange(page, filters, device_id);
     };
     const handlePerPageChangeWrapper = (perPage: string) => {
-        handlePerPageChange(perPage, filters, sensors.data[0].device.device_id);
+        handlePerPageChange(perPage, filters, device_id);
     };
-    const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters, sensors.data[0].device.device_id);
+    const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters, device_id);
 
     return (
         <div className='flex flex-col gap-4'>
@@ -53,15 +101,43 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                         </SelectContent>
                     </Select>
 
-                    <Input
+                    {/* <Input
                         type="text"
                         placeholder="Search..."
                         value={search}
                         onChange={(e) => handleSearchChange(e.target.value, setSearch)}
-                        onKeyDown={(e) => handleSearchKeyDown(e, search, filters, sensors.data[0].device.device_id)}
+                        onKeyDown={(e) => handleSearchKeyDown(e, search, filters, device_id)}
                         className="max-w-xs"
-                    />
-                    <Button onClick={() => handleSearchonClick(search, filters, sensors.data[0].device.device_id)}><Search className="h-4 w-4" /></Button>
+                    /> */}
+                    {/* <Button onClick={() => handleSearchonClick(search, filters, device_id)}><Search className="h-4 w-4" /></Button> */}
+                    {/* File Input (Hidden) */}
+                    <form onSubmit={handleSubmit} className="flex gap-2" encType="multipart/form-data">
+                        <Input
+                            type="file"
+                            accept=".xlsx,.xls,.csv"
+                            onChange={handleFileChange}
+                        />
+
+                        {/* Import Button */}
+                        <Button
+                            type='submit'
+                            className='bg-green-100 border border-green-200 text-green-800 dark:bg-green-950 dark:text-green-50'
+                            disabled={processing}
+                        >
+                            <FileSpreadsheet className="h-4 w-4 mr-2" />
+                            {processing ? 'Importing..' : 'Import'}
+                        </Button>
+
+                    </form>
+                    {/* Export Button */}
+                    <Button
+                        className='bg-green-100 border border-green-200 text-green-800 dark:bg-green-950 dark:text-green-50'
+                        onClick={handleExportData}
+                        disabled={processing}
+                    >
+                        <FileSpreadsheet className="h-4 w-4 mr-2" />
+                        Export
+                    </Button>
                 </div>
             </div>
             <div className="overflow-auto rounded-md bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border">

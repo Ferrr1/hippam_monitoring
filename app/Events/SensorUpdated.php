@@ -19,13 +19,13 @@ class SensorUpdated implements ShouldBroadcastNow
     public string $device_id;
     public array $payload;
 
-    // public string $status;
+    public string $flow;
 
-    public function __construct($device_id, $payload)
+    public function __construct($device_id, $payload, $flow)
     {
         $this->device_id = $device_id;
         $this->payload = $payload;
-        // $this->status = $status;
+        $this->flow = $flow;
     }
 
     public function broadcastWith(): array
@@ -33,7 +33,7 @@ class SensorUpdated implements ShouldBroadcastNow
         return [
             'device_id' => $this->device_id,
             'value' => $this->payload,
-            // 'status' => $this->status
+            'flow' => $this->flow
         ];
     }
     /**
