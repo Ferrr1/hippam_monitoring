@@ -237,7 +237,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                                 ))
                             ) : (
                                 <TableRow className="h-28 text-center">
-                                    <TableCell colSpan={12}>Tidak ada data</TableCell>
+                                    <TableCell colSpan={14}>Tidak ada data</TableCell>
                                 </TableRow>
                             )}
                         </TableBody>

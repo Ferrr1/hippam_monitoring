@@ -8,6 +8,7 @@ import { ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { useState } from 'react';
 import { useTruncateNumber } from '@/hooks/use-truncate-number';
 import { Filters, Pagination, Sensor } from '@/types';
+import { router } from '@inertiajs/react';
 
 
 type DataTableProps = {
@@ -116,13 +117,8 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                                 </TableHead>
                                 <TableHead
                                     className="max-w-md cursor-pointer text-center"
-                                    onClick={() => handleSortWrapper('updated_at', filters)}
                                 >
-                                    <div className="flex items-center justify-center gap-1 text-center">
-                                        Updated at
-                                        {filters.sortBy === 'updated_at' &&
-                                            (filters.sortDir === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />)}
-                                    </div>
+                                    Action
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -143,10 +139,19 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                                                 ))}
                                             </div>
                                         </TableCell>
-                                        <TableCell>{useTruncateNumber(sensor.value_fuzzy)} </TableCell>
+                                        <TableCell>{useTruncateNumber(sensor.value_fuzzy['result'])} </TableCell>
                                         <TableCell>{sensor.water_condition}</TableCell>
                                         <TableCell>{sensor.created_at}</TableCell>
-                                        <TableCell>{sensor.updated_at}</TableCell>
+                                        <TableCell>
+                                            <Button
+                                                variant="secondary"
+                                                onClick={() => {
+                                                    router.get(`/admin/fuzzy/${sensor.sensor_data_id}/detail`);
+                                                }}
+                                            >
+                                                Detail
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 ))
                             ) : (

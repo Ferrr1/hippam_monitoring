@@ -22,11 +22,12 @@ type Props = {
     tagihans: {
         data: Fine[];
     };
+    filter_by_months: string[];
     filters: Filters;
     pagination: Pagination;
 }
 
-export default function Tagihan({ tagihans, filters, pagination }: Props) {
+export default function Tagihan({ tagihans, filter_by_months, filters, pagination }: Props) {
     const { flash } = usePage().props;
     const [selectedDate, setSelectedDate] = useState<Date>();
     const printReport = () => {
@@ -40,6 +41,7 @@ export default function Tagihan({ tagihans, filters, pagination }: Props) {
                 <Heading title="Daftar Tagihan" description="Halaman untuk menambahkan daftar warga sistem" />
                 <div className='flex gap-2'>
                     <DatePickerWithPresets
+                        months={filter_by_months}
                         value={selectedDate}
                         onChange={setSelectedDate}
                     />

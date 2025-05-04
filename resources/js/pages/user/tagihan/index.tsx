@@ -81,7 +81,7 @@ export default function TagihanUser({ tagihan }: TagihanProps) {
                     <div className='flex justify-between'>
                         <div className='flex-1'>
                             <Heading title="Tagihan" className='text-blue-500 dark:text-slate-200' />
-                            <p className="font-medium tracking-tight text-sm -mt-6">Status :
+                            <p className="mt-4 font-medium tracking-tight text-sm -mt-6">Status :
                                 {tagihan && tagihan.status === "belum_lunas" ? (
                                     <span className='px-2 py-1 rounded-md bg-red-100 text-red-700'>Belum Lunas</span>
                                 ) : tagihan ? (

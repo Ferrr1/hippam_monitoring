@@ -93,7 +93,7 @@ class DeviceController extends Controller
         try {
             $device = Device::where('device_id', $devices)->firstOrFail();
             $query = $device->sensorData();
-            $search = $request->input('search');
+            // $search = $request->input('search');
             $sortBy = $request->input('sortBy', 'created_at');
             $sortDir = $request->input('sortDir', 'asc');
             $perPage = $request->input('perPage', 10);

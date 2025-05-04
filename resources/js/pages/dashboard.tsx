@@ -142,7 +142,7 @@ export default function Dashboard({ devices }: { devices: string[] }) {
 
                 <section>
                     <h2 className="text-xl font-semibold dark:text-gray-100 text-slate-700 mb-4">Water Condition Status</h2>
-                    <StatusPanel status={status ?? 'AMAN'} timestamp={formatFullDateTime(Date.now())} />
+                    <StatusPanel status={status || 'AMAN'} timestamp={formatFullDateTime(Date.now())} />
                 </section>
                 <InfoSection />
             </div>

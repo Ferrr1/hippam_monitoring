@@ -129,7 +129,34 @@ export interface Tagihan {
 
 export interface SensorData {
     id: number;
-    value: number;
+    value: number[];
+    value_fuzzy: {
+        phBasa: number;
+        phNetral: number;
+        phAsam: number;
+        tdsRendah: number;
+        tdsSedang: number;
+        tdsTinggi: number;
+        turbidityJernih: number;
+        turbiditySedang: number;
+        turbidityKeruh: number;
+        rules: string[];
+        membershipBahaya: number;
+        membershipWaspada: number;
+        membershipAman: number;
+        himpunanBahayaBaru: number;
+        himpunanWaspadaLinearNaikBaru: number;
+        himpunanWaspadaLinearTurunBaru: number;
+        himpunanAmanBaru: number;
+        momen1: number;
+        momen2: number;
+        momen3: number;
+        area1: number;
+        area2: number;
+        area3: number;
+        result: number;
+    }
+    water_condition: string;
     unit: string;
     location: string;
     status: MonitoringStatus;

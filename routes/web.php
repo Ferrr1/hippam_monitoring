@@ -50,6 +50,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('admin/tarif/store', [TarifAirController::class, 'store'])->name('tarif.store');
     // Route Untuk Fuzzy
     Route::get('admin/fuzzy', [FuzzyController::class, 'index'])->name('fuzzy.index');
+    Route::get('admin/fuzzy/{sensor}/detail', [FuzzyController::class, 'show'])->name('fuzzy.show');
 });
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'getDataMonitoringDevice'])->name('user.dashboard');

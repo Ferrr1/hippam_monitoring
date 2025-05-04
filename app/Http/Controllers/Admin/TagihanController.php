@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
@@ -20,84 +21,92 @@ class TagihanController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Tagihan::query();
+        try {
+            $query = Tagihan::query();
 
-        $search = $request->input('search');
-        $sortBy = $request->input('sortBy', 'created_at');
-        $sortDir = $request->input('sortDir', 'asc');
-        $perPage = $request->input('perPage', 10);
+            $search = $request->input('search');
+            $sortBy = $request->input('sortBy', 'created_at');
+            $sortDir = $request->input('sortDir', 'asc');
+            $perPage = $request->input('perPage', 10);
 
-        // Search logic
-        if ($search) {
-            $searchTerm = addcslashes($search, '%_\\');
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('periode', 'like', "%{$searchTerm}%")
-                    ->orWhere('pemakaian', 'like', "%{$searchTerm}%")
-                    ->orWhereHas('warga.user', function ($q) use ($searchTerm) {
-                        $q->where('name', 'like', "%{$searchTerm}%")
-                            ->orWhere('email', 'like', "%{$searchTerm}%");
-                    });
-            });
-        }
-
-        $allowedSorts = ['name', 'email', 'device_id', 'meter_awal', 'meter_akhir', 'tanggal_mulai', 'pemakaian', 'total_bayar', 'status', 'created_at'];
-        if (in_array($sortBy, $allowedSorts)) {
-            if ($sortBy === 'name' || $sortBy === 'email') {
-                // Join users table to sort by user name or email
-                $query->join('wargas', 'tagihans.warga_id', '=', 'wargas.warga_id')
-                    ->join('users', 'wargas.users_id', '=', 'users.id')
-                    ->orderBy('users.' . $sortBy, $sortDir);
-            } else {
-                $query->orderBy($sortBy, $sortDir);  // Untuk kolom lain yang ada di tagihans
+            // Search logic
+            if ($search) {
+                $searchTerm = addcslashes($search, '%_\\');
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->where('periode', 'like', "%{$searchTerm}%")
+                        ->orWhere('pemakaian', 'like', "%{$searchTerm}%")
+                        ->orWhereHas('warga.user', function ($q) use ($searchTerm) {
+                            $q->where('name', 'like', "%{$searchTerm}%")
+                                ->orWhere('email', 'like', "%{$searchTerm}%");
+                        });
+                });
             }
-        }
 
-        $tagihans = $query->paginate($perPage)->withQueryString();
+            $allowedSorts = ['name', 'email', 'device_id', 'meter_awal', 'meter_akhir', 'tanggal_mulai', 'pemakaian', 'total_bayar', 'status', 'created_at'];
+            if (in_array($sortBy, $allowedSorts)) {
+                if ($sortBy === 'name' || $sortBy === 'email') {
+                    // Join users table to sort by user name or email
+                    $query->join('wargas', 'tagihans.warga_id', '=', 'wargas.warga_id')
+                        ->join('users', 'wargas.users_id', '=', 'users.id')
+                        ->orderBy('users.' . $sortBy, $sortDir);
+                } else {
+                    $query->orderBy($sortBy, $sortDir);  // Untuk kolom lain yang ada di tagihans
+                }
+            }
+            $bulanTersedia = DB::table(DB::raw('(SELECT DISTINCT DATE_FORMAT(tanggal_mulai, "%m-%Y") as bulan FROM tagihans) as bulan_sub'))
+                ->orderByRaw('STR_TO_DATE(bulan, "%m-%Y")')
+                ->pluck('bulan');
 
-        return Inertia::render('admin/tagihan/index', [
-            'tagihans' => $tagihans->through(fn($tagihan) => [
-                'tagihan_id' => $tagihan->tagihan_id,
-                'meter_awal' => $tagihan->meter_awal,
-                'meter_akhir' => $tagihan->meter_akhir,
-                'tanggal_mulai' => Carbon::parse($tagihan->tanggal_mulai)->format('d/m/Y'),
-                'tanggal_akhir' => Carbon::parse($tagihan->tanggal_akhir)->format('d/m/Y'),
-                'pemakaian' => $tagihan->pemakaian,
-                'total_bayar' => Number::useCurrency($tagihan->total_bayar),
-                'status' => $tagihan->status,
-                'bukti_pembayaran' => $tagihan->bukti_pembayaran,
-                'warga' => [
-                    'user' => [
-                        'name' => $tagihan->warga->user->name,
-                        'email' => $tagihan->warga->user->email
+            $tagihans = $query->paginate($perPage)->withQueryString();
+
+            return Inertia::render('admin/tagihan/index', [
+                'tagihans' => $tagihans->through(fn($tagihan) => [
+                    'tagihan_id' => $tagihan->tagihan_id,
+                    'meter_awal' => $tagihan->meter_awal,
+                    'meter_akhir' => $tagihan->meter_akhir,
+                    'tanggal_mulai' => Carbon::parse($tagihan->tanggal_mulai)->format('d/m/Y'),
+                    'tanggal_akhir' => Carbon::parse($tagihan->tanggal_akhir)->format('d/m/Y'),
+                    'pemakaian' => $tagihan->pemakaian,
+                    'total_bayar' => Number::useCurrency($tagihan->total_bayar),
+                    'status' => $tagihan->status,
+                    'bukti_pembayaran' => $tagihan->bukti_pembayaran,
+                    'warga' => [
+                        'user' => [
+                            'name' => $tagihan->warga->user->name,
+                            'email' => $tagihan->warga->user->email
+                        ],
+                        'no_telp' => $tagihan->warga->no_telp,
+                        'alamat' => $tagihan->warga->alamat,
                     ],
-                    'no_telp' => $tagihan->warga->no_telp,
-                    'alamat' => $tagihan->warga->alamat,
+                    'device' => [
+                        'device_id' => $tagihan->device->device_id,
+                        'mac_address' => $tagihan->device->mac_address,
+                        'status' => $tagihan->device->status,
+                    ],
+                    'tarif' => [
+                        'harga' => Number::useCurrency($tagihan->tarif->harga),
+                    ],
+                    'created_at' => $tagihan->created_at->format('d/m/Y H:i:s'),
+                    'updated_at' => $tagihan->updated_at->format('d/m/Y H:i:s'),
+                ]),
+                'filter_by_months' => $bulanTersedia,
+                'filters' => [
+                    'search' => $search,
+                    'sortBy' => $sortBy,
+                    'sortDir' => $sortDir,
+                    'perPage' => $perPage,
                 ],
-                'device' => [
-                    'device_id' => $tagihan->device->device_id,
-                    'mac_address' => $tagihan->device->mac_address,
-                    'status' => $tagihan->device->status,
+                'pagination' => [
+                    'current_page' => $tagihans->currentPage(),
+                    'per_page' => $tagihans->perPage(),
+                    'total' => $tagihans->total(),
                 ],
-                'tarif' => [
-                    'harga' => Number::useCurrency($tagihan->tarif->harga),
-                ],
-                'created_at' => $tagihan->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $tagihan->updated_at->format('d/m/Y H:i:s'),
-            ]),
-            'filters' => [
-                'search' => $search,
-                'sortBy' => $sortBy,
-                'sortDir' => $sortDir,
-                'perPage' => $perPage,
-            ],
-            'pagination' => [
-                'current_page' => $tagihans->currentPage(),
-                'per_page' => $tagihans->perPage(),
-                'total' => $tagihans->total(),
-            ],
-            'success' => $request->session()->get('success'),
-            'error' => $request->session()->get('error'),
-        ]);
+                'success' => $request->session()->get('success'),
+                'error' => $request->session()->get('error'),
+            ]);
+        } catch (Throwable $th) {
+            return dd($th->getMessage());
+        }
     }
 
     /**

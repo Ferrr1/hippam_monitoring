@@ -1,5 +1,5 @@
 import * as React from "react"
-import { addMonths, format, parse } from "date-fns"
+import { format, parse } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -20,9 +20,11 @@ import {
 export function DatePickerWithPresets({
     value,
     onChange,
+    months,
 }: {
     value?: Date
     onChange: (date: Date) => void
+    months: string[]
 }) {
     return (
         <Popover>
@@ -34,14 +36,11 @@ export function DatePickerWithPresets({
                         !value && "text-muted-foreground"
                     )}
                 >
-                    <CalendarIcon />
+                    <CalendarIcon className="mr-2 h-4 w-4" />
                     {value ? format(value, "MMMM yyyy") : <span>Pilih Bulan dan Tahun</span>}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent
-                align="start"
-                className="flex w-[240px] flex-col space-y-2 p-2"
-            >
+            <PopoverContent align="start" className="flex w-[240px] flex-col space-y-2 p-2">
                 <Select
                     onValueChange={(value) => {
                         const selectedDate = parse(value, "MM-yyyy", new Date())
@@ -49,23 +48,26 @@ export function DatePickerWithPresets({
                     }}
                 >
                     <SelectTrigger>
-                        <SelectValue placeholder="Select" />
+                        <SelectValue placeholder="Pilih Bulan" />
                     </SelectTrigger>
                     <SelectContent position="popper" className="w-full">
-                        {[...Array(12)].map((_, i) => {
-                            const date = addMonths(new Date(), i)
-                            const value = format(date, "MM-yyyy")
-                            const label = format(date, "MMMM yyyy")
-                            return (
-                                <SelectItem key={value} value={value}>
-                                    {label}
-                                </SelectItem>
-                            )
-                        })}
+                        {months.length > 0 ? (
+                            months.map((value) => {
+                                const label = format(parse(value, "MM-yyyy", new Date()), "MMMM yyyy")
+                                return (
+                                    <SelectItem key={value} value={value}>
+                                        {label}
+                                    </SelectItem>
+                                )
+                            })
+                        ) : (
+                            <div className="px-2 py-1 text-sm text-muted-foreground">
+                                Tidak ada data untuk difilter
+                            </div>
+                        )}
                     </SelectContent>
                 </Select>
             </PopoverContent>
         </Popover>
     )
 }
-

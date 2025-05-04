@@ -145,7 +145,7 @@ class FuzzyWaterQualityService
     }
 
     // Fungsi Himpunan Baru
-    private function HimpunanBahayaBaru($x, $y)
+    public function HimpunanBahayaBaru($x, $y)
     {
         if ($x > $y)
             return (40 - ($x * (40 - 1)));
@@ -157,7 +157,7 @@ class FuzzyWaterQualityService
         ;
     }
     // x = T29, y = T30
-    private function HimpunanWaspadaLinearNaikBaru($x, $y)
+    public function HimpunanWaspadaLinearNaikBaru($x, $y)
     {
         if ($x > $y)
             return (40 - ($y * (40 - 1)));
@@ -169,7 +169,7 @@ class FuzzyWaterQualityService
         ;
     }
     // x = T31, y = T30
-    private function HimpunanWaspadaLinearTurunBaru($x, $y)
+    public function HimpunanWaspadaLinearTurunBaru($x, $y)
     {
         if ($x > $y)
             return (($y * 40) + 60);
@@ -181,7 +181,7 @@ class FuzzyWaterQualityService
         ;
     }
     // x = T30, y = T31
-    private function HimpunanAmanBaru($x, $y)
+    public function HimpunanAmanBaru($x, $y)
     {
         if ($x < $y)
             return (($y * 40) + 60);
@@ -209,24 +209,6 @@ class FuzzyWaterQualityService
         $turbiditySedang = $this->muSedangTurbidity($turbidity);
         $turbidityJernih = $this->muJernih($turbidity);
 
-        // Debugging: Log input values and memberships
-        Log::info('Input Values:', [
-            'pH' => $ph,
-            'TDS' => $tds,
-            'Turbidity' => $turbidity
-        ]);
-
-        Log::info('Memberships:', [
-            'phBasa' => $phBasa,
-            'phNetral' => $phNetral,
-            'phAsam' => $phAsam,
-            'tdsTinggi' => $tdsTinggi,
-            'tdsSedang' => $tdsSedang,
-            'tdsRendah' => $tdsRendah,
-            'turbidityKeruh' => $turbidityKeruh,
-            'turbiditySedang' => $turbiditySedang,
-            'turbidityJernih' => $turbidityJernih
-        ]);
 
         // Fuzzy Rule Base with all 27 rules
         $rules = [
@@ -354,15 +336,35 @@ class FuzzyWaterQualityService
         }
 
 
-        // Log::info('Fuzzy Calculation Result:', [
-        //     'himpunanBahayaBaru' => $himpunanBahayaBaru,
-        //     'himpunanWaspadaLinearNaikBaru' => $himpunanWaspadaLinearNaikBaru,
-        //     'himpunanWaspadaLinearTurunBaru' => $himpunanWaspadaLinearTurunBaru,
-        //     'himpunanAmanBaru' => $himpunanAmanBaru,
-        //     'result' => $result,
-        // ]);
 
-        return $result;
+        return [
+            'phBasa' => $phBasa,
+            'phNetral' => $phNetral,
+            'phAsam' => $phAsam,
+            'tdsTinggi' => $tdsTinggi,
+            'tdsSedang' => $tdsSedang,
+            'tdsRendah' => $tdsRendah,
+            'turbidityKeruh' => $turbidityKeruh,
+            'turbiditySedang' => $turbiditySedang,
+            'turbidityJernih' => $turbidityJernih,
+            'rules' => $rules,
+            'membershipAman' => $membershipAman,
+            'membershipWaspada' => $membershipWaspada,
+            'membershipBahaya' => $membershipBahaya,
+            'himpunanAmanBaru' => $himpunanAmanBaru,
+            'himpunanWaspadaLinearNaikBaru' => $himpunanWaspadaLinearNaikBaru,
+            'himpunanWaspadaLinearTurunBaru' => $himpunanWaspadaLinearTurunBaru,
+            'himpunanBahayaBaru' => $himpunanBahayaBaru,
+            'titikPotongBawah' => $titikPotongBawah,
+            'titikPotongAtas' => $titikPotongAtas,
+            'momen1' => $momen1,
+            'momen2' => $momen2,
+            'momen3' => $momen3,
+            'area1' => $area1,
+            'area2' => $area2,
+            'area3' => $area3,
+            'result' => $result,
+        ];
     }
     public function defineWaterCondition($result)
     {

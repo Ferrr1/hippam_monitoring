@@ -26,7 +26,7 @@ export default function Perangkat({ sensorDatas, filters, pagination }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Sensor" />
             <div className="px-4 py-6">
-                <Heading title="Data Sensor" description="Halaman untuk melihat data dari sensor yang tersimpan didatabase" />
+                <Heading title="Data Fuzzy" description="Halaman untuk melihat data dari sensor yang tersimpan didatabase" />
 
                 <Separator className="my-4" />
 

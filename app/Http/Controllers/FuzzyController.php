@@ -73,4 +73,29 @@ class FuzzyController extends Controller
             dd($e->getMessage());
         }
     }
+
+    public function show(Request $request, $id)
+    {
+        $sensorData = SensorData::where('sensor_data_id', $id)->firstOrFail();
+        $waterQualityService = new FuzzyWaterQualityService();
+        $fuzzyMamdani = $waterQualityService->calculateWaterQuality(
+            $sensorData->value['ph'] ?? 0,
+            $sensorData->value['tds'] ?? 0,
+            $sensorData->value['turbidity'] ?? 0
+        );
+        $water_condition = $waterQualityService->defineWaterCondition($fuzzyMamdani['result']);
+        return Inertia::render('admin/fuzzy/detail-fuzzy', [
+            'sensorData' => [
+                'id' => $sensorData->sensor_data_id,
+                'device' => [
+                    'device_id' => $sensorData->device->device_id,
+                ],
+                'value' => $sensorData->value,
+                'value_fuzzy' => $fuzzyMamdani,
+                'water_condition' => $water_condition,
+                'created_at' => $sensorData->created_at->format('d/m/Y H:i:s'),
+                'updated_at' => $sensorData->updated_at->format('d/m/Y H:i:s'),
+            ]
+        ]);
+    }
 }

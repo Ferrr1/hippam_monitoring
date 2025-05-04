@@ -188,7 +188,7 @@
 
 <body>
     @php
-        $chunks = $tagihans->chunk(20);
+        $chunks = $tagihans->chunk(10);
     @endphp
 
     @foreach ($chunks as $chunk)
@@ -227,7 +227,7 @@
                     <tbody>
                         @foreach ($chunk as $index => $tagihan)
                             <tr>
-                                <td>{{ $loop->parent->index * 20 + $loop->iteration }}</td>
+                                <td>{{ $loop->parent->index * 10 + $loop->iteration }}</td>
                                 <td>{{ $tagihan['name'] }}</td>
                                 <td>{{ $tagihan['device_id'] }}</td>
                                 <td>{{ $tagihan['meter_awal'] }}</td>
