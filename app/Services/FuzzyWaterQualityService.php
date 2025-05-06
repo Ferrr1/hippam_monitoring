@@ -323,7 +323,7 @@ class FuzzyWaterQualityService
             Log::info('Masuk kondisi 3');
             $titikPotongBawah = $himpunanWaspadaLinearTurunBaru;
             $titikPotongAtas = $himpunanAmanBaru;
-            $momen1 = $membershipWaspada * (($titikPotongBawah ** 2 / 2) - (60 ** 2 / 2));
+            $momen1 = $membershipWaspada * (($titikPotongBawah ** 2 / 2) - (30 ** 2 / 2));
             $momen2 = (($titikPotongAtas ** 3 / 3 - 30 * $titikPotongAtas ** 2) - ($titikPotongBawah ** 3 / 3 - 30 * $titikPotongBawah ** 2)) / 40;
             $momen3 = $membershipAman * ((100 ** 2 / 2) - ($titikPotongAtas ** 2 / 2));
             $area1 = $membershipWaspada * ($titikPotongBawah - 60);
@@ -338,33 +338,13 @@ class FuzzyWaterQualityService
 
 
         return [
-            'phBasa' => $phBasa,
-            'phNetral' => $phNetral,
-            'phAsam' => $phAsam,
-            'tdsTinggi' => $tdsTinggi,
-            'tdsSedang' => $tdsSedang,
-            'tdsRendah' => $tdsRendah,
-            'turbidityKeruh' => $turbidityKeruh,
-            'turbiditySedang' => $turbiditySedang,
-            'turbidityJernih' => $turbidityJernih,
-            'rules' => $rules,
-            'membershipAman' => $membershipAman,
-            'membershipWaspada' => $membershipWaspada,
-            'membershipBahaya' => $membershipBahaya,
-            'himpunanAmanBaru' => $himpunanAmanBaru,
-            'himpunanWaspadaLinearNaikBaru' => $himpunanWaspadaLinearNaikBaru,
-            'himpunanWaspadaLinearTurunBaru' => $himpunanWaspadaLinearTurunBaru,
-            'himpunanBahayaBaru' => $himpunanBahayaBaru,
-            'titikPotongBawah' => $titikPotongBawah,
-            'titikPotongAtas' => $titikPotongAtas,
-            'momen1' => $momen1,
-            'momen2' => $momen2,
-            'momen3' => $momen3,
-            'area1' => $area1,
-            'area2' => $area2,
-            'area3' => $area3,
-            'result' => $result,
+            'ph' => compact('phBasa', 'phNetral', 'phAsam'),
+            'tds' => compact('tdsTinggi', 'tdsSedang', 'tdsRendah'),
+            'turbidity' => compact('turbidityKeruh', 'turbiditySedang', 'turbidityJernih'),
+            'membership' => compact('membershipBahaya', 'membershipWaspada', 'membershipAman'),
+            'result' => $result
         ];
+
     }
     public function defineWaterCondition($result)
     {

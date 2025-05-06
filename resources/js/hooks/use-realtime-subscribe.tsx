@@ -3,27 +3,28 @@ import echo from '@/lib/echo'
 
 const useRealtimeSensor = (
     devices: string[],
-    callback: (deviceId: string, data: any, flow: string) => void,
+    callback: (deviceId: string, data: any) => void,
     onStatusChange?: (status: string) => void // <- opsional callback tambahan untuk event status global
 ) => {
     useEffect(() => {
         const channels = devices.map(deviceId => {
             const channel = echo.channel(`data_monitoring.${deviceId}`)
-            // console.log(`📡 Subscribed to channel: data_monitoring.${deviceId}`)
+            console.log(`📡 Subscribed to channel: data_monitoring.${deviceId}`)
 
             channel.listen('.SensorUpdated', (data: {
                 device_id: string,
                 flow: string,
                 value: {
-                    ph: number,
-                    tds: number,
-                    turbidity: number,
+                    ph?: number,
+                    tds?: number,
+                    turbidity?: number,
                     volume_liters?: number,
-                    volume_m3?: number
+                    volume_m3?: number,
+                    flow_m3_seconds?: number
                 }
             }) => {
-                // console.log(`📥 Event from ${deviceId}:`, data)
-                callback(deviceId, data.value, data.flow)
+                console.log(`📥 Event from ${deviceId}:`, data)
+                callback(deviceId, data.value)
             })
 
             return { deviceId, channel }
@@ -31,12 +32,12 @@ const useRealtimeSensor = (
 
         // Subscribe to global water condition status
         const statusChannel = echo.channel('data_status')
-        // console.log('📡 Subscribed to channel: data_status')
+        console.log('📡 Subscribed to channel: data_status')
 
         statusChannel.listen('.WaterConditionStatus', (data: {
             status: string
         }) => {
-            // console.log('📥 Global water status update:', data.status)
+            console.log('📥 Global water status update:', data.status)
             if (onStatusChange) {
                 onStatusChange(data.status)
             }

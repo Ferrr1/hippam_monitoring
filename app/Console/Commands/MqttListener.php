@@ -63,10 +63,12 @@ class MqttListener extends Command
         $user = Warga::where('device_id', $device->id)->with('user')->first()?->user;
         $this->info("Info Warga : {$warga}");
         $this->info("Info User : {$user}");
-        $keys = ['ph', 'tds', 'turbidity'];
+        $baseKeys = ['ph', 'tds', 'turbidity'];
+        $extraKeys = [];
+
         try {
             if ($user && $user->role !== 'admin') {
-                $keys = array_merge($keys, ['volume_liters', 'volume_m3']);
+                $extraKeys = ['volume_liters', 'volume_m3', 'flow_m3_second'];
             } else {
                 $waterCondition = $this->WaterStatus([
                     'device_id' => $device_id,
@@ -74,17 +76,22 @@ class MqttListener extends Command
                     'tds' => $data['tds'] ?? 0,
                     'turbidity' => $data['turbidity'] ?? 0,
                 ]);
-                $this->error("Water Condition: " . $waterCondition);
+                // $this->error("Water Condition: " . $waterCondition);
             }
         } catch (\Throwable $th) {
-            $this->error('User tidak ditemukan.' . $th->getMessage());
+            $this->error($th->getMessage());
         }
 
-        $filteredValues = Arr::only((array) $data, $keys);
-        $this->error('Filtered Values: ' . json_encode($filteredValues));
-        $this->error("Device ID: {$device_id}");
+        $keys = array_merge($baseKeys, $extraKeys);
 
-        if (isset($filteredValues['volume_liters'], $filteredValues['volume_m3'])) {
+        $filteredValues = Arr::only((array) $data, $keys);
+        $this->info('Data Masuk: ' . json_encode($data));
+        $this->info('Filtered Keys: ' . json_encode($keys));
+        $this->info('Filtered Values: ' . json_encode($filteredValues));
+
+        $this->info("Device ID: {$device_id}");
+
+        if (isset($filteredValues['volume_liters'], $filteredValues['volume_m3'], $filteredValues['flow_m3_second'])) {
             $this->error("Masuk Kondisi Volume Liter dan Volume M3");
             // Cek data terakhir dalam 1 bulan terakhir
             $tagihanPerMonth = Tagihan::where('warga_id', $warga->warga_id)
@@ -123,6 +130,7 @@ class MqttListener extends Command
                     'status' => 'belum_lunas',
                 ]);
             }
+            $exceptFlowKubic = Arr::except($filteredValues, ['flow_m3_second']);
             $latestSensorData = SensorData::where('device_id', $device->id)
                 ->whereNotNull('value->volume_liters')
                 ->whereNotNull('value->volume_m3')
@@ -133,13 +141,13 @@ class MqttListener extends Command
             if ($latestSensorData) {
                 // Update data yang sudah ada
                 $latestSensorData->update([
-                    'value' => $filteredValues,
+                    'value' => $exceptFlowKubic,
                 ]);
             } else {
                 // Belum ada data sama sekali dalam 1 bulan terakhir
                 SensorData::create([
                     'device_id' => $device->id,
-                    'value' => $filteredValues,
+                    'value' => $exceptFlowKubic,
                 ]);
             }
         } else {
@@ -150,25 +158,37 @@ class MqttListener extends Command
             ]);
         }
         $this->info("SensorData untuk {$device_id} berhasil diupdate/insert.");
-        SensorUpdated::dispatch($device_id, $filteredValues, $data['flow_m3_second']);
+        SensorUpdated::dispatch($device_id, $filteredValues);
         $this->error("Sensor data dispatched ");
         WaterConditionStatus::dispatch($waterCondition);
-        $this->error("Water Condition: " . $waterCondition);
         $this->error("Water Status Condition data dispatched");
+        $this->error("Water Condition: " . $waterCondition);
     }
 
     public function WaterStatus($data)
     {
-        $this->error("Water Status " . "Device ID :" . $data['device_id'] . "PH :" . $data['ph'] . "TDS :" . $data['tds'] . "Turbidity :" . $data['turbidity']);
+        $this->error("===> WaterStatus START: " . json_encode($data));
+
         $waterQualityService = new FuzzyWaterQualityService();
-        $valueFuzzy = $waterQualityService->calculateWaterQuality(
-            $ph = $data['ph'] ?? 0,        // Input pH
-            $tds = $data['tds'] ?? 0,     // Input TDS
-            $turbidity = $data['turbidity'] ?? 0 // Input Turbidity
+
+        $this->error("===> CALLING calculateWaterQuality...");
+        $result = $waterQualityService->calculateWaterQuality(
+            $data['ph'] ?? 0,
+            $data['tds'] ?? 0,
+            $data['turbidity'] ?? 0
         );
+        $this->error("===> RESULT calculateWaterQuality: " . json_encode($result));
+
+        $valueFuzzy = $result['result'] ?? null;
+
+        $this->error("===> CALLING defineWaterCondition...");
         $waterCondition = $waterQualityService->defineWaterCondition($valueFuzzy);
+        $this->error("===> Water Condition Result: " . $waterCondition);
+
         return $waterCondition;
     }
+
+
 
     public function handle()
     {
@@ -182,7 +202,7 @@ class MqttListener extends Command
             function (string $topic, string $message) {
                 // $this->info("Topic: {$topic}");
                 // $this->info("Message: {$message}");
-
+    
                 // Parse pesan, misalnya JSON
                 $data = json_decode($message, true);
 
