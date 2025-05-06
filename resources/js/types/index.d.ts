@@ -36,14 +36,14 @@ export interface SharedData {
 }
 export interface PageProps<T = Record<string, unknown>> {
     auth: {
-      user: User;
+        user: User;
     };
     ziggy: {
-      location: string;
-      routes: Record<string, unknown>;
+        location: string;
+        routes: Record<string, unknown>;
     };
     props?: T;
-  }
+}
 export interface User {
     id: number;
     name: string;
@@ -52,7 +52,7 @@ export interface User {
     warga: {
         no_telp: string;
         alamat: string;
-    }
+    };
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
@@ -111,7 +111,7 @@ export interface Tagihan {
         user: {
             name: string;
             email: string;
-        }
+        };
         no_telp: number;
         alamat: string;
     };
@@ -131,31 +131,45 @@ export interface SensorData {
     id: number;
     value: number[];
     value_fuzzy: {
-        phBasa: number;
-        phNetral: number;
-        phAsam: number;
-        tdsRendah: number;
-        tdsSedang: number;
-        tdsTinggi: number;
-        turbidityJernih: number;
-        turbiditySedang: number;
-        turbidityKeruh: number;
+        ph: {
+            phBasa: number;
+            phNetral: number;
+            phAsam: number;
+        };
+        tds: {
+            tdsRendah: number;
+            tdsSedang: number;
+            tdsTinggi: number;
+        };
+        turbidity: {
+            turbidityJernih: number;
+            turbiditySedang: number;
+            turbidityKeruh: number;
+        };
         rules: string[];
-        membershipBahaya: number;
-        membershipWaspada: number;
-        membershipAman: number;
-        himpunanBahayaBaru: number;
-        himpunanWaspadaLinearNaikBaru: number;
-        himpunanWaspadaLinearTurunBaru: number;
-        himpunanAmanBaru: number;
-        momen1: number;
-        momen2: number;
-        momen3: number;
-        area1: number;
-        area2: number;
-        area3: number;
+        membership: {
+            membershipBahaya: number;
+            membershipWaspada: number;
+            membershipAman: number;
+        };
+        himpunan: {
+            himpunanBahayaBaru: number;
+            himpunanWaspadaLinearNaikBaru: number;
+            himpunanWaspadaLinearTurunBaru: number;
+            himpunanAmanBaru: number;
+        };
+        momen: {
+            momen1: number;
+            momen2: number;
+            momen3: number;
+        };
+        area: {
+            area1: number;
+            area2: number;
+            area3: number;
+        };
         result: number;
-    }
+    };
     water_condition: string;
     unit: string;
     location: string;
@@ -164,7 +178,6 @@ export interface SensorData {
     icon: LucideIcon;
     description: string;
 }
-
 
 // Table Types
 

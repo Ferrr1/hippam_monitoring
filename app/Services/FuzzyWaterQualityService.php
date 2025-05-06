@@ -342,6 +342,10 @@ class FuzzyWaterQualityService
             'tds' => compact('tdsTinggi', 'tdsSedang', 'tdsRendah'),
             'turbidity' => compact('turbidityKeruh', 'turbiditySedang', 'turbidityJernih'),
             'membership' => compact('membershipBahaya', 'membershipWaspada', 'membershipAman'),
+            'himpunan' => compact('himpunanBahayaBaru', 'himpunanWaspadaLinearNaikBaru', 'himpunanWaspadaLinearTurunBaru', 'himpunanAmanBaru'),
+            'momen' => compact('momen1', 'momen2', 'momen3'),
+            'area' => compact('area1', 'area2', 'area3'),
+            'rules' => $rules,
             'result' => $result
         ];
 

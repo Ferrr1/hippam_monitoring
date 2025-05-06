@@ -39,19 +39,19 @@ export default function DetailFuzzy({ sensorData }: DetailFuzzyProps) {
                         <Heading title={`Fuzzifikasi`} description="Menentukan Nilai Fuzzifikasi" />
                         <div className='flex flex-col xl:flex-row gap-4'>
                             <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>pH Basa : {fuzzyMamdani.phBasa}</p>
-                                <p>pH Netral : {fuzzyMamdani.phNetral}</p>
-                                <p>pH Asam : {fuzzyMamdani.phAsam}</p>
+                                <p>pH Basa : {fuzzyMamdani.ph.phBasa}</p>
+                                <p>pH Netral : {fuzzyMamdani.ph.phNetral}</p>
+                                <p>pH Asam : {fuzzyMamdani.ph.phAsam}</p>
                             </div>
                             <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>TDS Rendah : {fuzzyMamdani.tdsRendah}</p>
-                                <p>TDS Sedang : {fuzzyMamdani.tdsSedang}</p>
-                                <p>TDS Tinggi : {fuzzyMamdani.tdsTinggi}</p>
+                                <p>TDS Rendah : {fuzzyMamdani.tds.tdsRendah}</p>
+                                <p>TDS Sedang : {fuzzyMamdani.tds.tdsSedang}</p>
+                                <p>TDS Tinggi : {fuzzyMamdani.tds.tdsTinggi}</p>
                             </div>
                             <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Turbidity Jernih : {fuzzyMamdani.turbidityJernih}</p>
-                                <p>Turbidity Sedang : {fuzzyMamdani.turbiditySedang}</p>
-                                <p>Turbidity Keruh : {fuzzyMamdani.turbidityKeruh}</p>
+                                <p>Turbidity Jernih : {fuzzyMamdani.turbidity.turbidityJernih}</p>
+                                <p>Turbidity Sedang : {fuzzyMamdani.turbidity.turbiditySedang}</p>
+                                <p>Turbidity Keruh : {fuzzyMamdani.turbidity.turbidityKeruh}</p>
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@ export default function DetailFuzzy({ sensorData }: DetailFuzzyProps) {
                                     </TableHeader>
                                     <TableBody>
                                         {fuzzyMamdani.rules.map((rule, index) => (
-                                            <TableRow className="text-center">
+                                            <TableRow className="text-center" key={rule + index}>
                                                 <TableCell>{`Rules ${index + 1}`}</TableCell>
                                                 <TableCell>{useTruncateNumber(rule)}</TableCell>
                                             </TableRow>
@@ -94,9 +94,9 @@ export default function DetailFuzzy({ sensorData }: DetailFuzzyProps) {
                         <Heading title={`Agregasi Output`} description="Menentukan Nilai Agregasi Output" />
                         <div className='flex flex-col xl:flex-row gap-2'>
                             <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Nilai MAX Output Bahaya : {fuzzyMamdani.membershipBahaya}</p>
-                                <p>Nilai MAX Output Waspada : {fuzzyMamdani.membershipWaspada}</p>
-                                <p>Nilai MAX Output Aman : {fuzzyMamdani.membershipAman}</p>
+                                <p>Nilai MAX Output Bahaya : {fuzzyMamdani.membership.membershipBahaya}</p>
+                                <p>Nilai MAX Output Waspada : {fuzzyMamdani.membership.membershipWaspada}</p>
+                                <p>Nilai MAX Output Aman : {fuzzyMamdani.membership.membershipAman}</p>
                             </div>
                         </div>
                     </div>
@@ -104,10 +104,10 @@ export default function DetailFuzzy({ sensorData }: DetailFuzzyProps) {
                         <Heading title={`Himpunan Baru`} description="Menentukan Himpunan Baru" />
                         <div className='flex flex-col xl:flex-row gap-2'>
                             <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Himpunan Bahaya : {fuzzyMamdani.himpunanBahayaBaru}</p>
-                                <p>Himpunan Waspada Naik : {fuzzyMamdani.himpunanWaspadaLinearNaikBaru}</p>
-                                <p>Himpunan Waspada Turun : {fuzzyMamdani.himpunanWaspadaLinearTurunBaru}</p>
-                                <p>Himpunan Aman : {fuzzyMamdani.himpunanAmanBaru}</p>
+                                <p>Himpunan Bahaya : {fuzzyMamdani.himpunan.himpunanBahayaBaru}</p>
+                                <p>Himpunan Waspada Naik : {fuzzyMamdani.himpunan.himpunanWaspadaLinearNaikBaru}</p>
+                                <p>Himpunan Waspada Turun : {fuzzyMamdani.himpunan.himpunanWaspadaLinearTurunBaru}</p>
+                                <p>Himpunan Aman : {fuzzyMamdani.himpunan.himpunanAmanBaru}</p>
                             </div>
                         </div>
                     </div>
@@ -115,12 +115,12 @@ export default function DetailFuzzy({ sensorData }: DetailFuzzyProps) {
                         <Heading title={`Deffuzifikasi`} description="Menentukan Nilai Deffuzifikasi Menggunakan Metode COG" />
                         <div className='flex flex-col xl:flex-row gap-2'>
                             <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Momen 1 : {useTruncateNumber(fuzzyMamdani.momen1)}</p>
-                                <p>Momen 2 : {useTruncateNumber(fuzzyMamdani.momen2)}</p>
-                                <p>Momen 3 : {useTruncateNumber(fuzzyMamdani.momen3)}</p>
-                                <p>Area 1 : {useTruncateNumber(fuzzyMamdani.area1)}</p>
-                                <p>Area 2 : {useTruncateNumber(fuzzyMamdani.area2)}</p>
-                                <p>Area 3 : {useTruncateNumber(fuzzyMamdani.area3)}</p>
+                                <p>Momen 1 : {useTruncateNumber(fuzzyMamdani.momen.momen1)}</p>
+                                <p>Momen 2 : {useTruncateNumber(fuzzyMamdani.momen.momen2)}</p>
+                                <p>Momen 3 : {useTruncateNumber(fuzzyMamdani.momen.momen3)}</p>
+                                <p>Area 1 : {useTruncateNumber(fuzzyMamdani.area.area1)}</p>
+                                <p>Area 2 : {useTruncateNumber(fuzzyMamdani.area.area2)}</p>
+                                <p>Area 3 : {useTruncateNumber(fuzzyMamdani.area.area3)}</p>
                             </div>
                         </div>
                     </div>
