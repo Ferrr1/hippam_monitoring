@@ -310,7 +310,7 @@ class FuzzyWaterQualityService
 
             $result = ($momen1 + $momen2 + $momen3) / ($area1 + $area2 + $area3);
 
-        } else if ($membershipWaspada > $membershipBahaya && $membershipAman < $membershipWaspada) {
+        } else if ($membershipWaspada > 0 && $membershipAman == 0 && $membershipBahaya == 0) {
             Log::info('Masuk kondisi 2');
             $titikPotongBawah = $himpunanWaspadaLinearNaikBaru;
             $titikPotongAtas = $himpunanWaspadaLinearTurunBaru;
@@ -326,7 +326,7 @@ class FuzzyWaterQualityService
             $momen1 = $membershipWaspada * (($titikPotongBawah ** 2 / 2) - (30 ** 2 / 2));
             $momen2 = (($titikPotongAtas ** 3 / 3 - 30 * $titikPotongAtas ** 2) - ($titikPotongBawah ** 3 / 3 - 30 * $titikPotongBawah ** 2)) / 40;
             $momen3 = $membershipAman * ((100 ** 2 / 2) - ($titikPotongAtas ** 2 / 2));
-            $area1 = $membershipWaspada * ($titikPotongBawah - 60);
+            $area1 = $membershipWaspada * ($titikPotongBawah - 30);
             $area2 = ((($titikPotongAtas ** 2) / 2 - $titikPotongBawah ** 2 / 2 - 60 * ($titikPotongAtas - $titikPotongBawah)) / 40);
             $area3 = $membershipAman * (100 - $titikPotongAtas);
 
@@ -343,8 +343,16 @@ class FuzzyWaterQualityService
             'turbidity' => compact('turbidityKeruh', 'turbiditySedang', 'turbidityJernih'),
             'membership' => compact('membershipBahaya', 'membershipWaspada', 'membershipAman'),
             'himpunan' => compact('himpunanBahayaBaru', 'himpunanWaspadaLinearNaikBaru', 'himpunanWaspadaLinearTurunBaru', 'himpunanAmanBaru'),
-            'momen' => compact('momen1', 'momen2', 'momen3'),
-            'area' => compact('area1', 'area2', 'area3'),
+            'momen' => [
+                'momen1' => $momen1 ?? null,
+                'momen2' => $momen2 ?? null,
+                'momen3' => $momen3 ?? null,
+            ],
+            'area' => [
+                'area1' => $area1 ?? null,
+                'area2' => $area2 ?? null,
+                'area3' => $area3 ?? null,
+            ],
             'rules' => $rules,
             'result' => $result
         ];

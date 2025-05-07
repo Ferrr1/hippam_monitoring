@@ -52,7 +52,7 @@ class FuzzyController extends Controller
                             $sensor->value['ph'] ?? 0,
                             $sensor->value['tds'] ?? 0,
                             $sensor->value['turbidity'] ?? 0
-                        )
+                        )['result']
                     ),
                     'created_at' => $sensor->created_at->format('d/m/Y H:i:s'),
                     'updated_at' => $sensor->updated_at->format('d/m/Y H:i:s'),

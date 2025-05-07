@@ -29,12 +29,12 @@ class SensorDatasImport implements ToModel
         }
 
         // Cek apakah tanggal valid
-        $createdAt = !empty($row[1])
-            ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[1])
+        $createdAt = !empty($row[3])
+            ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])
             : now();
 
-        $updatedAt = !empty($row[2])
-            ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[2])
+        $updatedAt = !empty($row[4])
+            ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[4])
             : now();
 
         $model = new SensorData([
