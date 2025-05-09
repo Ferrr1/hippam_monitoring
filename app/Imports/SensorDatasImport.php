@@ -4,42 +4,43 @@ namespace App\Imports;
 
 use App\Models\SensorData;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class SensorDatasImport implements ToModel
+class SensorDatasImport implements ToModel, WithHeadingRow
 {
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-
     protected $deviceId;
 
     public function __construct($deviceId)
     {
         $this->deviceId = $deviceId;
     }
+
     public function model(array $row)
     {
-        $json = json_decode($row[0], true);
-
-        // Validasi JSON
-        if (!is_array($json) || !isset($json['ph'], $json['tds'], $json['turbidity'])) {
+        if (!isset($row['ph'], $row['tds'], $row['turbidity'])) {
             return null;
         }
 
-        // Cek apakah tanggal valid
-        $createdAt = !empty($row[3])
-            ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])
+        $ph = $row['ph'];
+        $tds = $row['tds'];
+        $turbidity = $row['turbidity'];
+
+        // Perbaikan di sini
+        $createdAt = isset($row['created_at']) || !empty($row['created_at'])
+            ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['created_at'])
             : now();
 
-        $updatedAt = !empty($row[4])
-            ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[4])
+        $updatedAt = isset($row['updated_at']) || !empty($row['updated_at'])
+            ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['updated_at'])
             : now();
 
         $model = new SensorData([
             'device_id' => $this->deviceId,
-            'value' => $json,
+            'value' => [
+                'ph' => $ph,
+                'tds' => $tds,
+                'turbidity' => $turbidity,
+            ],
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
         ]);
@@ -48,5 +49,4 @@ class SensorDatasImport implements ToModel
 
         return $model;
     }
-
 }
