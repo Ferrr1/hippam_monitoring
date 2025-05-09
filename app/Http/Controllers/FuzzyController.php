@@ -69,7 +69,7 @@ class FuzzyController extends Controller
                     'total' => $sensorDatas->total(),
                 ],
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return back()->with(['error' => $e->getMessage()]);
         }
     }
