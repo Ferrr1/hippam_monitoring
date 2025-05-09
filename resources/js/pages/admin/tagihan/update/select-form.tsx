@@ -1,5 +1,4 @@
 import { useForm } from "@inertiajs/react";
-import { toast } from "sonner";
 import { useEffect, useRef } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -29,13 +28,7 @@ export default function SelectForm({
         if (data.status === null || data.tagihan_id === null) return
         put(route("tagihan.update", data.tagihan_id!), {
             preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                toast.success("Status Berhasil diubah");
-            },
-            onError: () => {
-                toast.error("Gagal Mengubah Status");
-            },
+            preserveState: false,
         });
     }, [data.status]);
 

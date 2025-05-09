@@ -61,7 +61,7 @@ export default function TagihanUser({ tagihan }: TagihanProps) {
         post(route('proof.payment', tagihan.tagihan_id), {
             forceFormData: true,
             preserveScroll: true,
-            preserveState: true,
+            preserveState: false,
             onSuccess: () => {
                 reset();
                 setPreviewUrl(null);

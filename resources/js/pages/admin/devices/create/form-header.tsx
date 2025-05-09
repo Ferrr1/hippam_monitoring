@@ -5,7 +5,6 @@ import InputError from "@/components/input-error";
 import { LoaderCircle } from "lucide-react";
 import { FormEventHandler } from "react";
 import { useForm } from "@inertiajs/react";
-import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type FormHeaderProps = {
@@ -22,13 +21,10 @@ export default function FormHeader({ action }: FormHeaderProps) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route(action), {
+            preserveState: false,
             onSuccess: () => {
-                reset("device_id", "status");
-                toast.success("Berhasil menambahkan data warga");
+                reset();
             },
-            onError: (errors) => {
-                if (errors) toast.error("Gagal menambahkan data warga");
-            }
         });
     };
 

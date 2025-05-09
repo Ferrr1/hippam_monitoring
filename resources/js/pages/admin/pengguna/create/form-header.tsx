@@ -12,7 +12,6 @@ import InputError from "@/components/input-error";
 import { LoaderCircle } from "lucide-react";
 import { FormEventHandler } from "react";
 import { useForm } from "@inertiajs/react";
-import { toast } from "sonner";
 
 type FormHeaderProps = {
     action: string;
@@ -30,13 +29,10 @@ export default function FormHeader({ action }: FormHeaderProps) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route(action), {
+            preserveState: false,
             onSuccess: () => {
-                reset("name", "email", "password", "role");
-                toast.success("Berhasil membuat pengguna");
+                reset();
             },
-            onError: (errors) => {
-                if (errors) toast.error("Gagal membuat pengguna");
-            }
         });
     };
 

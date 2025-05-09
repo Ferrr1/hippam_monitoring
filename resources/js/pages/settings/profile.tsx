@@ -40,6 +40,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
         patch(route('profile.update'), {
             preserveScroll: true,
+            preserveState: false,
             onSuccess: () => {
                 toast.success("Data Berhasil diubah");
             },

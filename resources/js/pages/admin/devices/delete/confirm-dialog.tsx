@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { useForm } from "@inertiajs/react";
-import { toast } from "sonner";
 import { FormEventHandler } from "react";
 
 interface ConfirmDialogProps {
@@ -42,14 +41,12 @@ export default function ConfirmDialog({
         e.preventDefault();
         destroy(route("devices.destroy", id), {
             preserveScroll: true,
-            preserveState: true,
+            preserveState: false,
             onSuccess: () => {
-                toast.success("Data Warga Berhasil dihapus");
                 onOpenChange(false);
                 onClose?.();
             },
             onError: () => {
-                toast.error("Gagal Menghapus Data Warga");
                 onOpenChange(false);
                 onClose?.();
             },

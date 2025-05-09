@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "@inertiajs/react";
-import { toast } from "sonner";
 import { FormEventHandler, useCallback, useEffect, useState } from "react";
 import InputError from "@/components/input-error";
 import { Textarea } from "@/components/ui/textarea";
@@ -93,14 +92,10 @@ export default function FormDialog({
         e.preventDefault();
         put(route("warga.update", data.warga_id!), {
             preserveScroll: true,
-            preserveState: true,
+            preserveState: false,
             onSuccess: () => {
-                toast.success("Data Warga Berhasil diubah");
                 onOpenChange(false);
                 onClose?.();
-            },
-            onError: () => {
-                toast.error("Gagal Mengubah Data Warga");
             },
         });
     };

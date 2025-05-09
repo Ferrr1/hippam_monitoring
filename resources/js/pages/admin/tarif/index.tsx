@@ -10,7 +10,6 @@ import { Transition } from '@headlessui/react';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
-import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,12 +32,7 @@ export default function Tarif({ tarif }: { tarif: TarifForm }) {
 
         post(route('tarif.store'), {
             preserveScroll: true,
-            onSuccess: () => {
-                toast.success("Tarif Air Berhasil diubah/ditambahkan");
-            },
-            onError: () => {
-                toast.error("Gagal Mengubah Tarif Air");
-            }
+            preserveState: false,
         });
     };
     return (

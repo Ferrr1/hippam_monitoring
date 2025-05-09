@@ -58,15 +58,13 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
         }
         post(route('devices.sensor.importData', device_id), {
             forceFormData: true,
+            preserveState: false,
             onSuccess: () => {
-                reset('file');
+                reset();
                 setData('file', null);
-                toast.success('Data berhasil diimport');
             },
-            onError: (err) => {
-                reset('file');
-                toast.error('Gagal mengimport data');
-                console.error('Import error:', err);
+            onError: () => {
+                reset();
             }
         });
     };

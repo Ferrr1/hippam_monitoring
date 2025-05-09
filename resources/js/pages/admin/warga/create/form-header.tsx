@@ -5,12 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { LoaderCircle, Check, ChevronsUpDown } from "lucide-react";
-
 import InputError from "@/components/input-error";
 import { useForm } from "@inertiajs/react";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-
 import { useCallback, useEffect, useState } from "react";
 import debounce from "lodash/debounce";
 import axios from "axios";
@@ -106,12 +103,9 @@ export default function FormHeader({ users, devices, action }: FormHeaderProps) 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route(action), {
+            preserveState: false,
             onSuccess: () => {
                 reset();
-                toast.success("Berhasil menambahkan data warga");
-            },
-            onError: () => {
-                toast.error("Gagal menambahkan data warga");
             },
         });
     };

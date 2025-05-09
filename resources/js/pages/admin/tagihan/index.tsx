@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { Filters, Pagination, Tagihan as Fine, type BreadcrumbItem } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/heading';
 import DataTable from './create/data-table';
@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { DatePickerWithPresets } from '@/components/ui/date-picker';
 import { useState } from 'react';
 import { format } from 'date-fns';
-import InputError from '@/components/input-error';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,7 +27,6 @@ type Props = {
 }
 
 export default function Tagihan({ tagihans, filter_by_months, filters, pagination }: Props) {
-    const { flash } = usePage().props;
     const [selectedDate, setSelectedDate] = useState<Date>();
     const printReport = () => {
         const periode = selectedDate ? format(selectedDate, "yyyy-MM") : ""
@@ -49,7 +47,6 @@ export default function Tagihan({ tagihans, filter_by_months, filters, paginatio
                         onClick={printReport}
                     >Cetak Laporan</Button>
                 </div>
-                <InputError message={flash.error} className='mt-2' />
                 <Separator className="my-4" />
 
                 <DataTable

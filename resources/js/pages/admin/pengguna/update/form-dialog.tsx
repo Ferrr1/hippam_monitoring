@@ -18,7 +18,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useForm } from "@inertiajs/react";
-import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import { FormEventHandler } from "react";
 import InputError from "@/components/input-error";
@@ -56,14 +55,12 @@ export default function FormDialog({
         e.preventDefault();
         put(route("register.update", data.id!), {
             preserveScroll: true,
-            preserveState: true,
+            preserveState: false,
             onSuccess: () => {
-                toast.success("Data Pengguna Berhasil diubah");
                 onOpenChange(false);
                 onClose?.();
             },
             onError: () => {
-                toast.error("Gagal Mengubah Data Pengguna");
             },
         });
     };
@@ -115,7 +112,6 @@ export default function FormDialog({
                             </SelectContent>
                         </Select>
                         <InputError message={errors.role} className="mt-1" />
-                        <InputError className="mt-2" message={errors.message} />
                     </div>
 
                     <DialogFooter className="gap-2 pt-4">

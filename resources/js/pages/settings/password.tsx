@@ -33,6 +33,7 @@ export default function Password() {
 
         put(route('password.update'), {
             preserveScroll: true,
+            preserveState: false,
             onSuccess: () => reset(),
             onError: (errors) => {
                 if (errors.password) {
