@@ -23,7 +23,7 @@ class TarifAirController extends Controller
                 ]
             ]);
         } catch (\Throwable $th) {
-            return $th->getMessage();
+            return back()->with('error', $th->getMessage());
         }
     }
 
@@ -40,20 +40,24 @@ class TarifAirController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'harga' => 'required|numeric|min_digits:3',
-        ]);
+        try {
+            $validated = $request->validate([
+                'harga' => 'required|numeric|min_digits:3',
+            ]);
 
-        // Ambil tarif pertama, kalau tidak ada maka buat baru
-        $tarif = Tarif::first();
+            // Ambil tarif pertama, kalau tidak ada maka buat baru
+            $tarif = Tarif::first();
 
-        if ($tarif) {
-            $tarif->update(['harga' => $validated['harga']]);
-        } else {
-            Tarif::create(['harga' => $validated['harga']]);
+            if ($tarif) {
+                $tarif->update(['harga' => $validated['harga']]);
+            } else {
+                Tarif::create(['harga' => $validated['harga']]);
+            }
+
+            return back()->with('success', __('Tarif berhasil disimpan'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
         }
-
-        return back()->with('success', __('Tarif berhasil disimpan'));
     }
 
 

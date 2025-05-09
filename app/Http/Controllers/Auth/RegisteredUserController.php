@@ -62,56 +62,67 @@ class RegisteredUserController extends Controller
                 'per_page' => $users->perPage(),
                 'total' => $users->total(),
             ],
-            // 'success' => $request->session()->get('success'),
         ]);
     }
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            'password' => ['required', Password::defaults()],
-            'role' => 'required|in:admin,user',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+                'password' => ['required', Password::defaults()],
+                'role' => 'required|in:admin,user',
+            ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-        ]);
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => $validated['role'],
+            ]);
 
-        event(new Registered($user));
+            event(new Registered($user));
 
-        return back()->with('success', __('Pengguna berhasil ditambahkan'));
+            return back()->with('success', __('Pengguna berhasil ditambahkan'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 
     public function update(Request $request, User $user): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,user',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|lowercase|email|max:255|unique:users,email,' . $user->id,
+                'role' => 'required|in:admin,user',
+            ]);
 
-        if (
-            $validated['name'] === $user->name &&
-            $validated['email'] === $user->email &&
-            $validated['role'] === $user->role
-        ) {
-            return back()->withErrors(['message' => 'Tidak ada perubahan data.']);
+            if (
+                $validated['name'] === $user->name &&
+                $validated['email'] === $user->email &&
+                $validated['role'] === $user->role
+            ) {
+                return back()->with(['message' => 'Tidak ada perubahan data.']);
+            }
+
+            $user->update($validated);
+
+            return back()->with('success', __('Pengguna berhasil diperbarui'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
         }
-
-        $user->update($validated);
-
-        return back()->with('success', __('Pengguna berhasil diperbarui'));
     }
     public function destroy($email): RedirectResponse
     {
-        $user = User::where('email', $email)->first();
+        try {
+            $user = User::where('email', $email)->first();
 
-        $user->delete();
+            $user->delete();
 
-        return back()->with('success', __('Pengguna berhasil dihapus'));
+            return back()->with('success', __('Pengguna berhasil dihapus'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 }

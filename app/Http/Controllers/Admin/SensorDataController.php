@@ -75,7 +75,7 @@ class SensorDataController extends Controller
             $id_device = Device::where('device_id', $deviceId)->first()->id;
             return Excel::download(new SensorDatasExport($id_device), 'sensor_data.xlsx');
         } catch (\Throwable $th) {
-            return dd($th->getMessage());
+            return redirect()->route('devices.show', $deviceId)->with(['error' => $th->getMessage()]);
         }
     }
 
@@ -100,8 +100,12 @@ class SensorDataController extends Controller
      */
     public function destroy($sensorData)
     {
-        $sensorData = SensorData::where('sensor_data_id', $sensorData)->first();
-        $sensorData->delete();
-        return back()->with('success', __('Data berhasil dihapus'));
+        try {
+            $sensorData = SensorData::where('sensor_data_id', $sensorData)->first();
+            $sensorData->delete();
+            return back()->with('success', __('Data berhasil dihapus'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 }

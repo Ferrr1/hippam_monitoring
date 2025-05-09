@@ -32,7 +32,7 @@ class DashboardController extends Controller
                 'devices' => $devices->pluck('device_id'),
             ]);
         } catch (Exception $e) {
-            return dd($e);
+            return back()->with(['error' => $e->getMessage()]);
         }
     }
 }

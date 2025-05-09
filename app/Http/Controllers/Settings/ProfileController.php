@@ -47,7 +47,7 @@ class ProfileController extends Controller
                     ->orWhere('alamat', $validated['alamat'])
                     ->first();
                 if ($checkData) {
-                    return back()->withErrors(['message' => 'No Telepon atau Alamat sudah digunakan.']);
+                    return back()->with(['message' => 'No Telepon atau Alamat sudah digunakan.']);
                 } else {
                     Warga::create([
                         'users_id' => $user->id,
@@ -60,7 +60,7 @@ class ProfileController extends Controller
                     $validated['no_telp'] === $warga->no_telp &&
                     $validated['alamat'] === $warga->alamat
                 ) {
-                    return back()->withErrors(['message' => 'Tidak ada perubahan data.']);
+                    return back()->with(['message' => 'Tidak ada perubahan data.']);
                 } else {
                     $warga->update([
                         'no_telp' => $validated['no_telp'],

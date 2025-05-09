@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Exception;
 use Inertia\Inertia;
-use Storage;
 use Throwable;
 
 class TagihanController extends Controller
@@ -101,11 +99,9 @@ class TagihanController extends Controller
                     'per_page' => $tagihans->perPage(),
                     'total' => $tagihans->total(),
                 ],
-                'success' => $request->session()->get('success'),
-                'error' => $request->session()->get('error'),
             ]);
         } catch (Throwable $th) {
-            return dd($th->getMessage());
+            return back()->with(['error' => $th->getMessage()]);
         }
     }
 
@@ -162,7 +158,7 @@ class TagihanController extends Controller
 
             return $pdf->stream("laporan_tagihan_{$periode}.pdf");
         } catch (Throwable $th) {
-            return dd($th->getMessage());
+            return back()->with(['error' => $th->getMessage()]);
         }
     }
 
@@ -196,13 +192,17 @@ class TagihanController extends Controller
      */
     public function update(Request $request, Tagihan $tagihan)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:lunas,belum_lunas',
-        ]);
+        try {
+            $validated = $request->validate([
+                'status' => 'required|in:lunas,belum_lunas',
+            ]);
 
-        $tagihan->update($validated);
+            $tagihan->update($validated);
 
-        return back()->with('success', __('Tagihan berhasil diperbarui'));
+            return back()->with('success', __('Tagihan berhasil diperbarui'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -210,10 +210,14 @@ class TagihanController extends Controller
      */
     public function destroy($tagihan)
     {
-        $tagihan = Tagihan::where('tagihan_id', $tagihan)->first();
+        try {
+            $tagihan = Tagihan::where('tagihan_id', $tagihan)->first();
 
-        $tagihan->delete();
+            $tagihan->delete();
 
-        return back()->with('success', __('Pengguna berhasil dihapus'));
+            return back()->with('success', __('Pengguna berhasil dihapus'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 }

@@ -53,7 +53,6 @@ class DeviceController extends Controller
                 'per_page' => $devices->perPage(),
                 'total' => $devices->total(),
             ],
-            // 'success' => $request->session()->get('success'),
         ]);
     }
 
@@ -70,19 +69,23 @@ class DeviceController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'device_id' => 'required|string|min:4|max:20|unique:devices,device_id',
-            'status' => 'required|in:aktif,tidak_aktif',
-        ]);
+        try {
+            $validated = $request->validate([
+                'device_id' => 'required|string|min:4|max:20|unique:devices,device_id',
+                'status' => 'required|in:aktif,tidak_aktif',
+            ]);
 
-        $device = Device::create([
-            'device_id' => $validated['device_id'],
-            'status' => $validated['status'],
-        ]);
+            $device = Device::create([
+                'device_id' => $validated['device_id'],
+                'status' => $validated['status'],
+            ]);
 
-        $device->save();
+            $device->save();
 
-        return back()->with('success', __('Device berhasil ditambahkan'));
+            return back()->with('success', __('Device berhasil ditambahkan'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -134,8 +137,8 @@ class DeviceController extends Controller
                     'total' => $sensors->total(),
                 ],
             ]);
-        } catch (\Throwable $th) {
-            return dd($th->getMessage());
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
         }
     }
 
@@ -152,28 +155,32 @@ class DeviceController extends Controller
      */
     public function update(Request $request, Device $devices): RedirectResponse
     {
-        $validated = $request->validate([
-            'device_id' => 'required|string|min:4|max:20',
-            'status' => 'required|in:aktif,tidak_aktif',
-        ]);
-        $existsDeviceId = Device::where('device_id', $validated['device_id'])
-            ->where('id', '!=', $devices->id)
-            ->exists();
+        try {
+            $validated = $request->validate([
+                'device_id' => 'required|string|min:4|max:20',
+                'status' => 'required|in:aktif,tidak_aktif',
+            ]);
+            $existsDeviceId = Device::where('device_id', $validated['device_id'])
+                ->where('id', '!=', $devices->id)
+                ->exists();
 
-        if ($existsDeviceId) {
-            return back()->withErrors(['device_id' => 'Device ID sudah digunakan.']);
+            if ($existsDeviceId) {
+                return back()->with(['message' => 'Device ID sudah digunakan.']);
+            }
+
+            if (
+                $validated['device_id'] === $devices->device_id &&
+                $validated['status'] === $devices->status
+            ) {
+                return back()->with(['message' => 'Tidak ada perubahan data.']);
+            }
+
+            $devices->update($validated);
+
+            return back()->with('success', __('Device berhasil diperbarui'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
         }
-
-        if (
-            $validated['device_id'] === $devices->device_id &&
-            $validated['status'] === $devices->status
-        ) {
-            return back()->withErrors(['message' => 'Tidak ada perubahan data.']);
-        }
-
-        $devices->update($validated);
-
-        return back()->with('success', __('Device berhasil diperbarui'));
     }
 
     /**
@@ -181,10 +188,14 @@ class DeviceController extends Controller
      */
     public function destroy($devices): RedirectResponse
     {
-        $devices = Device::where('id', $devices)->first();
+        try {
+            $devices = Device::where('id', $devices)->first();
 
-        $devices->delete();
+            $devices->delete();
 
-        return back()->with('success', __('Device berhasil dihapus'));
+            return back()->with('success', __('Device berhasil dihapus'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 }

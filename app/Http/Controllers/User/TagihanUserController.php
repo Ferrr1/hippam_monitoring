@@ -40,7 +40,7 @@ class TagihanUserController extends Controller
                 ] : null,
             ]);
         } catch (\Throwable $th) {
-            dd($th->getMessage(), $th->getTraceAsString());
+            return back()->with(['error' => $th->getMessage()]);
         }
     }
 

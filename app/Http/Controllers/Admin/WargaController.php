@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Device;
 use App\Models\User;
 use App\Models\Warga;
-use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -122,22 +121,26 @@ class WargaController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'users_id' => 'required|unique:wargas,users_id|exists:users,id',
-            'device_id' => 'required|unique:wargas,device_id|exists:devices,id',
-            'no_telp' => 'required|numeric|unique:wargas,no_telp|max_digits:16',
-            'alamat' => 'required|string|unique:wargas,alamat|min:20|max:255',
-        ]);
+        try {
+            $validated = $request->validate([
+                'users_id' => 'required|unique:wargas,users_id|exists:users,id',
+                'device_id' => 'required|unique:wargas,device_id|exists:devices,id',
+                'no_telp' => 'required|numeric|unique:wargas,no_telp|max_digits:16',
+                'alamat' => 'required|string|unique:wargas,alamat|min:20|max:255',
+            ]);
 
-        $warga = Warga::create([
-            'users_id' => $validated['users_id'],
-            'device_id' => $validated['device_id'],
-            'no_telp' => $validated['no_telp'],
-            'alamat' => $validated['alamat'],
-        ]);
+            $warga = Warga::create([
+                'users_id' => $validated['users_id'],
+                'device_id' => $validated['device_id'],
+                'no_telp' => $validated['no_telp'],
+                'alamat' => $validated['alamat'],
+            ]);
 
-        $warga->save();
-        return back()->with('success', __('Warga berhasil ditambahkan'));
+            $warga->save();
+            return back()->with('success', __('Warga berhasil ditambahkan'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -174,14 +177,14 @@ class WargaController extends Controller
                 $validated['device_id'] === $warga->device_id &&
                 $validated['alamat'] === $warga->alamat
             ) {
-                return back()->withErrors(['message' => 'Tidak ada perubahan data.']);
+                return back()->with(['message' => 'Tidak ada perubahan data.']);
             }
 
             $warga->update($validated);
 
             return back()->with('success', __('Pengguna berhasil diperbarui'));
-        } catch (Exception $e) {
-            return back()->withErrors(['message' => "Device ID sudah digunakan oleh warga lain."]);
+        } catch (\Exception $e) {
+            return back()->with(['message' => "Device ID sudah digunakan oleh warga lain."]);
         }
     }
 
@@ -190,10 +193,14 @@ class WargaController extends Controller
      */
     public function destroy($warga)
     {
-        $warga = Warga::where('warga_id', $warga)->first();
+        try {
+            $warga = Warga::where('warga_id', $warga)->first();
 
-        $warga->delete();
+            $warga->delete();
 
-        return back()->with('success', __('Pengguna berhasil dihapus'));
+            return back()->with('success', __('Pengguna berhasil dihapus'));
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 }
