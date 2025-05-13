@@ -1,5 +1,7 @@
 import { SensorData } from '@/types';
 import React from 'react';
+import NumberFlow from '@number-flow/react';
+import { motion } from "framer-motion";
 
 type MonitoringStatus = 'good' | 'moderate' | 'warning' | 'alert';
 
@@ -57,30 +59,57 @@ const SensorDataCard: React.FC<SensorDataCardProps> = ({ data }) => {
     };
 
     const styles = getStatusStyles(status);
+    const containerVariants = {
+        hidden: { opacity: 0, x: 30 },
+        visible: {
+            opacity: 1,
+            x: 0,
+            transition: {
+                duration: 0.3,
+                when: "beforeChildren",
+                staggerChildren: 0.1,
+            },
+        },
+    };
+
+    const childVariants = {
+        hidden: { opacity: 0, x: 20 },
+        visible: { opacity: 1, x: 0 },
+    };
+
 
     return (
-        <div className={`${styles.bg} rounded-lg border ${styles.border} p-4 transition-all duration-300 hover:shadow-md`}>
-            <div className="flex items-start justify-between mb-3">
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover={{ scale: 1.02 }}
+            className={`${styles.bg} rounded-lg border ${styles.border} p-4 transition-all duration-300 hover:shadow-md`}
+        >
+            <motion.div variants={childVariants} className="flex items-start justify-between mb-3">
                 <div>
                     <p className={`text-sm ${styles.textInformation}`}>{description}</p>
                     <p className={`text-xs ${styles.textInformation}`}>{location}</p>
                 </div>
                 <Icon className={`h-6 w-6 ${styles.icon}`} />
-            </div>
+            </motion.div>
 
-            <div className="mt-2">
+            <motion.div variants={childVariants} className="mt-2">
                 <div className="flex items-baseline gap-1">
-                    <span className={`text-2xl font-bold ${styles.text}`}>{value}</span>
+                    <span className={`text-2xl font-bold ${styles.text}`}>
+                        <NumberFlow value={Number(value)} />
+                    </span>
                     <span className={`text-sm ${styles.text}`}>{unit}</span>
                 </div>
-            </div>
+            </motion.div>
 
-            <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+            <motion.div variants={childVariants} className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
                 <p className={`text-xs ${styles.textInformation}`}>
-                    Updated: {(timestamp)}
+                    Updated: {timestamp}
                 </p>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
+
     );
 };
 

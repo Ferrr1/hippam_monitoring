@@ -1,4 +1,5 @@
 import { AlertTriangle, Info } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface StatusPanelProps {
     status: string;
@@ -39,23 +40,49 @@ const StatusPanel: React.FC<StatusPanelProps> = ({ status, timestamp }) => {
     };
 
     const styles = getStatusStyles(status);
+    const containerVariants = {
+        hidden: { opacity: 0, x: 30 },
+        visible: {
+            opacity: 1,
+            x: 0,
+            transition: {
+                duration: 0.3,
+                when: "beforeChildren",
+                staggerChildren: 0.1,
+            },
+        },
+    };
+
+    const childVariants = {
+        hidden: { opacity: 0, x: 20 },
+        visible: { opacity: 1, x: 0 },
+    };
 
     return (
-        <div className={`border ${styles.border} rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md ${styles.bg}`}>
-            <div className="p-6">
-                <div className="flex items-center gap-6">
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover={{ scale: 1.01 }}
+            className={`border ${styles.border} rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md ${styles.bg}`}
+        >
+            <motion.div variants={childVariants} className="p-6">
+                <motion.div variants={childVariants} className="flex items-center gap-6">
                     {styles.icon}
-                    <div>
+                    <motion.div variants={childVariants}>
                         <h3 className={`text-2xl font-semibold ${styles.textInformation}`}>{status}</h3>
                         <p className="mt-2 text-slate-600 dark:text-slate-200">{styles.message}</p>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
 
-                <div className={`mt-6 text-right text-sm ${styles.textInformation}`}>
-                    Updated: {(timestamp)}
-                </div>
-            </div>
-        </div>
+                <motion.div
+                    variants={childVariants}
+                    className={`mt-6 text-right text-sm ${styles.textInformation}`}
+                >
+                    Updated: {timestamp}
+                </motion.div>
+            </motion.div>
+        </motion.div>
     );
 };
 
