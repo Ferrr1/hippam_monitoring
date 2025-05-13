@@ -18,13 +18,13 @@ const ImageModal: React.FC<{
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute min-w-screen min-h-screen inset-0 bg-black/50"
+                        className="absolute min-w-screen min-h-screen inset-0 bg-black/70"
                         onClick={onClose}
                     />
 
                     {/* Gambar */}
                     <motion.div
-                        initial={{ scale: 0.7, opacity: 0 }}
+                        initial={{ scale: 0.3, opacity: 0 }}
                         animate={{
                             scale: 1,
                             opacity: 1,
@@ -33,7 +33,7 @@ const ImageModal: React.FC<{
                         exit={{
                             scale: 0.7,
                             opacity: 0,
-                            transition: { duration: 0.2 }
+                            transition: { duration: 0.5 }
                         }}
                         className="relative w-full max-w-screen-lg max-h-[90vh] p-4 lg:aspect-[16/9] flex justify-center items-center"
                         onClick={onClose}
