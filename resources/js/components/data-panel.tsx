@@ -1,21 +1,19 @@
-import { SensorData } from '@/types';
-import React from 'react';
-import NumberFlow from '@number-flow/react';
 import { motion } from "framer-motion";
+import NumberFlow from "@number-flow/react";
+import { SensorData } from "@/types";
 
-type MonitoringStatus = 'good' | 'moderate' | 'warning' | 'alert';
 
-
-interface SensorDataCardProps {
+type DataStatus = 'ph' | 'tds' | 'turbidity';
+interface DataPanelProps {
     data: SensorData;
 }
 
-const SensorDataCard: React.FC<SensorDataCardProps> = ({ data }) => {
-    const { value, unit, location, status, timestamp, icon: Icon, description } = data;
+const DataPanel: React.FC<DataPanelProps> = ({ data }) => {
+    const { value, unit, status, icon: Icon, description } = data;
 
-    const getStatusStyles = (status: MonitoringStatus) => {
+    const getStatusStyles = (status: DataStatus) => {
         switch (status) {
-            case 'good':
+            case 'ph':
                 return {
                     bg: 'bg-emerald-50 dark:bg-emerald-950',
                     text: 'text-emerald-700 dark:text-emerald-200',
@@ -23,7 +21,7 @@ const SensorDataCard: React.FC<SensorDataCardProps> = ({ data }) => {
                     icon: 'text-emerald-500 dark:text-emerald-200',
                     textInformation: 'text-slate-500 dark:text-slate-100'
                 };
-            case 'moderate':
+            case 'tds':
                 return {
                     bg: 'bg-blue-50 dark:bg-blue-950',
                     text: 'text-blue-700 dark:text-blue-200',
@@ -31,20 +29,12 @@ const SensorDataCard: React.FC<SensorDataCardProps> = ({ data }) => {
                     icon: 'text-blue-500 dark:text-blue-200',
                     textInformation: 'text-slate-500 dark:text-slate-100'
                 };
-            case 'warning':
+            case 'turbidity':
                 return {
                     bg: 'bg-amber-50 dark:bg-amber-950',
                     text: 'text-amber-700 dark:text-amber-200',
                     border: 'border-amber-100 dark:border-amber-800',
                     icon: 'text-amber-500 dark:text-amber-200',
-                    textInformation: 'text-slate-500 dark:text-slate-100'
-                };
-            case 'alert':
-                return {
-                    bg: 'bg-red-50 dark:bg-red-950',
-                    text: 'text-red-700 dark:text-red-200',
-                    border: 'border-red-100 dark:border-red-800',
-                    icon: 'text-red-500 dark:text-red-200',
                     textInformation: 'text-slate-500 dark:text-slate-100'
                 };
             default:
@@ -77,7 +67,6 @@ const SensorDataCard: React.FC<SensorDataCardProps> = ({ data }) => {
         visible: { opacity: 1, x: 0 },
     };
 
-
     return (
         <motion.div
             variants={containerVariants}
@@ -89,7 +78,6 @@ const SensorDataCard: React.FC<SensorDataCardProps> = ({ data }) => {
             <motion.div variants={childVariants} className="flex items-start justify-between mb-3">
                 <div>
                     <p className={`text-sm ${styles.textInformation}`}>{description}</p>
-                    <p className={`text-xs ${styles.textInformation}`}>{location}</p>
                 </div>
                 <Icon className={`h-6 w-6 ${styles.icon}`} />
             </motion.div>
@@ -97,21 +85,13 @@ const SensorDataCard: React.FC<SensorDataCardProps> = ({ data }) => {
             <motion.div variants={childVariants} className="mt-2">
                 <div className="flex items-baseline gap-1">
                     <span className={`text-2xl font-bold ${styles.text}`}>
-                        <NumberFlow value={Number(value)}
-                            format={{ minimumFractionDigits: 4, maximumFractionDigits: 4 }} />
+                        <NumberFlow value={Number(value)} />
                     </span>
                     <span className={`text-sm ${styles.text}`}>{unit}</span>
                 </div>
             </motion.div>
-
-            <motion.div variants={childVariants} className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
-                <p className={`text-xs ${styles.textInformation}`}>
-                    Updated: {timestamp}
-                </p>
-            </motion.div>
         </motion.div>
-
     );
 };
 
-export default SensorDataCard;
+export default DataPanel;

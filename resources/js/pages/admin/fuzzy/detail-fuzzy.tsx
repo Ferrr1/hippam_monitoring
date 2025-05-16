@@ -4,6 +4,9 @@ import { SensorData, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useTruncateNumber } from '@/hooks/use-truncate-number';
+import { Droplets, FlaskRound as Flask, Waves, MoveUpRight, Grid2x2, MoveDownLeft, Aperture, AlertTriangle, Info } from 'lucide-react';
+import DataPanel from '@/components/data-panel';
+import PanelFuzzy from '@/components/panel-fuzzy';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -22,37 +25,210 @@ type DetailFuzzyProps = {
 
 export default function DetailFuzzy({ sensorData }: DetailFuzzyProps) {
     const fuzzyMamdani = sensorData.value_fuzzy;
+    const ListData = [
+        {
+            id: 1,
+            value: sensorData.value['ph'] || 0,
+            unit: 'pH',
+            status: 'ph',
+            icon: Flask,
+            description: 'Acidity Level'
+        },
+        {
+            id: 2,
+            value: sensorData.value['tds'] || 0,
+            unit: 'ppm',
+            status: 'tds',
+            icon: Droplets,
+            description: 'Total Dissolved Solids'
+        },
+        {
+            id: 3,
+            value: sensorData.value['turbidity'] || 0,
+            unit: 'NTU',
+            status: 'turbidity',
+            icon: Waves,
+            description: 'Turbidity Level'
+        },
+    ];
+
+    const FuzzifikasiData = [
+        {
+            id: 1,
+            value: fuzzyMamdani.ph.phBasa || 0,
+            icon: Flask,
+            description: 'pH Basa'
+        },
+        {
+            id: 2,
+            value: fuzzyMamdani.ph.phNetral || 0,
+            icon: Flask,
+            description: 'pH Netral'
+        },
+        {
+            id: 3,
+            value: fuzzyMamdani.ph.phAsam || 0,
+            icon: Flask,
+            description: 'pH Asam'
+        },
+        {
+            id: 4,
+            value: fuzzyMamdani.tds.tdsRendah || 0,
+            icon: Droplets,
+            description: 'TDS Rendah'
+        },
+        {
+            id: 5,
+            value: fuzzyMamdani.tds.tdsSedang || 0,
+            icon: Droplets,
+            description: 'TDS Sedang'
+        },
+        {
+            id: 6,
+            value: fuzzyMamdani.tds.tdsTinggi || 0,
+            icon: Droplets,
+            description: 'TDS Tinggi'
+        },
+        {
+            id: 7,
+            value: fuzzyMamdani.turbidity.turbidityJernih || 0,
+            icon: Waves,
+            description: 'Turbidity Jernih'
+        },
+        {
+            id: 8,
+            value: fuzzyMamdani.turbidity.turbiditySedang || 0,
+            icon: Waves,
+            description: 'Turbidity Sedang'
+        },
+        {
+            id: 9,
+            value: fuzzyMamdani.turbidity.turbidityKeruh || 0,
+            icon: Waves,
+            description: 'Turbidity Keruh'
+        },
+    ];
+
+    const AgregasiData = [
+        {
+            id: 1,
+            value: fuzzyMamdani.membership.membershipBahaya || 0,
+            icon: AlertTriangle,
+            description: 'Membership Bahaya'
+        },
+        {
+            id: 2,
+            value: fuzzyMamdani.membership.membershipWaspada || 0,
+            icon: AlertTriangle,
+            description: 'Membership Waspada'
+        },
+        {
+            id: 3,
+            value: fuzzyMamdani.membership.membershipAman || 0,
+            icon: Info,
+            description: 'Membership Aman'
+        },
+    ];
+
+    const HimpunanData = [
+        {
+            id: 1,
+            value: fuzzyMamdani.himpunan.himpunanBahayaBaru || 0,
+            icon: AlertTriangle,
+            description: 'Himpunan Bahaya'
+        },
+        {
+            id: 2,
+            value: fuzzyMamdani.himpunan.himpunanWaspadaLinearNaikBaru || 0,
+            icon: MoveUpRight,
+            description: 'Himpunan Waspada Naik'
+        },
+        {
+            id: 3,
+            value: fuzzyMamdani.himpunan.himpunanWaspadaLinearTurunBaru || 0,
+            icon: MoveDownLeft,
+            description: 'Himpunan Waspada Turun'
+        },
+        {
+            id: 4,
+            value: fuzzyMamdani.himpunan.himpunanAmanBaru || 0,
+            icon: Info,
+            description: 'Himpunan Aman'
+        },
+    ];
+
+    const DeffuzifikasiData = [
+        {
+            id: 1,
+            value: fuzzyMamdani.momen.momen1 || 0,
+            icon: Aperture,
+            description: 'Momen 1'
+        },
+        {
+            id: 2,
+            value: fuzzyMamdani.momen.momen2 || 0,
+            icon: Aperture,
+            description: 'Momen 2'
+        },
+        {
+            id: 3,
+            value: fuzzyMamdani.momen.momen3 || 0,
+            icon: Aperture,
+            description: 'Momen 3'
+        },
+        {
+            id: 4,
+            value: fuzzyMamdani.area.area1 || 0,
+            icon: Grid2x2,
+            description: 'Area 1'
+        },
+        {
+            id: 5,
+            value: fuzzyMamdani.area.area2 || 0,
+            icon: Grid2x2,
+            description: 'Area 2'
+        },
+        {
+            id: 6,
+            value: fuzzyMamdani.area.area3 || 0,
+            icon: Grid2x2,
+            description: 'Area 3'
+        },
+    ];
+
+    const ValueFuzzyData = [
+        {
+            id: 1,
+            value: fuzzyMamdani.result || 0,
+            icon: Waves,
+            description: 'Nilai Fuzzy'
+        },
+        {
+            id: 2,
+            value: sensorData.water_condition || 0,
+            icon: Droplets,
+            description: 'Kondisi Air'
+        },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Detail Perhitungan" />
             <div className='px-4 py-6 gap-2 flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-12'>
-                <div className='flex-2 bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border p-6 rounded-xl'>
+                <div className='flex-2 shadow-md p-6 rounded-xl'>
                     <div className='flex-1 mb-2'>
                         <Heading className='' title={`Detail Perhitungan Data ID ke ${sensorData.id}`} description="Halaman untuk melihat detail perhitungan fuzzy mamdani menggunakan metode center of gravity" />
-                        <div className='space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                            <p>Nilai pH : {sensorData.value['ph']}</p>
-                            <p>Nilai TDS : {sensorData.value['tds']}</p>
-                            <p>Nilai Turbidity : {sensorData.value['turbidity']}</p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {ListData.map((data) => (
+                                <DataPanel key={data.id} data={data} />
+                            ))}
                         </div>
                     </div>
                     <div className='flex-1 mb-2'>
                         <Heading title={`Fuzzifikasi`} description="Menentukan Nilai Fuzzifikasi" />
-                        <div className='flex flex-col xl:flex-row gap-4'>
-                            <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>pH Basa : {fuzzyMamdani.ph.phBasa}</p>
-                                <p>pH Netral : {fuzzyMamdani.ph.phNetral}</p>
-                                <p>pH Asam : {fuzzyMamdani.ph.phAsam}</p>
-                            </div>
-                            <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>TDS Rendah : {fuzzyMamdani.tds.tdsRendah}</p>
-                                <p>TDS Sedang : {fuzzyMamdani.tds.tdsSedang}</p>
-                                <p>TDS Tinggi : {fuzzyMamdani.tds.tdsTinggi}</p>
-                            </div>
-                            <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Turbidity Jernih : {fuzzyMamdani.turbidity.turbidityJernih}</p>
-                                <p>Turbidity Sedang : {fuzzyMamdani.turbidity.turbiditySedang}</p>
-                                <p>Turbidity Keruh : {fuzzyMamdani.turbidity.turbidityKeruh}</p>
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {FuzzifikasiData.map((data) => (
+                                <PanelFuzzy key={data.id} data={data} />
+                            ))}
                         </div>
                     </div>
                     <div className='flex-1 mb-2'>
@@ -92,45 +268,34 @@ export default function DetailFuzzy({ sensorData }: DetailFuzzyProps) {
                     </div>
                     <div className='flex-1 mb-2'>
                         <Heading title={`Agregasi Output`} description="Menentukan Nilai Agregasi Output" />
-                        <div className='flex flex-col xl:flex-row gap-2'>
-                            <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Nilai MAX Output Bahaya : {fuzzyMamdani.membership.membershipBahaya}</p>
-                                <p>Nilai MAX Output Waspada : {fuzzyMamdani.membership.membershipWaspada}</p>
-                                <p>Nilai MAX Output Aman : {fuzzyMamdani.membership.membershipAman}</p>
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {AgregasiData.map((data) => (
+                                <PanelFuzzy key={data.id} data={data} />
+                            ))}
                         </div>
                     </div>
                     <div className='flex-1 mb-2'>
                         <Heading title={`Himpunan Baru`} description="Menentukan Himpunan Baru" />
-                        <div className='flex flex-col xl:flex-row gap-2'>
-                            <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Himpunan Bahaya : {fuzzyMamdani.himpunan.himpunanBahayaBaru}</p>
-                                <p>Himpunan Waspada Naik : {fuzzyMamdani.himpunan.himpunanWaspadaLinearNaikBaru}</p>
-                                <p>Himpunan Waspada Turun : {fuzzyMamdani.himpunan.himpunanWaspadaLinearTurunBaru}</p>
-                                <p>Himpunan Aman : {fuzzyMamdani.himpunan.himpunanAmanBaru}</p>
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {HimpunanData.map((data) => (
+                                <PanelFuzzy key={data.id} data={data} />
+                            ))}
                         </div>
                     </div>
                     <div className='flex-1 mb-2'>
                         <Heading title={`Deffuzifikasi`} description="Menentukan Nilai Deffuzifikasi Menggunakan Metode COG" />
-                        <div className='flex flex-col xl:flex-row gap-2'>
-                            <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Momen 1 : {useTruncateNumber(fuzzyMamdani.momen.momen1)}</p>
-                                <p>Momen 2 : {useTruncateNumber(fuzzyMamdani.momen.momen2)}</p>
-                                <p>Momen 3 : {useTruncateNumber(fuzzyMamdani.momen.momen3)}</p>
-                                <p>Area 1 : {useTruncateNumber(fuzzyMamdani.area.area1)}</p>
-                                <p>Area 2 : {useTruncateNumber(fuzzyMamdani.area.area2)}</p>
-                                <p>Area 3 : {useTruncateNumber(fuzzyMamdani.area.area3)}</p>
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {DeffuzifikasiData.map((data) => (
+                                <PanelFuzzy key={data.id} data={data} />
+                            ))}
                         </div>
                     </div>
                     <div className='flex-1 mb-2'>
                         <Heading title={`Nilai Deffuzifikasi`} description="Menentukan Nilai Deffuzifikasi Menggunakan Metode COG" />
-                        <div className='flex flex-col xl:flex-row gap-2'>
-                            <div className='flex-1 space-y-2 bg-blue-200 dark:bg-blue-950 p-4 rounded-md border border-blue-300 dark:border-blue-800'>
-                                <p>Nilai Deffuzifikasi : {useTruncateNumber(fuzzyMamdani.result)}</p>
-                                <p>Kondisi Air : {sensorData.water_condition}</p>
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {ValueFuzzyData.map((data) => (
+                                <PanelFuzzy key={data.id} data={data} />
+                            ))}
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { handlePageChange, handlePerPageChange, handleSort } from '@/services/SensorDataTableHandler';
-import { ArrowDown, ArrowUp, FileSpreadsheet } from 'lucide-react';
+import { ArrowDown, ArrowUp, FileSpreadsheet, LoaderCircle } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import ConfirmDialog from '../delete/confirm-dialog';
 import { useTruncateNumber } from '@/hooks/use-truncate-number';
@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 
 
 type DataTableProps = {
+    device: string;
     sensors: {
         data: Sensor[];
     };
@@ -22,9 +23,8 @@ type DataTableProps = {
     total: number;
 };
 
-export default function DataTable({ sensors, total, filters, pagination }: DataTableProps) {
+export default function DataTable({ sensors, device, total, filters, pagination }: DataTableProps) {
     // const inputFileRef = useRef<HTMLInputElement>(null);
-    const device_id = sensors.data[0]?.device?.device_id;
     const {
         post,
         processing,
@@ -33,9 +33,8 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
         reset,
     } = useForm({
         file: null as File | null,
-        device_id: device_id || null
+        device_id: device || null
     });
-    // const [search, setSearch] = useState('');
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
@@ -56,7 +55,7 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
             toast.warning('Pilih file terlebih dahulu');
             return;
         }
-        post(route('devices.sensor.importData', device_id), {
+        post(route('devices.sensor.importData', device), {
             forceFormData: true,
             preserveState: false,
             onSuccess: () => {
@@ -69,17 +68,14 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
         });
     };
 
-    const handleExportData = () => {
-        window.open(route('devices.sensor.exportData', device_id));
-    };
 
     const handlePageChangeWrapper = (page: number) => {
-        handlePageChange(page, filters, device_id);
+        handlePageChange(page, filters, device);
     };
     const handlePerPageChangeWrapper = (perPage: string) => {
-        handlePerPageChange(perPage, filters, device_id);
+        handlePerPageChange(perPage, filters, device);
     };
-    const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters, device_id);
+    const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters, device);
 
     return (
         <div className='flex flex-col gap-4'>
@@ -99,17 +95,7 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                         </SelectContent>
                     </Select>
 
-                    {/* <Input
-                        type="text"
-                        placeholder="Search..."
-                        value={search}
-                        onChange={(e) => handleSearchChange(e.target.value, setSearch)}
-                        onKeyDown={(e) => handleSearchKeyDown(e, search, filters, device_id)}
-                        className="max-w-xs"
-                    /> */}
-                    {/* <Button onClick={() => handleSearchonClick(search, filters, device_id)}><Search className="h-4 w-4" /></Button> */}
-                    {/* File Input (Hidden) */}
-                    <form onSubmit={handleSubmit} className="flex gap-2" encType="multipart/form-data">
+                    <form onSubmit={handleSubmit} className="flex xl:flex-row gap-2" encType="multipart/form-data">
                         <Input
                             type="file"
                             accept=".xlsx,.xls,.csv"
@@ -122,20 +108,12 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                             className='bg-green-100 border border-green-200 text-green-800 dark:bg-green-950 dark:text-green-50'
                             disabled={processing}
                         >
-                            <FileSpreadsheet className="h-4 w-4 mr-2" />
-                            {processing ? 'Importing..' : 'Import'}
+                            <FileSpreadsheet className="h-4 w-4" />
+                            {processing ?
+                                <LoaderCircle className="h-4 w-4 animate-spin mr-2" /> : "Import"}
                         </Button>
 
                     </form>
-                    {/* Export Button */}
-                    <Button
-                        className='bg-green-100 border border-green-200 text-green-800 dark:bg-green-950 dark:text-green-50'
-                        onClick={handleExportData}
-                        disabled={processing}
-                    >
-                        <FileSpreadsheet className="h-4 w-4 mr-2" />
-                        Export
-                    </Button>
                 </div>
             </div>
             <div className="overflow-auto rounded-md bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border">
@@ -193,7 +171,7 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                             {sensors.data.length > 0 ? (
                                 sensors.data.map((sensor, index) => (
                                     <TableRow key={sensor.sensor_data_id} className="text-center">
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{(pagination.current_page - 1) * pagination.per_page + index + 1}</TableCell>
                                         <TableCell>{sensor.device.device_id}</TableCell>
                                         <TableCell className='flex justify-center'>
                                             <div className='rounded-sm px-4 py-1 max-w-4xl text-sm font-medium bg-green-100 text-green-700'>
@@ -245,10 +223,10 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                             }}
                         />
                     )}
-                    <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
                     <div />
                 </div>
             </div>
+            <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
         </div>
     );
 }

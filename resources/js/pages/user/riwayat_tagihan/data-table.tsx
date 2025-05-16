@@ -73,7 +73,7 @@ export default function DataTable({ tagihans, pagination }: DataTableProps) {
                             {tagihans.length > 0 ? (
                                 tagihans.map((tagihan, index) => (
                                     <TableRow key={index} className="text-center">
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{(pagination.current_page - 1) * pagination.per_page + index + 1}</TableCell>
                                         <TableCell>{tagihan.meter_awal} m³</TableCell>
                                         <TableCell>{tagihan.meter_akhir} m³</TableCell>
                                         <TableCell>{tagihan.tanggal_mulai} - {tagihan.tanggal_akhir}</TableCell>
@@ -119,10 +119,10 @@ export default function DataTable({ tagihans, pagination }: DataTableProps) {
                             }}
                         />
                     )}
-                    <PaginationWrapper currentPage={pagination.current_page} totalPages={pagination.total / 5} onPageChange={handlePageChange} />
                     <div />
                 </div>
             </div>
+            <PaginationWrapper currentPage={pagination.current_page} totalPages={pagination.total / 5} onPageChange={handlePageChange} />
         </div>
     );
 }

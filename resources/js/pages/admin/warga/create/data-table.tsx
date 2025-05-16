@@ -136,7 +136,7 @@ export default function DataTable({ wargas, devices, total, filters, pagination 
                             {wargas.data.length > 0 ? (
                                 wargas.data.map((warga, index) => (
                                     <TableRow key={warga.warga_id} className="text-center">
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{(pagination.current_page - 1) * pagination.per_page + index + 1}</TableCell>
                                         <TableCell>{warga.device?.device_id ?? '-'}</TableCell>
                                         <TableCell>{warga.user.name}</TableCell>
                                         <TableCell>{warga.user.email}</TableCell>
@@ -225,10 +225,10 @@ export default function DataTable({ wargas, devices, total, filters, pagination 
                             }}
                         />
                     )}
-                    <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
                     <div />
                 </div>
             </div>
+            <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
         </div>
     );
 }

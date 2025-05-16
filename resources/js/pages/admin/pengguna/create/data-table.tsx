@@ -21,6 +21,7 @@ type DataTableProps = {
 };
 
 export default function DataTable({ users, total, filters, pagination }: DataTableProps) {
+    console.log(pagination)
     const [search, setSearch] = useState('');
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -132,7 +133,7 @@ export default function DataTable({ users, total, filters, pagination }: DataTab
                             {users.data.length > 0 ? (
                                 users.data.map((user, index) => (
                                     <TableRow key={user.id} className="text-center">
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{(pagination.current_page - 1) * pagination.per_page + index + 1}</TableCell>
                                         <TableCell>{user.name}</TableCell>
                                         <TableCell>{user.email}</TableCell>
                                         <TableCell>
@@ -227,10 +228,10 @@ export default function DataTable({ users, total, filters, pagination }: DataTab
                             }}
                         />
                     )}
-                    <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
                     <div />
                 </div>
             </div>
+            <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
         </div>
     );
 }

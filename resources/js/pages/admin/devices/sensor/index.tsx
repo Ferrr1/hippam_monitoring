@@ -18,6 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 type Props = {
+    device: string;
     sensors: {
         data: Sensor[];
     };
@@ -25,7 +26,7 @@ type Props = {
     pagination: Pagination;
 }
 
-export default function Perangkat({ sensors, filters, pagination }: Props) {
+export default function Perangkat({ sensors, device, filters, pagination }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Sensor" />
@@ -35,6 +36,7 @@ export default function Perangkat({ sensors, filters, pagination }: Props) {
                 <Separator className="my-4" />
 
                 <DataTable
+                    device={device}
                     sensors={sensors}
                     pagination={pagination}
                     total={pagination.total}

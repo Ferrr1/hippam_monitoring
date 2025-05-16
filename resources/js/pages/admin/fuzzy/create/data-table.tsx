@@ -1,11 +1,9 @@
 import PaginationWrapper from '@/components/pagination-wrapper';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { handlePageChange, handlePerPageChange, handleSearchChange, handleSearchKeyDown, handleSearchonClick, handleSort } from '@/services/FuzzyDataTableHandler';
-import { ArrowDown, ArrowUp, Search } from 'lucide-react';
-import { useState } from 'react';
+import { handlePageChange, handlePerPageChange, handleSort } from '@/services/FuzzyDataTableHandler';
+import { ArrowDown, ArrowUp, FileSpreadsheet } from 'lucide-react';
 import { useTruncateNumber } from '@/hooks/use-truncate-number';
 import { Filters, Pagination, Sensor } from '@/types';
 import { router } from '@inertiajs/react';
@@ -21,16 +19,20 @@ type DataTableProps = {
 };
 
 export default function DataTable({ sensors, total, filters, pagination }: DataTableProps) {
-    const [search, setSearch] = useState('');
     const totalPages = Math.ceil(total / parseInt(filters.perPage));
     const showCountOptions = ['10', '20', '30'];
-
+    const device = sensors.data[0].device.device_id;
 
     const handlePageChangeWrapper = (page: number) => {
         handlePageChange(page, filters);
     };
     const handlePerPageChangeWrapper = (perPage: string) => {
         handlePerPageChange(perPage, filters);
+    };
+    const handleExportData = () => {
+        window.open(route('devices.sensor.exportData', device));
+        console.log('export');
+        console.log(device);
     };
     const handleSortWrapper = (column: string, filters: Filters) => handleSort(column, filters);
 
@@ -51,16 +53,14 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                             ))}
                         </SelectContent>
                     </Select>
-
-                    <Input
-                        type="text"
-                        placeholder="Search..."
-                        value={search}
-                        onChange={(e) => handleSearchChange(e.target.value, setSearch)}
-                        onKeyDown={(e) => handleSearchKeyDown(e, search, filters)}
-                        className="max-w-xs"
-                    />
-                    <Button onClick={() => handleSearchonClick(search, filters)}><Search className="h-4 w-4" /></Button>
+                    {/* Export Button */}
+                    <Button
+                        className='bg-green-100 border border-green-200 text-green-800 dark:bg-green-950 dark:text-green-50'
+                        onClick={handleExportData}
+                    >
+                        <FileSpreadsheet className="h-4 w-4" />
+                        Export
+                    </Button>
                 </div>
             </div>
             <div className="overflow-auto rounded-md bg-blue-50 dark:bg-accent border border-blue-100 dark:border-border">
@@ -126,7 +126,7 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                             {sensors.data.length > 0 ? (
                                 sensors.data.map((sensor, index) => (
                                     <TableRow key={sensor.sensor_data_id} className="text-center">
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{(pagination.current_page - 1) * pagination.per_page + index + 1}</TableCell>
                                         <TableCell>{sensor.device.device_id}</TableCell>
                                         <TableCell className='flex justify-center'>
                                             <div className='rounded-sm px-4 py-1 max-w-4xl text-sm font-medium bg-green-100 text-green-700'>
@@ -161,10 +161,10 @@ export default function DataTable({ sensors, total, filters, pagination }: DataT
                             )}
                         </TableBody>
                     </Table>
-                    <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
                     <div />
                 </div>
             </div>
+            <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
         </div>
     );
 }

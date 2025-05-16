@@ -185,7 +185,7 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                             {tagihans.data.length > 0 ? (
                                 tagihans.data.map((tagihan, index) => (
                                     <TableRow key={tagihan.tagihan_id} className="text-center">
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{(pagination.current_page - 1) * pagination.per_page + index + 1}</TableCell>
                                         <TableCell>{tagihan.warga.user.name}</TableCell>
                                         <TableCell className='break-normal'>{tagihan.warga.user.email}</TableCell>
                                         <TableCell>{tagihan.device.device_id}</TableCell>
@@ -269,10 +269,10 @@ export default function DataTable({ tagihans, total, filters, pagination }: Data
                             }}
                         />
                     )}
-                    <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
                     <div />
                 </div>
             </div>
+            <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
         </div>
     );
 }

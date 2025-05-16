@@ -129,7 +129,7 @@ export interface Tagihan {
 
 export interface SensorData {
     id: number;
-    value: number[];
+    value: number[] | string;
     value_fuzzy: {
         ph: {
             phBasa: number;

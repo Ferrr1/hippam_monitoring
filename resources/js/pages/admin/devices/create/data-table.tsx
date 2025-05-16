@@ -101,7 +101,7 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                             {devices.data.length > 0 ? (
                                 devices.data.map((device, index) => (
                                     <TableRow key={device.id} className="text-center">
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{(pagination.current_page - 1) * pagination.per_page + index + 1}</TableCell>
                                         <TableCell>{device.device_id}</TableCell>
                                         <TableCell><span
                                             className={`rounded-full px-2 py-1 text-sm font-medium ${device.status === 'aktif'
@@ -195,10 +195,10 @@ export default function DataTable({ devices, total, filters, pagination }: DataT
                             }}
                         />
                     )}
-                    <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
                     <div />
                 </div>
             </div>
+            <PaginationWrapper currentPage={pagination.current_page} totalPages={totalPages} onPageChange={handlePageChangeWrapper} />
         </div>
     );
 }
