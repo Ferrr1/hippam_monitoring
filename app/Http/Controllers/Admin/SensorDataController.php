@@ -34,11 +34,11 @@ class SensorDataController extends Controller
      */
     public function importData(Request $request, $deviceId)
     {
-        $request->validate([
-            'file' => 'required|mimes:csv,xls,xlsx',
-            'device_id' => 'required|exists:devices,device_id'
-        ]);
         try {
+            $request->validate([
+                'file' => 'required|mimes:csv,xls,xlsx',
+                'device_id' => 'required|exists:devices,device_id'
+            ]);
             // Proses import
             $file = $request->file('file');
             $id_device = Device::where('device_id', $deviceId)->first()->id;

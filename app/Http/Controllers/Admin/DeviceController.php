@@ -114,6 +114,7 @@ class DeviceController extends Controller
             if ($request->has('sortBy') && $request->has('sortDir')) {
                 $query->orderBy($request->sortBy, $request->sortDir);
             }
+            // dd($device->device_id);
 
             $sensors = $query->paginate($perPage)->withQueryString();
             return Inertia::render('admin/devices/sensor/index', [
@@ -136,6 +137,7 @@ class DeviceController extends Controller
                     'per_page' => $sensors->perPage(),
                     'total' => $sensors->total(),
                 ],
+                'device' => $device->device_id,
             ]);
         } catch (\Exception $e) {
             return back()->with(['error' => $e->getMessage()]);
